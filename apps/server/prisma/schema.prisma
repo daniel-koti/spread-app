@@ -1,0 +1,182 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ENABLED
+  DISABLED
+}
+
+enum ApproveStatus {
+  APPROVED
+  RECUSED
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  is_admin      Boolean  @default(false)
+  status        Status   @default(ENABLED)
+  created_at    DateTime @default(now())
+  wallet        Wallet?
+
+  @@map("users")
+}
+
+model Wallet {
+  id         String   @id @default(cuid())
+  amount     Decimal  @default(0.0)
+  created_at DateTime @default(now())
+
+  user                     User                       @relation(fields: [user_id], references: [id])
+  user_id                  String                     @unique
+  TransactionIncomeUser    TransactionIncomeUser[]
+  TransactionPaymentTicket TransactionPaymentTicket[]
+
+  @@map("wallets")
+}
+
+model Producer {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  phone      String
+  nif        String
+  company    Boolean
+  status     Status   @default(ENABLED)
+  created_at DateTime @default(now())
+
+  wallet WalletProducer?
+  Event  Event[]
+
+  @@map("producers")
+}
+
+model WalletProducer {
+  id         String   @id @default(cuid())
+  amount     Decimal  @default(0.0)
+  created_at DateTime @default(now())
+
+  producer    Producer @relation(fields: [producer_id], references: [id])
+  producer_id String   @unique
+
+  TransactionIncomeProducer TransactionIncomeProducer[]
+  TransactionDiclosure      TransactionDisclosure[]
+
+  @@map("wallets_producer")
+}
+
+model Ticket {
+  id    String  @id @default(cuid())
+  name  String
+  price Decimal
+
+  event    Event  @relation(fields: [event_id], references: [id])
+  event_id String
+
+  ticket_type              TicketType                @relation(fields: [ticket_type_id], references: [id])
+  ticket_type_id           String
+  TransactionPaymentTicket TransactionPaymentTicket?
+}
+
+model TicketType {
+  id     String   @id @default(cuid())
+  type   String   @unique
+  Ticket Ticket[]
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  imageUrl    String?
+  date_start  DateTime
+  date_end    DateTime
+  hour_start  String
+  hour_end    String
+  address     String
+  latitude    Decimal?
+  longitude   Decimal?
+  status      Status    @default(ENABLED)
+  disclosed   DateTime?
+  created_at  DateTime  @default(now())
+
+  categoryEvent CategoryEvent @relation(fields: [category_id], references: [id])
+  category_id   String
+
+  producer             Producer               @relation(fields: [producer_id], references: [id])
+  producer_id          String
+  TransactionDiclosure TransactionDisclosure?
+  Ticket               Ticket[]
+}
+
+model CategoryEvent {
+  id    String  @id @default(cuid())
+  name  String
+  Event Event[]
+}
+
+model TransactionIncomeUser {
+  id               String        @id @default(cuid())
+  amount           Decimal
+  initial_amount   Decimal
+  remaining_amount Decimal
+  createdAt        DateTime      @default(now())
+  approve_status   ApproveStatus @default(APPROVED)
+
+  wallet_user    Wallet @relation(fields: [wallet_user_Id], references: [id])
+  wallet_user_Id String
+}
+
+model TransactionIncomeProducer {
+  id               String        @id @default(cuid())
+  initial_amount   Decimal
+  remaining_amount Decimal
+  amount           Decimal
+  createdAt        DateTime      @default(now())
+  approve_status   ApproveStatus @default(APPROVED)
+
+  wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
+  wallet_producer_Id String
+}
+
+model TransactionDisclosure {
+  id               String        @id @default(cuid())
+  amount           Decimal
+  initial_amount   Decimal
+  remaining_amount Decimal
+  createdAt        DateTime      @default(now())
+  approve_status   ApproveStatus @default(APPROVED)
+
+  event    Event  @relation(fields: [event_Id], references: [id])
+  event_Id String @unique
+
+  wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
+  wallet_producer_Id String
+}
+
+model TransactionPaymentTicket {
+  id               String        @id @default(cuid())
+  amount           Decimal
+  initial_amount   Decimal
+  remaining_amount Decimal
+  createdAt        DateTime      @default(now())
+  approve_status   ApproveStatus @default(APPROVED)
+  reference        String        @unique
+
+  ticket    Ticket @relation(fields: [ticket_Id], references: [id])
+  ticket_Id String @unique
+
+  wallet         Wallet @relation(fields: [wallet_user_Id], references: [id])
+  wallet_user_Id String
+}
