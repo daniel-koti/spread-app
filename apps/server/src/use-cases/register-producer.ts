@@ -1,9 +1,8 @@
-import { Producer, WalletProducer } from '@prisma/client'
+import { Producer } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ResourceNotCreatedError } from './errors/resource-not-created-error'
-import { ProducerRepository } from '@/repositories/producer-repository'
-import { WalletProducerRepository } from '@/repositories/wallet-producer-repository'
+
+import { ProducersRepository } from '@/repositories/producers-repository'
 
 interface RegisterProducerUseCaseRequest {
   name: string
@@ -16,14 +15,10 @@ interface RegisterProducerUseCaseRequest {
 
 interface RegisterProducerUseCaseResponse {
   producer: Producer
-  walletProducer: WalletProducer
 }
 
 export class RegisterProducerUseCase {
-  constructor(
-    private producerRepository: ProducerRepository,
-    private walletProducerRepository: WalletProducerRepository,
-  ) {}
+  constructor(private producerRepository: ProducersRepository) {}
 
   async execute({
     name,
@@ -46,23 +41,14 @@ export class RegisterProducerUseCase {
     const producer = await this.producerRepository.create({
       name,
       email,
-      password: password_hash,
+      password_hash,
       company,
       nif,
       phone,
     })
 
-    if (!producer) {
-      throw new ResourceNotCreatedError()
-    }
-
-    const walletProducer = await this.walletProducerRepository.create(
-      producer.id,
-    )
-
     return {
       producer,
-      walletProducer,
     }
   }
 }

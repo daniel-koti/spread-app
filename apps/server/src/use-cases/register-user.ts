@@ -1,9 +1,7 @@
 import { UsersRepository } from '@/repositories/users-repository'
-import { User, Wallet } from '@prisma/client'
+import { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { ResourceNotCreatedError } from './errors/resource-not-created-error'
-import { WalletUserRepository } from '@/repositories/wallet-user-repository'
 
 interface RegisterUserUseCaseRequest {
   name: string
@@ -13,14 +11,10 @@ interface RegisterUserUseCaseRequest {
 
 interface RegisterUserUseCaseResponse {
   user: User
-  wallet: Wallet
 }
 
 export class RegisterUserUseCase {
-  constructor(
-    private usersRepository: UsersRepository,
-    private walletRepository: WalletUserRepository,
-  ) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   async execute({
     name,
@@ -41,15 +35,8 @@ export class RegisterUserUseCase {
       password_hash,
     })
 
-    if (!user) {
-      throw new ResourceNotCreatedError()
-    }
-
-    const wallet = await this.walletRepository.create(user.id)
-
     return {
       user,
-      wallet,
     }
   }
 }

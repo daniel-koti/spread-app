@@ -21,19 +21,19 @@ enum ApproveStatus {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String
-  email         String   @unique
+  email         String      @unique
   password_hash String
-  is_admin      Boolean  @default(false)
-  status        Status   @default(ENABLED)
-  created_at    DateTime @default(now())
-  wallet        Wallet?
+  is_admin      Boolean     @default(false)
+  status        Status      @default(ENABLED)
+  created_at    DateTime    @default(now())
+  wallet        WalletUser?
 
   @@map("users")
 }
 
-model Wallet {
+model WalletUser {
   id         String   @id @default(cuid())
   amount     Decimal  @default(0.0)
   created_at DateTime @default(now())
@@ -47,15 +47,15 @@ model Wallet {
 }
 
 model Producer {
-  id         String   @id @default(cuid())
-  name       String
-  email      String   @unique
-  password   String
-  phone      String
-  nif        String
-  company    Boolean
-  status     Status   @default(ENABLED)
-  created_at DateTime @default(now())
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  phone         String
+  nif           String
+  company       Boolean
+  status        Status   @default(ENABLED)
+  created_at    DateTime @default(now())
 
   wallet WalletProducer?
   Event  Event[]
@@ -143,8 +143,8 @@ model TransactionIncomeUser {
   createdAt        DateTime      @default(now())
   approve_status   ApproveStatus @default(APPROVED)
 
-  wallet_user    Wallet @relation(fields: [wallet_user_Id], references: [id])
-  wallet_user_Id String
+  wallet_user    WalletUser @relation(fields: [id_wallet_user], references: [id])
+  id_wallet_user String
 
   @@map("transaction_income_user")
 }
@@ -157,8 +157,8 @@ model TransactionIncomeProducer {
   createdAt        DateTime      @default(now())
   approve_status   ApproveStatus @default(APPROVED)
 
-  wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
-  wallet_producer_Id String
+  wallet_producer    WalletProducer @relation(fields: [id_wallet_producer], references: [id])
+  id_wallet_producer String
 
   @@map("transaction_income_producer")
 }
@@ -174,8 +174,8 @@ model TransactionDisclosure {
   event    Event  @relation(fields: [event_Id], references: [id])
   event_Id String @unique
 
-  wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
-  wallet_producer_Id String
+  wallet_producer    WalletProducer @relation(fields: [id_wallet_producer], references: [id])
+  id_wallet_producer String
 
   @@map("transaction_disclosure")
 }
@@ -192,8 +192,8 @@ model TransactionPaymentTicket {
   ticket    Ticket @relation(fields: [ticket_Id], references: [id])
   ticket_Id String @unique
 
-  wallet         Wallet @relation(fields: [wallet_user_Id], references: [id])
-  wallet_user_Id String
+  wallet         WalletUser @relation(fields: [id_wallet_user], references: [id])
+  id_wallet_user String
 
   @@map("transaction_payment_ticket")
 }
