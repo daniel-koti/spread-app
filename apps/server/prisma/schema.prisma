@@ -50,6 +50,7 @@ model Producer {
   id         String   @id @default(cuid())
   name       String
   email      String   @unique
+  password   String
   phone      String
   nif        String
   company    Boolean
@@ -87,12 +88,16 @@ model Ticket {
   ticket_type              TicketType                @relation(fields: [ticket_type_id], references: [id])
   ticket_type_id           String
   TransactionPaymentTicket TransactionPaymentTicket?
+
+  @@map("tickets")
 }
 
 model TicketType {
   id     String   @id @default(cuid())
   type   String   @unique
   Ticket Ticket[]
+
+  @@map("ticket_types")
 }
 
 model Event {
@@ -118,12 +123,16 @@ model Event {
   producer_id          String
   TransactionDiclosure TransactionDisclosure?
   Ticket               Ticket[]
+
+  @@map("events")
 }
 
 model CategoryEvent {
   id    String  @id @default(cuid())
   name  String
   Event Event[]
+
+  @@map("categories_events")
 }
 
 model TransactionIncomeUser {
@@ -136,6 +145,8 @@ model TransactionIncomeUser {
 
   wallet_user    Wallet @relation(fields: [wallet_user_Id], references: [id])
   wallet_user_Id String
+
+  @@map("transaction_income_user")
 }
 
 model TransactionIncomeProducer {
@@ -148,6 +159,8 @@ model TransactionIncomeProducer {
 
   wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
   wallet_producer_Id String
+
+  @@map("transaction_income_producer")
 }
 
 model TransactionDisclosure {
@@ -163,6 +176,8 @@ model TransactionDisclosure {
 
   wallet_producer    WalletProducer @relation(fields: [wallet_producer_Id], references: [id])
   wallet_producer_Id String
+
+  @@map("transaction_disclosure")
 }
 
 model TransactionPaymentTicket {
@@ -179,4 +194,6 @@ model TransactionPaymentTicket {
 
   wallet         Wallet @relation(fields: [wallet_user_Id], references: [id])
   wallet_user_Id String
+
+  @@map("transaction_payment_ticket")
 }

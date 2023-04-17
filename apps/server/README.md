@@ -6,7 +6,7 @@ Plataforma de divulgação de eventos
 - O que o usuário vai poder fazer
 
 - [ ] Deve ser possível criar conta para organizadores de evento
-- [ ] Deve ser possível criar conta como cliente
+- [x] Deve ser possível criar usuário
 - [ ] Deve ser possível se autenticar (Organizador | Cliente | Administrador)
 - [ ] Deve ser possível fazer sign out
 - [ ] Toda conta, exceto o administrador, deve ter uma carteira para transações na plataforma 
