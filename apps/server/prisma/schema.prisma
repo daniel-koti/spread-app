@@ -93,8 +93,8 @@ model Event {
   hour_start  String
   hour_end    String
   address     String
-  latitude    Decimal?
-  longitude   Decimal?
+  latitude    Decimal
+  longitude   Decimal
   status      Status    @default(ENABLED)
   disclosed   DateTime?
   created_at  DateTime  @default(now())

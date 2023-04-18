@@ -8,13 +8,15 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível criar conta para organizadores de evento
 - [x] Deve ser possível criar usuário
 - [x] Deve ser possível criar uma carteira
-- [ ] Deve ser possível se autenticar (Organizador | Usuário)
-- [ ] Deve ser possível fazer sign out
 - [x] Toda conta, exceto o administrador, deve ter uma carteira para transações na plataforma 
-- [ ] Deve ser possível criar evento
+- [x] Deve ser possível buscar perfil de usuário | organizador
+- [x] Deve ser possível buscar usuário | organizador pela carteira
+- [ ] Deve ser possível fazer sign out
+- [x] Deve ser possível criar evento
 - [ ] Deve ser possível pesquisar evento
 - [ ] Deve ser possível filtrar eventos por categoria
 - [ ] Deve ser possível desabilitar um evento
+- [ ] Deve ser possível se autenticar (Organizador | Usuário)
 - [ ] Deve ser possível cadastrar bilhetes para eventos
 - [ ] Deve ser possível divulgar um evento
 - [ ] Deve ser possível comprar bilhetes 
@@ -22,7 +24,6 @@ Plataforma de divulgação de eventos
 - [ ] Deve ser possível alterar informações do usuário
 - [ ] Deve ser possível bloquear conta do usuário
 - [ ] Deve ser possível carregar a carteira
-- [ ] Deve ser possível buscar usuário | organizador pela carteira
 - [ ] Deve ser possível buscar evento pelo Bilhete
 - [ ] Deve ser possível filtrar transações feitas pelo Id da carteira (Income | Divulgações | Pagamento)
 
@@ -30,7 +31,7 @@ Plataforma de divulgação de eventos
 ## (Regras de negócio)
 - As condições que uma funcionalidade pode acontecer
 
-- [ ] O usuário não deve poder se cadastrar com um e-mail duplicado;
+- [x] O usuário não deve poder se cadastrar com um e-mail duplicado;
 - [ ] Só o administrador pode bloquear uma conta de usuário/organizador
 - [ ] Um administrador pode bloquear um evento
 - [ ] Só um organizador pode criar um evento
@@ -47,7 +48,7 @@ Plataforma de divulgação de eventos
 
 - Estratégias para chegar ao resultado previsto.
 
-- [ ] As senhas do usuário/organizador/admin precisam estar criptografadas  
+- [x] As senhas do usuário/organizador/admin precisam estar criptografadas  
 - [ ] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
 - [ ] Uma conta deve ser identificada por um JWT (JSON Web Token) 
 
