@@ -16,11 +16,16 @@ export class InMemoryEventsRepository implements EventsRepository {
       date_end: new Date(data.date_end),
       disclosed: data.disclosed ? new Date(data.disclosed) : null,
       hour_start: data.hour_start,
+      type: data.type,
       hour_end: data.hour_end,
       status: data.status ?? 'ENABLED',
       imageUrl: data.imageUrl ?? null,
-      latitude: new Prisma.Decimal(data.latitude.toString()),
-      longitude: new Prisma.Decimal(data.longitude.toString()),
+      latitude: data.latitude
+        ? new Prisma.Decimal(data.latitude.toString())
+        : null,
+      longitude: data.longitude
+        ? new Prisma.Decimal(data.longitude.toString())
+        : null,
       created_at: new Date(),
       producer_id: data.producer_id,
     }

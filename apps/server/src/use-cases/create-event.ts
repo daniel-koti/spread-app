@@ -9,9 +9,9 @@ interface CreateEventUseCaseRequest {
   date_end: Date
   hour_start: string
   hour_end: string
-
-  latitude: number
-  longitude: number
+  type: string
+  latitude?: number
+  longitude?: number
   producer_id: string
 }
 
@@ -28,6 +28,7 @@ export class CreateEventUseCase {
     hour_start,
     hour_end,
     latitude,
+    type,
     longitude,
     producer_id,
   }: CreateEventUseCaseRequest) {
@@ -40,6 +41,7 @@ export class CreateEventUseCase {
       date_end,
       hour_start,
       hour_end,
+      type,
       latitude,
       longitude,
       producer_id,

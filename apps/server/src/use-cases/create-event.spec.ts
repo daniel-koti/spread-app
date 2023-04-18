@@ -22,8 +22,7 @@ describe('Create Event Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      latitude: -27.2092052,
-      longitude: -49.6401091,
+      type: 'online',
       producer_id: 'producer-01',
     })
 
