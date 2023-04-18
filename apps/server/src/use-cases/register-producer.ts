@@ -1,8 +1,9 @@
 import { Producer } from '@prisma/client'
 import { hash } from 'bcryptjs'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-
 import { ProducersRepository } from '@/repositories/producers-repository'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
+
+import { WalletsRepository } from '@/repositories/wallets-repository'
 
 interface RegisterProducerUseCaseRequest {
   name: string
@@ -18,7 +19,10 @@ interface RegisterProducerUseCaseResponse {
 }
 
 export class RegisterProducerUseCase {
-  constructor(private producerRepository: ProducersRepository) {}
+  constructor(
+    private producerRepository: ProducersRepository,
+    private walletsRepository: WalletsRepository,
+  ) {}
 
   async execute({
     name,
@@ -35,8 +39,10 @@ export class RegisterProducerUseCase {
     )
 
     if (producerWithSameEmail) {
-      throw new ResourceNotFoundError()
+      throw new UserAlreadyExistsError()
     }
+
+    const wallet = await this.walletsRepository.create()
 
     const producer = await this.producerRepository.create({
       name,
@@ -45,6 +51,7 @@ export class RegisterProducerUseCase {
       company,
       nif,
       phone,
+      wallet_id: wallet.id,
     })
 
     return {

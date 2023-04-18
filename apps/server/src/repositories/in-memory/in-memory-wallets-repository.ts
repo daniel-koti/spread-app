@@ -1,0 +1,20 @@
+import { randomUUID } from 'node:crypto'
+import { Prisma, Wallet } from '@prisma/client'
+
+import { WalletsRepository } from '../wallets-repository'
+
+export class InMemoryWalletsRepository implements WalletsRepository {
+  public items: Wallet[] = []
+
+  async create() {
+    const wallet = {
+      id: randomUUID(),
+      amount: new Prisma.Decimal(0.0),
+      created_at: new Date(),
+    }
+
+    this.items.push(wallet)
+
+    return wallet
+  }
+}

@@ -1,7 +1,8 @@
 import { UsersRepository } from '@/repositories/users-repository'
 import { User } from '@prisma/client'
 import { hash } from 'bcryptjs'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { UserAlreadyExistsError } from './errors/user-already-exists-error'
+import { WalletsRepository } from '@/repositories/wallets-repository'
 
 interface RegisterUserUseCaseRequest {
   name: string
@@ -14,7 +15,10 @@ interface RegisterUserUseCaseResponse {
 }
 
 export class RegisterUserUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private walletsRepository: WalletsRepository,
+  ) {}
 
   async execute({
     name,
@@ -26,13 +30,16 @@ export class RegisterUserUseCase {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
     if (userWithSameEmail) {
-      throw new ResourceNotFoundError()
+      throw new UserAlreadyExistsError()
     }
+
+    const wallet = await this.walletsRepository.create()
 
     const user = await this.usersRepository.create({
       name,
       email,
       password_hash,
+      wallet_id: wallet.id,
     })
 
     return {

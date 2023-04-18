@@ -5,7 +5,7 @@ import { ProducersRepository } from '../producers-repository'
 export class InMemoryProducerRepository implements ProducersRepository {
   public items: Producer[] = []
 
-  async create(data: Prisma.ProducerCreateInput) {
+  async create(data: Prisma.ProducerUncheckedCreateInput) {
     const producer: Producer = {
       id: randomUUID(),
       name: data.name,
@@ -16,6 +16,7 @@ export class InMemoryProducerRepository implements ProducersRepository {
       status: 'ENABLED',
       password_hash: data.password_hash,
       created_at: new Date(),
+      wallet_id: '01',
     }
 
     this.items.push(producer)

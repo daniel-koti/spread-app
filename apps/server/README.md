@@ -5,11 +5,12 @@ Plataforma de divulgação de eventos
 ## (Requisitos funcionais)
 - O que o usuário vai poder fazer
 
-- [ ] Deve ser possível criar conta para organizadores de evento
+- [x] Deve ser possível criar conta para organizadores de evento
 - [x] Deve ser possível criar usuário
-- [ ] Deve ser possível se autenticar (Organizador | Cliente | Administrador)
+- [x] Deve ser possível criar uma carteira
+- [ ] Deve ser possível se autenticar (Organizador | Usuário)
 - [ ] Deve ser possível fazer sign out
-- [ ] Toda conta, exceto o administrador, deve ter uma carteira para transações na plataforma 
+- [x] Toda conta, exceto o administrador, deve ter uma carteira para transações na plataforma 
 - [ ] Deve ser possível criar evento
 - [ ] Deve ser possível pesquisar evento
 - [ ] Deve ser possível filtrar eventos por categoria
@@ -21,7 +22,6 @@ Plataforma de divulgação de eventos
 - [ ] Deve ser possível alterar informações do usuário
 - [ ] Deve ser possível bloquear conta do usuário
 - [ ] Deve ser possível carregar a carteira
-- [ ] Deve ser possível buscar carteira pelo Id do responsável
 - [ ] Deve ser possível buscar usuário | organizador pela carteira
 - [ ] Deve ser possível buscar evento pelo Bilhete
 - [ ] Deve ser possível filtrar transações feitas pelo Id da carteira (Income | Divulgações | Pagamento)
