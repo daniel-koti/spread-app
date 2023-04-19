@@ -42,4 +42,28 @@ export class InMemoryEventsRepository implements EventsRepository {
   async findManyByCategoryId(categoryId: string) {
     return this.items.filter((item) => item.category_id === categoryId)
   }
+
+  async findManyProducerId(producerId: string) {
+    return this.items.filter((item) => item.producer_id === producerId)
+  }
+
+  async findById(id: string) {
+    const event = this.items.find((item) => item.id === id)
+
+    if (!event) {
+      return null
+    }
+
+    return event
+  }
+
+  async save(event: Event) {
+    const eventIndex = this.items.findIndex((item) => item.id === event.id)
+
+    if (eventIndex >= 0) {
+      this.items[eventIndex] = event
+    }
+
+    return event
+  }
 }

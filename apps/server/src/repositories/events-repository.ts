@@ -4,4 +4,7 @@ export interface EventsRepository {
   create(data: Prisma.EventUncheckedCreateInput): Promise<Event>
   searchMany(query: string): Promise<Event[]>
   findManyByCategoryId(categoryId: string): Promise<Event[]>
+  findManyProducerId(producerId: string): Promise<Event[]>
+  findById(id: string): Promise<Event | null>
+  save(event: Event): Promise<Event>
 }

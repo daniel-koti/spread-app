@@ -17,7 +17,8 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível criar evento
 - [x] Deve ser possível pesquisar evento
 - [x] Deve ser possível filtrar eventos por categoria
-- [ ] Deve ser possível alterar informações do evento
+- [x] Deve ser possível filtrar eventos por organizador
+- [x] Deve ser possível alterar informações do evento
 - [ ] Deve ser possível desabilitar um evento
 - [ ] Deve ser possível cadastrar bilhetes para eventos
 - [ ] Deve ser possível divulgar um evento

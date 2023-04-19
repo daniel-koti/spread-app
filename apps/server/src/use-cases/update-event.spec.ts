@@ -1,19 +1,18 @@
 import { expect, describe, it, beforeAll } from 'vitest'
-
-import { CreateEventUseCase } from './create-event'
 import { InMemoryEventsRepository } from '../repositories/in-memory/in-memory-events-repository'
+import { UpdateEventUseCase } from './update-event'
 
 let eventRepository: InMemoryEventsRepository
-let sut: CreateEventUseCase
+let sut: UpdateEventUseCase
 
-describe('Create Event Use case', () => {
+describe('Update Event Use case', () => {
   beforeAll(() => {
     eventRepository = new InMemoryEventsRepository()
-    sut = new CreateEventUseCase(eventRepository)
+    sut = new UpdateEventUseCase(eventRepository)
   })
 
-  it('should be able to create a event', async () => {
-    const { event } = await sut.execute({
+  it('should be able to update a event', async () => {
+    const eventCreated = await eventRepository.create({
       title: 'Event 1',
       description: 'Description event 1',
       address: 'Rua 1',
@@ -26,6 +25,11 @@ describe('Create Event Use case', () => {
       producer_id: 'producer-01',
     })
 
-    expect(event.id).toEqual(expect.any(String))
+    const { event } = await sut.execute({
+      eventId: eventCreated.id,
+      fields: { title: 'Event' },
+    })
+
+    expect(event.title).toEqual('Event')
   })
 })
