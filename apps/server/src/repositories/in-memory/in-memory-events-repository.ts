@@ -34,4 +34,12 @@ export class InMemoryEventsRepository implements EventsRepository {
 
     return event
   }
+
+  async searchMany(query: string) {
+    return this.items.filter((item) => item.title.includes(query))
+  }
+
+  async findManyByCategoryId(categoryId: string) {
+    return this.items.filter((item) => item.category_id === categoryId)
+  }
 }

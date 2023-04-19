@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto'
 import { Prisma, Wallet } from '@prisma/client'
-
 import { WalletsRepository } from '../wallets-repository'
 
 export class InMemoryWalletsRepository implements WalletsRepository {
@@ -14,6 +13,16 @@ export class InMemoryWalletsRepository implements WalletsRepository {
     }
 
     this.items.push(wallet)
+
+    return wallet
+  }
+
+  async findById(id: string) {
+    const wallet = this.items.find((item) => item.id === id)
+
+    if (!wallet) {
+      return null
+    }
 
     return wallet
   }

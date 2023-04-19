@@ -11,16 +11,17 @@ Plataforma de divulgação de eventos
 - [x] Toda conta, exceto o administrador, deve ter uma carteira para transações na plataforma 
 - [x] Deve ser possível buscar perfil de usuário | organizador
 - [x] Deve ser possível buscar usuário | organizador pela carteira
+- [x] Deve ser possível buscar carteira pelo ID
 - [ ] Deve ser possível fazer sign out
 - [ ] Deve ser possível se autenticar (Organizador | Usuário)
 - [x] Deve ser possível criar evento
-- [ ] Deve ser possível pesquisar evento
-- [ ] Deve ser possível filtrar eventos por categoria
+- [x] Deve ser possível pesquisar evento
+- [x] Deve ser possível filtrar eventos por categoria
+- [ ] Deve ser possível alterar informações do evento
 - [ ] Deve ser possível desabilitar um evento
 - [ ] Deve ser possível cadastrar bilhetes para eventos
 - [ ] Deve ser possível divulgar um evento
 - [ ] Deve ser possível comprar bilhetes 
-- [ ] Deve ser possível alterar informações do evento
 - [ ] Deve ser possível alterar informações do usuário
 - [ ] Deve ser possível bloquear conta do usuário
 - [ ] Deve ser possível carregar a carteira
