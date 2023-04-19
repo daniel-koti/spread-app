@@ -106,33 +106,32 @@ model Event {
   producer    Producer @relation(fields: [producer_id], references: [id])
   producer_id String
 
-  Package    Package[]
+  Coupon     Coupon[]
   Disclosure Disclosure?
   Ticket     Ticket[]
 
   @@map("events")
 }
 
-model Package {
+model Coupon {
   id    String  @id @default(cuid())
-  name  String
   price Decimal
 
   event    Event  @relation(fields: [event_id], references: [id])
   event_id String
 
-  package_type    PackageType @relation(fields: [package_type_id], references: [id])
-  package_type_id String
-  ticket          Ticket[]
+  coupon_type    CouponType @relation(fields: [coupon_type_id], references: [id])
+  coupon_type_id String
+  ticket         Ticket[]
 
   @@map("packages")
 }
 
-model PackageType {
+model CouponType {
   id   String @id @default(cuid())
-  type String @unique
+  name String @unique
 
-  Package Package[]
+  Coupon Coupon[]
 
   @@map("package_types")
 }
@@ -170,8 +169,8 @@ model Ticket {
   event    Event  @relation(fields: [event_Id], references: [id])
   event_Id String
 
-  package    Package @relation(fields: [package_Id], references: [id])
-  package_Id String
+  Coupon    Coupon @relation(fields: [coupon_Id], references: [id])
+  coupon_Id String
 
   @@map("tickets")
 }
