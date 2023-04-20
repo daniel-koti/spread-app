@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { Prisma, Wallet } from '@prisma/client'
 import { WalletsRepository } from '../wallets-repository'
+import { ResourceNotFoundError } from '../../use-cases/errors/resource-not-found-error'
 
 export class InMemoryWalletsRepository implements WalletsRepository {
   public items: Wallet[] = []
@@ -25,5 +26,15 @@ export class InMemoryWalletsRepository implements WalletsRepository {
     }
 
     return wallet
+  }
+
+  async verifyWalletAmountIsEnough(walletId: string, price: Prisma.Decimal) {
+    const wallet = await this.findById(walletId)
+
+    if (!wallet) {
+      throw new ResourceNotFoundError()
+    }
+
+    return wallet.amount >= price
   }
 }

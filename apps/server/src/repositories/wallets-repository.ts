@@ -1,6 +1,10 @@
-import { Wallet } from '@prisma/client'
+import { Prisma, Wallet } from '@prisma/client'
 
 export interface WalletsRepository {
   create(): Promise<Wallet>
   findById(id: string): Promise<Wallet | null>
+  verifyWalletAmountIsEnough(
+    walletId: string,
+    price: Prisma.Decimal,
+  ): Promise<boolean>
 }

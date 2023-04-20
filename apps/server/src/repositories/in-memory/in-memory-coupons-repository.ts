@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import { Prisma, Coupon } from '@prisma/client'
-import { PackagesRepository } from '../packages-repository'
+import { CouponsRepository } from '../coupons-repository'
 
-export class InMemoryPackagesRepository implements PackagesRepository {
+export class InMemoryCouponsRepository implements CouponsRepository {
   private items: Coupon[] = []
 
   async create(data: Prisma.CouponUncheckedCreateInput) {

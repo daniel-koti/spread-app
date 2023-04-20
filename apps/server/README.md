@@ -20,12 +20,13 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível filtrar eventos por organizador
 - [x] Deve ser possível alterar informações do evento
 - [ ] Deve ser possível desabilitar um evento
-- [ ] Deve ser possível cadastrar bilhetes para eventos
-- [ ] Deve ser possível divulgar um evento
+- [x] Deve ser possível cadastrar bilhetes para eventos
+- [x] Deve ser possível divulgar um evento
 - [ ] Deve ser possível comprar bilhetes 
 - [ ] Deve ser possível alterar informações do usuário
 - [ ] Deve ser possível bloquear conta do usuário
 - [ ] Deve ser possível carregar a carteira
+- [ ] Deve ser possível criar uma transação
 - [ ] Deve ser possível buscar evento pelo Bilhete
 - [ ] Deve ser possível filtrar transações feitas pelo Id da carteira (Income | Divulgações | Pagamento)
 

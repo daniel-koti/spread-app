@@ -1,5 +1,5 @@
 import { Prisma, Coupon } from '@prisma/client'
 
-export interface PackagesRepository {
+export interface CouponsRepository {
   create(data: Prisma.CouponUncheckedCreateInput): Promise<Coupon>
 }
