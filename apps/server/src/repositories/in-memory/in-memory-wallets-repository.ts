@@ -28,7 +28,17 @@ export class InMemoryWalletsRepository implements WalletsRepository {
     return wallet
   }
 
-  async verifyWalletAmountIsEnough(walletId: string, price: Prisma.Decimal) {
+  async save(wallet: Wallet) {
+    const walletIndex = this.items.findIndex((item) => item.id === wallet.id)
+
+    if (walletIndex >= 0) {
+      this.items[walletIndex] = wallet
+    }
+
+    return wallet
+  }
+
+  async checkBalance(walletId: string, price: Prisma.Decimal) {
     const wallet = await this.findById(walletId)
 
     if (!wallet) {
