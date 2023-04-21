@@ -24,11 +24,10 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível comprar ticket 
 - [ ] Deve ser possível fazer sign out
 - [x] Deve ser possível se autenticar (Organizador | Usuário)
-- [ ] Deve ser possível filtrar transações pelo id da carteira
-- [ ] Deve ser possível buscar uma transação
-- [ ] Deve ser possível desabilitar um evento
+- [ ] Deve ser possível filtrar transações de uma conta (walletId)
 - [ ] Deve ser possível buscar evento pelo ticket
 - [ ] Deve ser possível alterar informações do usuário
+- [ ] Deve ser possível desabilitar um evento
 - [ ] Deve ser possível bloquear conta do usuário
 
 
