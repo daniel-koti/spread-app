@@ -34,10 +34,7 @@ export class CreateTransactionUseCase {
     }
 
     if (type === 'OUTCOME') {
-      const isWalletBalanceReady = this.walletRepository.checkBalance(
-        wallet.id,
-        new Prisma.Decimal(price),
-      )
+      const isWalletBalanceReady = wallet.amount >= price
 
       if (!isWalletBalanceReady) {
         throw new InsufficientFundsInWalletError()
