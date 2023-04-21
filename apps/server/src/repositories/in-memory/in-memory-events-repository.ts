@@ -57,13 +57,18 @@ export class InMemoryEventsRepository implements EventsRepository {
     return event
   }
 
-  async save(event: Event) {
-    const eventIndex = this.items.findIndex((item) => item.id === event.id)
+  async save(data: Event) {
+    const eventIndex = this.items.findIndex((item) => item.id === data.id)
 
     if (eventIndex >= 0) {
-      this.items[eventIndex] = event
+      this.items[eventIndex] = data
     }
 
-    return event
+    return data
+  }
+
+  async fetch() {
+    const events = this.items.map((item) => item)
+    return events
   }
 }
