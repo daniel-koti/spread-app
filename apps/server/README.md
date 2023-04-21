@@ -12,25 +12,24 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível buscar perfil de usuário | organizador
 - [x] Deve ser possível buscar usuário | organizador pela carteira
 - [x] Deve ser possível buscar carteira pelo ID
-- [ ] Deve ser possível fazer sign out
-- [ ] Deve ser possível criar uma transação
-- [ ] Deve ser possível filtrar transações pelo id da carteira
-- [ ] Deve ser possível buscar uma transação
-- [ ] Deve ser possível se autenticar (Organizador | Usuário)
+- [x] Deve ser possível criar uma transação
 - [x] Deve ser possível criar evento
 - [x] Deve ser possível pesquisar evento
 - [x] Deve ser possível filtrar eventos por categoria
 - [x] Deve ser possível filtrar eventos por organizador
 - [x] Deve ser possível alterar informações do evento
-- [ ] Deve ser possível desabilitar um evento
 - [x] Deve ser possível cadastrar bilhetes para eventos
 - [x] Deve ser possível divulgar um evento
-- [ ] Deve ser possível comprar bilhetes 
+- [x] Deve ser possível carregar a carteira
+- [ ] Deve ser possível comprar ticket 
+- [ ] Deve ser possível fazer sign out
+- [ ] Deve ser possível se autenticar (Organizador | Usuário)
+- [ ] Deve ser possível filtrar transações pelo id da carteira
+- [ ] Deve ser possível buscar uma transação
+- [ ] Deve ser possível desabilitar um evento
+- [ ] Deve ser possível buscar evento pelo ticket
 - [ ] Deve ser possível alterar informações do usuário
 - [ ] Deve ser possível bloquear conta do usuário
-- [ ] Deve ser possível carregar a carteira
-- [ ] Deve ser possível buscar evento pelo Bilhete
-- [ ] Deve ser possível filtrar transações feitas pelo Id da carteira (Income | Divulgações | Pagamento)
 
 
 ## (Regras de negócio)

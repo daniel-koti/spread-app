@@ -17,4 +17,14 @@ export class InMemoryCouponsRepository implements CouponsRepository {
 
     return coupon
   }
+
+  async findById(id: string) {
+    const coupon = this.items.find((item) => item.id === id)
+
+    if (!coupon) {
+      return null
+    }
+
+    return coupon
+  }
 }

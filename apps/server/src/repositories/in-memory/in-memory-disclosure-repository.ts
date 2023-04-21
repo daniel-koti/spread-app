@@ -8,9 +8,10 @@ export class InMemoryDiscloseRepository implements DiscloseRepository {
   async create(data: Prisma.DisclosureUncheckedCreateInput) {
     const disclose: Disclosure = {
       id: randomUUID(),
-      event_Id: data.event_Id,
-      transaction_Id: data.transaction_Id,
+      event_id: data.event_id,
+      transaction_id: data.transaction_id,
       approve_status: 'APPROVED',
+      producer_id: data.producer_id,
     }
 
     this.items.push(disclose)

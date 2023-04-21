@@ -31,8 +31,9 @@ model User {
   status        Status   @default(ENABLED)
   created_at    DateTime @default(now())
 
-  wallet    Wallet @relation(fields: [wallet_id], references: [id])
-  wallet_id String @unique
+  wallet    Wallet   @relation(fields: [wallet_id], references: [id])
+  wallet_id String   @unique
+  Ticket    Ticket[]
 
   @@map("users")
 }
@@ -51,7 +52,8 @@ model Producer {
   wallet    Wallet @relation(fields: [wallet_id], references: [id])
   wallet_id String @unique
 
-  Event Event[]
+  Event      Event[]
+  Disclosure Disclosure[]
 
   @@map("producers")
 }
@@ -124,7 +126,7 @@ model Coupon {
   coupon_type_id String
   ticket         Ticket[]
 
-  @@map("packages")
+  @@map("coupons")
 }
 
 model CouponType {
@@ -133,7 +135,7 @@ model CouponType {
 
   Coupon Coupon[]
 
-  @@map("package_types")
+  @@map("coupon_types")
 }
 
 model CategoryEvent {
@@ -148,11 +150,14 @@ model Disclosure {
   id             String        @id @default(cuid())
   approve_status ApproveStatus @default(APPROVED)
 
-  event    Event  @relation(fields: [event_Id], references: [id])
-  event_Id String @unique
+  producer    Producer @relation(fields: [producer_id], references: [id])
+  producer_id String   @unique
 
-  transaction    Transaction @relation(fields: [transaction_Id], references: [id])
-  transaction_Id String      @unique
+  event    Event  @relation(fields: [event_id], references: [id])
+  event_id String @unique
+
+  transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  transaction_id String      @unique
 
   @@map("disclosures")
 }
@@ -161,16 +166,19 @@ model Ticket {
   id             String        @id @default(cuid())
   approve_status ApproveStatus @default(APPROVED)
   reference      String        @unique
-  createdAt      DateTime      @default(now())
+  created_at     DateTime      @default(now())
 
-  transaction    Transaction @relation(fields: [transaction_Id], references: [id])
-  transaction_Id String      @unique
+  transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  transaction_id String      @unique
 
-  event    Event  @relation(fields: [event_Id], references: [id])
-  event_Id String
+  event    Event  @relation(fields: [event_id], references: [id])
+  event_id String
 
-  Coupon    Coupon @relation(fields: [coupon_Id], references: [id])
-  coupon_Id String
+  Coupon    Coupon @relation(fields: [coupon_id], references: [id])
+  coupon_id String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String @unique
 
   @@map("tickets")
 }
