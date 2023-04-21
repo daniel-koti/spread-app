@@ -21,4 +21,8 @@ export class InMemoryTicketRepository implements TicketRepository {
 
     return ticket
   }
+
+  async fetchByUserId(userId: string) {
+    return this.items.filter((item) => item.user_id === userId)
+  }
 }
