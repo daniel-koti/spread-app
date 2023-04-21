@@ -1,16 +1,16 @@
-import { Ticket } from '@prisma/client'
+import { Prisma, Ticket } from '@prisma/client'
 import { TicketRepository } from '../repositories/ticket-repository'
 import { CouponsRepository } from '../repositories/coupons-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 
 interface BuyTicketUseCaseRequest {
-  event_Id: string
-  transaction_Id: string
+  event_id: string
   approve_status: 'APPROVED' | 'RECUSED'
-  coupon_Id: string
+  coupon_id: string
   reference: string
-  createdAt: Date
+  user_id: string
 }
 
 interface BuyTicketUseCaseResponse {
@@ -21,38 +21,47 @@ export class BuyTicketUseCase {
   constructor(
     private ticketRepository: TicketRepository,
     private couponsRepository: CouponsRepository,
+    private usersRepository: UsersRepository,
     private transactionRepository: TransactionsRepository,
   ) {}
 
   async execute({
-    event_Id,
+    event_id,
     approve_status,
-    coupon_Id,
+    coupon_id,
     reference,
-    createdAt,
-    transaction_Id,
+    user_id,
   }: BuyTicketUseCaseRequest): Promise<BuyTicketUseCaseResponse> {
-    const coupon = await this.couponsRepository.findById(event_Id)
+    const user = await this.usersRepository.findById(user_id)
+
+    if (!user) {
+      throw new ResourceNotFoundError()
+    }
+
+    const coupon = await this.couponsRepository.findById(coupon_id)
 
     if (!coupon) {
       throw new ResourceNotFoundError()
     }
 
-    const transaction = this.transactionRepository.create({
+    const transaction = await this.transactionRepository.create({
       description: 'Compra do bilhete',
-      price: 200,
+      price: new Prisma.Decimal(coupon.price),
       type: 'OUTCOME',
-      wallet_id,
+      wallet_id: user.wallet_id,
     })
 
-    const disclose = await this.discloseRepository.create({
-      event_Id,
+    const ticket = await this.ticketRepository.create({
+      coupon_id: coupon.id,
       approve_status,
-      transaction_Id,
+      transaction_id: transaction.id,
+      event_id,
+      reference,
+      user_id: user.id,
     })
 
     return {
-      disclose,
+      ticket,
     }
   }
 }

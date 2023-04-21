@@ -73,8 +73,8 @@ model Transaction {
   id          String           @id @default(cuid())
   type        TransactionsType
   description String
-  created_at  DateTime         @default(now())
   price       Decimal
+  created_at  DateTime         @default(now())
 
   wallet    Wallet @relation(fields: [wallet_id], references: [id])
   wallet_id String

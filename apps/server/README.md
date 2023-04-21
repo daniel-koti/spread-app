@@ -21,9 +21,9 @@ Plataforma de divulgação de eventos
 - [x] Deve ser possível cadastrar bilhetes para eventos
 - [x] Deve ser possível divulgar um evento
 - [x] Deve ser possível carregar a carteira
-- [ ] Deve ser possível comprar ticket 
+- [x] Deve ser possível comprar ticket 
 - [ ] Deve ser possível fazer sign out
-- [ ] Deve ser possível se autenticar (Organizador | Usuário)
+- [x] Deve ser possível se autenticar (Organizador | Usuário)
 - [ ] Deve ser possível filtrar transações pelo id da carteira
 - [ ] Deve ser possível buscar uma transação
 - [ ] Deve ser possível desabilitar um evento
