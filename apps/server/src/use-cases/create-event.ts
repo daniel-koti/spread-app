@@ -1,4 +1,6 @@
 import { EventsRepository } from '@/repositories/events-repository'
+import { ProducersRepository } from '@/repositories/producers-repository'
+import { NotAuthorizedError } from './errors/not-authorized'
 
 interface CreateEventUseCaseRequest {
   title: string
@@ -10,13 +12,17 @@ interface CreateEventUseCaseRequest {
   hour_start: string
   hour_end: string
   type: string
-  latitude?: number
-  longitude?: number
+  latitude: number | null
+  longitude: number | null
   producer_id: string
+  imageUrl: string | null
 }
 
 export class CreateEventUseCase {
-  constructor(private eventsRepository: EventsRepository) {}
+  constructor(
+    private eventsRepository: EventsRepository,
+    private producersRepository: ProducersRepository,
+  ) {}
 
   async execute({
     title,
@@ -31,7 +37,14 @@ export class CreateEventUseCase {
     type,
     longitude,
     producer_id,
+    imageUrl,
   }: CreateEventUseCaseRequest) {
+    const isProducer = await this.producersRepository.findById(producer_id)
+
+    if (!isProducer) {
+      throw new NotAuthorizedError()
+    }
+
     const event = await this.eventsRepository.create({
       title,
       description,
@@ -45,6 +58,7 @@ export class CreateEventUseCase {
       latitude,
       longitude,
       producer_id,
+      imageUrl,
     })
 
     return {

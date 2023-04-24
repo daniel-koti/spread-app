@@ -1,4 +1,5 @@
 import { expect, describe, it, beforeAll } from 'vitest'
+import { Prisma } from '@prisma/client'
 
 import { BuyTicketUseCase } from './buy-ticket'
 
@@ -8,7 +9,7 @@ import { InMemoryTransactionsRepository } from '../repositories/in-memory/in-mem
 import { InMemoryCouponsRepository } from '../repositories/in-memory/in-memory-coupons-repository'
 import { EventsRepository } from '../repositories/events-repository'
 import { InMemoryEventsRepository } from '../repositories/in-memory/in-memory-events-repository'
-import { Prisma } from '@prisma/client'
+import { generateTicketReference } from '../utils/generateTicketReference'
 
 let eventsRepository: EventsRepository
 
@@ -67,7 +68,7 @@ describe('Disclose Event Use case', () => {
       event_id: event.id,
       approve_status: 'APPROVED',
       coupon_id: coupon.id,
-      reference: '2321232',
+      reference: await generateTicketReference(),
       user_id: user.id,
     })
 

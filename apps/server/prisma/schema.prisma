@@ -124,14 +124,15 @@ model Coupon {
 
   coupon_type    CouponType @relation(fields: [coupon_type_id], references: [id])
   coupon_type_id String
-  ticket         Ticket[]
+
+  ticket Ticket[]
 
   @@map("coupons")
 }
 
 model CouponType {
   id   String @id @default(cuid())
-  name String @unique
+  name String
 
   Coupon Coupon[]
 
@@ -174,7 +175,7 @@ model Ticket {
   event    Event  @relation(fields: [event_id], references: [id])
   event_id String
 
-  Coupon    Coupon @relation(fields: [coupon_id], references: [id])
+  coupon    Coupon @relation(fields: [coupon_id], references: [id])
   coupon_id String
 
   user    User   @relation(fields: [user_id], references: [id])

@@ -1,5 +1,5 @@
-import { CouponsRepository } from '@/repositories/coupons-repository'
 import { Prisma, Coupon } from '@prisma/client'
+import { CouponsRepository } from '../repositories/coupons-repository'
 
 interface CreateCouponUseCaseRequest {
   event_id: string

@@ -1,27 +1,32 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../lib/prisma'
 
 export async function generateTicketReference() {
   let reference = ''
-  let isCharacterValid = false
+  let isCharactersValid = false
 
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-  while (!isCharacterValid) {
+  while (!isCharactersValid) {
     for (let i = 0; i <= 4; i++) {
       reference += characters.charAt(
         Math.floor(Math.random() * characters.length),
       )
     }
 
+    console.log('referencia gerada', reference)
+
     const isCodeAlreadyExists = await prisma.ticket.findFirst({
       where: {
         reference,
       },
+      select: {
+        id: true,
+      },
     })
 
     if (!isCodeAlreadyExists) {
-      isCharacterValid = true
+      isCharactersValid = true
     }
   }
 

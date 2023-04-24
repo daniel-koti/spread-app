@@ -4,7 +4,7 @@ import { CouponsRepository } from '../repositories/coupons-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 import { UsersRepository } from '@/repositories/users-repository'
-import { generateTicketReference } from '@/utils/generateTicketReference'
+import { generateTicketReference } from '../utils/generateTicketReference'
 
 interface BuyTicketUseCaseRequest {
   event_id: string
@@ -30,7 +30,6 @@ export class BuyTicketUseCase {
     event_id,
     approve_status,
     coupon_id,
-    reference,
     user_id,
   }: BuyTicketUseCaseRequest): Promise<BuyTicketUseCaseResponse> {
     const user = await this.usersRepository.findById(user_id)

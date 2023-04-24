@@ -37,7 +37,7 @@ Plataforma de divulgação de eventos
 - [x] O usuário não deve poder se cadastrar com um e-mail duplicado;
 - [ ] Só o administrador pode bloquear uma conta de usuário/organizador
 - [ ] Um administrador pode bloquear um evento
-- [ ] Só um organizador pode criar um evento
+- [x] Só um organizador pode criar um evento
 - [ ] O organizador só pode ver, alterar informações de eventos que ele mesmo criou.
 - [ ] Um usuário não pode comprar bilhetes se tiver a sua conta bloqueada
 - [ ] Um organizador não pode divulgar eventos se tiver a sua conta bloqueada
@@ -52,8 +52,8 @@ Plataforma de divulgação de eventos
 - Estratégias para chegar ao resultado previsto.
 
 - [x] As senhas do usuário/organizador/admin precisam estar criptografadas  
-- [ ] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
-- [ ] Uma conta deve ser identificada por um JWT (JSON Web Token) 
+- [x] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
+- [x] Uma conta deve ser identificada por um JWT (JSON Web Token) 
 
 
 ## Docker
