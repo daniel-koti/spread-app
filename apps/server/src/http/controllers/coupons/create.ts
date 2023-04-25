@@ -1,9 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { makeCreateCouponUseCase } from '@/use-cases/factories/make-create-coupon-use-case'
 import { Prisma } from '@prisma/client'
-
-import { prisma } from '@/lib/prisma'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createCouponBodySchema = z.object({

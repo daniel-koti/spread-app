@@ -57,7 +57,6 @@ describe('Disclose Event Use case', () => {
 
     const { disclose } = await sut.execute({
       event_id: event.id,
-      approve_status: 'APPROVED',
       producer_id: producer.id,
     })
 

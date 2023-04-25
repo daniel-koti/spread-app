@@ -14,8 +14,6 @@ export async function generateTicketReference() {
       )
     }
 
-    console.log('referencia gerada', reference)
-
     const isCodeAlreadyExists = await prisma.ticket.findFirst({
       where: {
         reference,

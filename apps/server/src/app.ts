@@ -4,10 +4,12 @@ import fastifyCookie from '@fastify/cookie'
 
 import { env } from './env'
 import { ZodError } from 'zod'
+
 import { usersRoutes } from './http/controllers/users/routes'
 import { producersRoutes } from './http/controllers/producers/routes'
 import { eventsRoutes } from './http/controllers/events/routes'
 import { couponsRoutes } from './http/controllers/coupons/routes'
+import { discloseRoutes } from './http/controllers/discloses/routes'
 
 export const app = fastify()
 
@@ -24,6 +26,7 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie)
 
+app.register(discloseRoutes)
 app.register(couponsRoutes)
 app.register(usersRoutes)
 app.register(eventsRoutes)

@@ -7,7 +7,6 @@ import { ProducersRepository } from '../repositories/producers-repository'
 
 interface DiscloseEventUseCaseRequest {
   event_id: string
-  approve_status: 'APPROVED' | 'RECUSED'
   producer_id: string
 }
 
@@ -25,7 +24,6 @@ export class DiscloseEventUseCase {
 
   async execute({
     event_id,
-    approve_status,
     producer_id,
   }: DiscloseEventUseCaseRequest): Promise<DiscloseEventUseCaseResponse> {
     const event = await this.eventsRepository.findById(event_id)
@@ -35,6 +33,7 @@ export class DiscloseEventUseCase {
     }
 
     event.disclosed = new Date()
+
     await this.eventsRepository.save(event)
 
     const producer = await this.producersRepository.findById(producer_id)
@@ -52,7 +51,6 @@ export class DiscloseEventUseCase {
 
     const disclose = await this.discloseRepository.create({
       event_id,
-      approve_status,
       transaction_id: transaction.id,
       producer_id,
     })
