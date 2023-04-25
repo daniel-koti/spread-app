@@ -27,4 +27,8 @@ export class InMemoryCouponsRepository implements CouponsRepository {
 
     return coupon
   }
+
+  async fetchByEvent(eventId: string): Promise<Coupon[]> {
+    return this.items.filter((item) => item.event_id === eventId)
+  }
 }

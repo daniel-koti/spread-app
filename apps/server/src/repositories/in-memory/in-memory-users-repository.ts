@@ -14,7 +14,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       status: 'ENABLED',
       password_hash: data.password_hash,
       created_at: new Date(),
-      wallet_id: '01',
+      wallet_id: data.wallet_id,
     }
 
     this.items.push(user)

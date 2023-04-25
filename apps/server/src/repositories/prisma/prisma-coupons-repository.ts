@@ -20,4 +20,14 @@ export class PrismaCouponsRepository implements CouponsRepository {
 
     return coupon
   }
+
+  async fetchByEvent(eventId: string) {
+    const coupons = await prisma.coupon.findMany({
+      where: {
+        event_id: eventId,
+      },
+    })
+
+    return coupons
+  }
 }

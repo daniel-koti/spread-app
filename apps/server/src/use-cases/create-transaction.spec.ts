@@ -4,6 +4,7 @@ import { expect, describe, it, beforeAll } from 'vitest'
 import { InMemoryTransactionsRepository } from '../repositories/in-memory/in-memory-transactions-repository'
 import { CreateTransactionUseCase } from './create-transaction'
 import { InMemoryWalletsRepository } from '../repositories/in-memory/in-memory-wallets-repository'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
 
 let transactionRepository: InMemoryTransactionsRepository
 let walletRepository: InMemoryWalletsRepository
@@ -47,5 +48,18 @@ describe('Create Transaction Use case', () => {
     })
 
     expect(wallet.amount).toEqual(new Prisma.Decimal(150))
+  })
+
+  it('should not be able to create a outcome transaction without money in wallet', async () => {
+    const wallet = await walletRepository.create()
+
+    await expect(() =>
+      sut.execute({
+        description: 'Pagamento de bilhete',
+        type: 'OUTCOME',
+        price: new Prisma.Decimal(500),
+        wallet_id: wallet.id,
+      }),
+    ).rejects.toBeInstanceOf(InsufficientFundsInWalletError)
   })
 })

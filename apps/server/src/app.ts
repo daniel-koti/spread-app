@@ -10,6 +10,8 @@ import { producersRoutes } from './http/controllers/producers/routes'
 import { eventsRoutes } from './http/controllers/events/routes'
 import { couponsRoutes } from './http/controllers/coupons/routes'
 import { discloseRoutes } from './http/controllers/discloses/routes'
+import { ticketRoutes } from './http/controllers/tickets/routes'
+import { transactionsRoutes } from './http/controllers/transactions/routes'
 
 export const app = fastify()
 
@@ -26,6 +28,8 @@ app.register(fastifyJwt, {
 
 app.register(fastifyCookie)
 
+app.register(transactionsRoutes)
+app.register(ticketRoutes)
 app.register(discloseRoutes)
 app.register(couponsRoutes)
 app.register(usersRoutes)

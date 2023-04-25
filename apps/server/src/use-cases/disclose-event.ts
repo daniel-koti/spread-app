@@ -4,6 +4,8 @@ import { Disclosure, Prisma } from '@prisma/client'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '../repositories/transactions-repository'
 import { ProducersRepository } from '../repositories/producers-repository'
+import { WalletsRepository } from '../repositories/wallets-repository'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
 
 interface DiscloseEventUseCaseRequest {
   event_id: string
@@ -16,6 +18,7 @@ interface DiscloseEventUseCaseResponse {
 
 export class DiscloseEventUseCase {
   constructor(
+    private walletsRepository: WalletsRepository,
     private discloseRepository: DiscloseRepository,
     private transactionRepository: TransactionsRepository,
     private eventsRepository: EventsRepository,
@@ -32,19 +35,29 @@ export class DiscloseEventUseCase {
       throw new ResourceNotFoundError()
     }
 
-    event.disclosed = new Date()
-
-    await this.eventsRepository.save(event)
-
     const producer = await this.producersRepository.findById(producer_id)
 
     if (!producer) {
       throw new ResourceNotFoundError()
     }
 
+    const wallet = await this.walletsRepository.findById(producer.wallet_id)
+
+    if (!wallet) {
+      throw new ResourceNotFoundError()
+    }
+
+    if (Number(wallet.amount) < 500) {
+      throw new InsufficientFundsInWalletError()
+    }
+
+    event.disclosed = new Date()
+
+    await this.eventsRepository.save(event)
+
     const transaction = await this.transactionRepository.create({
       description: 'Divulgar evento',
-      price: new Prisma.Decimal(300),
+      price: new Prisma.Decimal(500),
       type: 'OUTCOME',
       wallet_id: producer.wallet_id,
     })
