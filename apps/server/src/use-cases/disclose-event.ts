@@ -51,8 +51,10 @@ export class DiscloseEventUseCase {
       throw new InsufficientFundsInWalletError()
     }
 
-    event.disclosed = new Date()
+    wallet.amount = new Prisma.Decimal(Number(wallet.amount) - 500)
+    this.walletsRepository.save(wallet)
 
+    event.disclosed = new Date()
     await this.eventsRepository.save(event)
 
     const transaction = await this.transactionRepository.create({

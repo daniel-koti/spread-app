@@ -6,7 +6,7 @@ import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-w
 
 interface CreateTransactionUseCaseRequest {
   description: string
-  price: Prisma.Decimal
+  price: number
   type: 'INCOME' | 'OUTCOME'
   wallet_id: string
 }
@@ -27,26 +27,22 @@ export class CreateTransactionUseCase {
     type,
     wallet_id,
   }: CreateTransactionUseCaseRequest): Promise<CreateTransactionUseCaseResponse> {
+    // Funcionalidade responsável por dar tratamento a todas as transações
     const wallet = await this.walletRepository.findById(wallet_id)
 
     if (!wallet) {
       throw new ResourceNotFoundError()
     }
 
-    if (type === 'OUTCOME') {
-      const isWalletBalanceReady = wallet.amount >= price
-
-      if (!isWalletBalanceReady) {
-        throw new InsufficientFundsInWalletError()
-      }
-
-      wallet.amount = new Prisma.Decimal(Number(wallet.amount) - Number(price))
+    if (type === 'INCOME') {
+      wallet.amount = new Prisma.Decimal(Number(wallet.amount) + price)
     } else {
-      wallet.amount = new Prisma.Decimal(Number(wallet.amount) + Number(price))
-    }
-
-    if (price <= new Prisma.Decimal(0)) {
-      throw new Error()
+      // checks if the wallet has enough amount
+      if (price > Number(wallet.amount)) {
+        throw new InsufficientFundsInWalletError()
+      } else {
+        wallet.amount = new Prisma.Decimal(Number(wallet.amount) - price)
+      }
     }
 
     await this.walletRepository.save(wallet)

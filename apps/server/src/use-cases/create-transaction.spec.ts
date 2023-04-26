@@ -23,7 +23,7 @@ describe('Create Transaction Use case', () => {
     await sut.execute({
       description: 'Carregamento',
       type: 'INCOME',
-      price: new Prisma.Decimal(300),
+      price: 300,
       wallet_id: wallet.id,
     })
 
@@ -36,14 +36,14 @@ describe('Create Transaction Use case', () => {
     await sut.execute({
       description: 'Carregamento',
       type: 'INCOME',
-      price: new Prisma.Decimal(300),
+      price: 300,
       wallet_id: wallet.id,
     })
 
     await sut.execute({
       description: 'Pagamento de bilhete',
       type: 'OUTCOME',
-      price: new Prisma.Decimal(150),
+      price: 150,
       wallet_id: wallet.id,
     })
 
@@ -57,7 +57,7 @@ describe('Create Transaction Use case', () => {
       sut.execute({
         description: 'Pagamento de bilhete',
         type: 'OUTCOME',
-        price: new Prisma.Decimal(500),
+        price: 500,
         wallet_id: wallet.id,
       }),
     ).rejects.toBeInstanceOf(InsufficientFundsInWalletError)

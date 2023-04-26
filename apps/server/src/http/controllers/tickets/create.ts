@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { makeBuyTicketUseCase } from '@/use-cases/factories/make-buy-ticket-use-case'
-import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
+import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const buyTicketParamsSchema = z.object({
@@ -26,8 +26,8 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(201).send(ticket)
   } catch (error) {
-    if (error instanceof ResourceNotFoundError) {
-      return reply.status(404).send({ message: error.message })
+    if (error instanceof InsufficientFundsInWalletError) {
+      return reply.status(400).send({ message: error.message })
     }
 
     throw error
