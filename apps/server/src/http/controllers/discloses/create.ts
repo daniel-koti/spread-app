@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { makeDiscloseEventUseCase } from '../../../use-cases/factories/make-disclose-event-use-case'
 import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet'
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const discloseParamsSchema = z.object({
@@ -22,6 +23,10 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   } catch (error) {
     if (error instanceof InsufficientFundsInWalletError) {
       return reply.status(400).send({ message: error.message })
+    } else {
+      if (error instanceof ResourceNotFoundError) {
+        return reply.status(404).send({ message: error.message })
+      }
     }
   }
 

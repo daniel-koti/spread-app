@@ -3,7 +3,7 @@ import { makeCreateTransactionUseCase } from '@/use-cases/factories/make-create-
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function incomeUserWallet(
+export async function incomeProducerWallet(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -13,13 +13,13 @@ export async function incomeUserWallet(
 
   const { amount } = incomeWalletSchemaBody.parse(request.body)
 
-  const user = await prisma.user.findFirstOrThrow({
+  const producer = await prisma.producer.findFirstOrThrow({
     where: {
       id: request.user.sub,
     },
   })
 
-  if (!user) {
+  if (!producer) {
     return reply.status(404).send({
       message: 'User not found',
     })
@@ -32,7 +32,7 @@ export async function incomeUserWallet(
       description: 'Carregar a carteira',
       price: amount,
       type: 'INCOME',
-      wallet_id: user.wallet_id,
+      wallet_id: producer.wallet_id,
     })
 
     return reply.status(201).send(transaction)
