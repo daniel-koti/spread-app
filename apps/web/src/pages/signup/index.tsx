@@ -1,4 +1,8 @@
 import Link from 'next/link'
+import Head from 'next/head'
+import Image from 'next/image'
+
+import asideBackgroundImage from '../../assets/spread-tickets.jpg'
 
 import { CheckCircle } from 'phosphor-react'
 import { useState } from 'react'
@@ -10,8 +14,17 @@ export default function SignUp() {
 
   return (
     <section className="bg-white">
+      <Head>
+        <title>Criar conta | Spread Events</title>
+      </Head>
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <aside className="relative bg-blue-50 block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6"></aside>
+        <aside className="relative bg-blue-50 block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
+          <Image
+            src={asideBackgroundImage}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </aside>
 
         <main
           aria-label="Main"

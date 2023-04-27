@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router'
 import { Input } from '@/components/Input'
 
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '../../../../lib/axios'
+import { toast } from 'sonner'
 
 const createProducerSchema = z.object({
   name: z.string().min(3, 'Campo obrigatório'),
@@ -19,13 +22,24 @@ export function CreateProducerForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isValid },
   } = useForm<CreateProducerInputSchema>({
     resolver: zodResolver(createProducerSchema),
   })
 
-  function handleCreateProducer(data: CreateProducerInputSchema) {
-    console.log(data)
+  const router = useRouter()
+
+  async function handleCreateProducer(data: CreateProducerInputSchema) {
+    try {
+      await api.post('producers', data)
+
+      toast.success('Organizador criado com sucesso')
+      router.push('/signin')
+      reset()
+    } catch (error) {
+      toast.error('Não foi possível criar o organizador')
+    }
   }
 
   return (

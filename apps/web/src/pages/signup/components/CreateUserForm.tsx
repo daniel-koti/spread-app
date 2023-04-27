@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router'
 import { Input } from '@/components/Input'
 
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '../../../../lib/axios'
+import { toast } from 'sonner'
 
 const createUserSchema = z.object({
   name: z.string().min(3, 'Campo obrigatório'),
@@ -16,13 +19,24 @@ export function CreateUserForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isValid },
   } = useForm<CreateUserInputSchema>({
     resolver: zodResolver(createUserSchema),
   })
 
-  function handleCreateUser(data: CreateUserInputSchema) {
-    console.log(data)
+  const router = useRouter()
+
+  async function handleCreateUser(data: CreateUserInputSchema) {
+    try {
+      await api.post('users', data)
+      toast.success('Usuário criado com sucesso')
+      reset()
+
+      router.push('/signin')
+    } catch (error) {
+      toast.error('Não foi possível criar o usuário')
+    }
   }
 
   return (
