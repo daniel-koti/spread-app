@@ -41,10 +41,9 @@ Plataforma de divulgação de eventos
 - [ ] O organizador só pode ver, alterar informações de eventos que ele mesmo criou.
 - [ ] Um usuário não pode comprar bilhetes se tiver a sua conta bloqueada
 - [ ] Um organizador não pode divulgar eventos se tiver a sua conta bloqueada
-- [ ] O organizador não pode comprar bilhetes
-- [ ] O usuário só pode comprar 1 bilhete por cada evento
+- [x] O organizador não pode comprar bilhetes
 - [ ] Um admin pode invalidar um carregamento suspeito
-- [ ] Uma transação de compra de bilhete, deve gerar uma referência
+- [x] Uma transação de compra de bilhete, deve gerar uma referência
 
 
 ## (Requisitos não funcionais)

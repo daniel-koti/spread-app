@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
+import cors from '@fastify/cors'
 
 import { env } from './env'
 import { ZodError } from 'zod'
@@ -21,10 +22,9 @@ app.register(fastifyJwt, {
     cookieName: 'refreshToken',
     signed: false,
   },
-  sign: {
-    expiresIn: '10m',
-  },
 })
+
+app.register(cors)
 
 app.register(fastifyCookie)
 

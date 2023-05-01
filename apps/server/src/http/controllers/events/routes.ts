@@ -17,7 +17,7 @@ export async function eventsRoutes(app: FastifyInstance) {
   app.get('/events', { onRequest: [verifyJWT] }, fetchAll)
   app.get('/events/:eventId', { onRequest: [verifyJWT] }, findById)
   app.get(
-    '/events/producer/:producerId',
+    '/events/producer',
     { onRequest: [verifyJWT] },
     filterEventsByProducer,
   )
