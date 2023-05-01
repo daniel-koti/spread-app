@@ -4,8 +4,9 @@ import { Input } from '@/components/Input'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '../../../../lib/axios'
+
 import { toast } from 'sonner'
+import { api } from '@/services/api'
 
 const createUserSchema = z.object({
   name: z.string().min(3, 'Campo obrigatório'),
