@@ -5,6 +5,7 @@ import { AuthContext } from '@/contexts/AuthContext'
 import { parseCookies } from 'nookies'
 import { getAPIClient } from '@/services/axios'
 import { Header } from '@/components/Header'
+import { MyEvents } from '@/components/MyEvents'
 
 interface ServerSidePropsResponse {
   profile: {
@@ -15,7 +16,7 @@ interface ServerSidePropsResponse {
 }
 
 export default function Home({ profile }: ServerSidePropsResponse) {
-  const { saveNewInfoInContextUser } = useContext(AuthContext)
+  const { user, saveNewInfoInContextUser } = useContext(AuthContext)
 
   useEffect(() => {
     const { email, name, wallet_id: walletId } = profile
@@ -28,7 +29,16 @@ export default function Home({ profile }: ServerSidePropsResponse) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return <Header />
+  if (!user) {
+    return null
+  }
+
+  return (
+    <div>
+      <Header />
+      <MyEvents />
+    </div>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

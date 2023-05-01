@@ -2,4 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .description-wrapper {
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
 
