@@ -1,5 +1,5 @@
-import { ReactNode, createContext, useState } from 'react'
-import { destroyCookie, setCookie } from 'nookies'
+import { ReactNode, createContext, useEffect, useState } from 'react'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { api } from '@/services/api'
 import { toast } from 'sonner'
 
@@ -34,6 +34,28 @@ export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    async function getProfile() {
+      const { 'spread.token': token } = parseCookies()
+      const { 'spread.isUser': isUser } = parseCookies()
+
+      if (token) {
+        try {
+          const response = await api.get(
+            `${isUser === 'true' ? 'users' : 'producers'}/me`,
+          )
+
+          const { user } = response.data
+          setUser(user)
+        } catch (err) {
+          Router.push('/signin')
+        }
+      }
+    }
+
+    getProfile()
+  }, [])
 
   const isAuthenticated = !!user
 

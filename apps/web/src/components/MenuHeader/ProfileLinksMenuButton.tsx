@@ -28,7 +28,7 @@ export function ProfileLinksMenuButton() {
             <User />
           </span>
           <span className="text-gray-900 text-sm">{user?.email}</span>
-          <CaretDown className="w-2 h-2 text-zinc-500" />
+          <CaretDown className="w-4 h-4 text-zinc-500" />
         </div>
       </DropdownMenu.Trigger>
 

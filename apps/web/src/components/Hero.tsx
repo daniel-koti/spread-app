@@ -1,24 +1,11 @@
 import Image from 'next/image'
-import womansSmilingImage from '../assets/womans-smiling.png'
+import partyImg from '../assets/sign-in.avif'
 
 export function Hero() {
   return (
-    <section className="flex flex-col lg:flex-row items-center px-4 bg-orange-200 rounded-3xl">
-      <div className="w-[500px] flex flex-col">
-        <h1 className="text-xl lg:text-5xl font-medium text-gray-900">
-          Explore novos eventos numa única plataforma
-        </h1>
-      </div>
-
-      <div className="flex-1 flex justify-end">
-        <Image
-          className=""
-          src={womansSmilingImage}
-          alt="Duas mulheres negras sorrindo"
-          height={400}
-          width={700}
-        />
-      </div>
+    <section className="bg-primary-500/70 rounded-xl mt-4 grid grid-cols-2">
+      <div className="p-6"></div>
+      <Image src={partyImg} alt="" className="rounded-tr-xl rounded-br-xl" />
     </section>
   )
 }

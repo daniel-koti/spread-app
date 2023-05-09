@@ -8,6 +8,7 @@ import { getAPIClient } from '@/services/axios'
 import { NextPageWithLayout } from './_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
 import { Hero } from '@/components/Hero'
+import { Events } from '@/components/Events'
 
 interface ServerSidePropsResponse {
   profile?: {
@@ -32,9 +33,10 @@ const HomePage: NextPageWithLayout = ({ profile }: ServerSidePropsResponse) => {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <Hero />
-    </div>
+      <Events />
+    </>
   )
 }
 

@@ -6,8 +6,7 @@ export function WalletLinksMenuButton() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <div className="flex gap-2 outline-none rounded-sm items-center justify-center text-zinc-400 hover:text-zinc-600">
-          <span className="">Carteira</span>
+        <div className="flex gap-2 outline-none rounded-sm items-center justify-center text-zinc-900 hover:text-primary-500 h-full">
           <Wallet className="h-6 w-6" />
         </div>
       </DropdownMenu.Trigger>
