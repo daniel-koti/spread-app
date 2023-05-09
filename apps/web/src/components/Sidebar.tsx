@@ -9,12 +9,12 @@ import {
 
 export function Sidebar() {
   return (
-    <aside className="w-20 bg-zinc-800 h-full rounded-2xl p-4 text-zinc-500 flex flex-col items-center justify-between">
-      <header className="text-2xl">🦑</header>
+    <aside className="w-20 bg-zinc-800 h-full p-4 text-zinc-500 flex flex-col items-center justify-between">
+      <header className="text-4xl bg-gray-950 p-2 rounded-md">🦑</header>
 
       <ul className="flex flex-col gap-6">
         <li className="hover:text-zinc-50">
-          <Link href="#">
+          <Link href="/">
             <HouseSimple size={28} />
           </Link>
         </li>

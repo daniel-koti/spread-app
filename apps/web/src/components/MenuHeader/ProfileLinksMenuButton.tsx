@@ -17,7 +17,7 @@ export function ProfileLinksMenuButton() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="outline-none">
-        <div className="group flex shrink-0 items-center gap-2 transition pr-4 pl-2 py-1 border-[1px] border-zinc-400 rounded-full">
+        <div className="group bg-slate-100 flex shrink-0 items-center gap-2 transition pr-4 pl-2 py-1 rounded-full">
           <span className="sr-only">Menu</span>
 
           <span
@@ -27,14 +27,14 @@ export function ProfileLinksMenuButton() {
           >
             <User />
           </span>
-          <span className="text-gray-200 text-sm">{user?.email}</span>
-          <CaretDown className="w-2 h-2 text-white" />
+          <span className="text-gray-900 text-sm">{user?.email}</span>
+          <CaretDown className="w-2 h-2 text-zinc-500" />
         </div>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="bg-white z-10 flex-col rounded-lg overflow-auto shadow-md"
+          className="bg-white z-10 flex-col rounded-lg overflow-auto shadow-2xl"
           sideOffset={5}
         >
           <DropdownMenu.Item className="outline-none">

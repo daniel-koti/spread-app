@@ -1,7 +1,7 @@
 import { ReactNode, ReactElement } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { Inter } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { Toaster } from 'sonner'
 
@@ -9,7 +9,10 @@ import Head from 'next/head'
 
 import '@/styles/globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+})
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -33,7 +36,7 @@ export default function App({
       </Head>
 
       {getLayout(
-        <main className={inter.className}>
+        <main className={poppins.className}>
           <Component {...pageProps} />
         </main>,
       )}

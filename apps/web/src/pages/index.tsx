@@ -34,41 +34,6 @@ const HomePage: NextPageWithLayout = ({ profile }: ServerSidePropsResponse) => {
   return (
     <div className="flex flex-col gap-4">
       <Hero />
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
-      <div className="bg-white rounded-lg p-4">
-        <strong className="text-xl text-zinc-800 font-medium ">
-          Últimos eventos 🎉
-        </strong>
-      </div>
     </div>
   )
 }
