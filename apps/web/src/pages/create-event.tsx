@@ -1,10 +1,10 @@
 import { ReactElement } from 'react'
-import { NextPageWithLayout } from '../_app'
+import { NextPageWithLayout } from './_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
 import { GetServerSideProps } from 'next'
 
 import { getAPIClient } from '@/services/axios'
-import { CreateEventForm } from './components/CreateEvent'
+import { CreateEventForm } from '../components/CreateEvent'
 
 interface ServerSideProps {
   categories?: {

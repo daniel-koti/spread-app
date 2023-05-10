@@ -5,7 +5,7 @@ export function getAPIClient(ctx?: any) {
   const { 'spread.token': token } = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'http://127.0.0.1:3333',
+    baseURL: 'http://localhost:3333',
   })
 
   api.interceptors.request.use((config) => {

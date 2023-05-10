@@ -3,6 +3,8 @@ import { Clock, MapPin } from 'phosphor-react'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '@/services/api'
+import { toast } from 'sonner'
 
 const createEventSchema = z.object({
   title: z.string(),
@@ -10,7 +12,7 @@ const createEventSchema = z.object({
   imageUrl: z.string().nullable(),
   categoryId: z.string(),
   dateStart: z.string(),
-  dateEnd: z.date(),
+  dateEnd: z.string(),
   hourStart: z.string().nullable(),
   hourEnd: z.string().nullable(),
   type: z.enum(['online', 'person']),
@@ -29,12 +31,49 @@ interface CreateEventFormProps {
 }
 
 export function CreateEventForm({ categories }: CreateEventFormProps) {
-  const { register, handleSubmit } = useForm<CreateNewEventInput>({
+  const { register, handleSubmit, reset } = useForm<CreateNewEventInput>({
     resolver: zodResolver(createEventSchema),
+    defaultValues: {
+      type: 'person',
+    },
   })
 
   async function handleCreateEvent(data: CreateNewEventInput) {
-    console.log('Data to send: ', data)
+    const {
+      title,
+      description,
+      address,
+      categoryId,
+      dateEnd,
+      dateStart,
+      hourEnd,
+      hourStart,
+      imageUrl,
+      type,
+    } = data
+
+    const newEvent = {
+      title,
+      description,
+      address,
+      category_id: categoryId,
+      date_start: new Date(dateStart),
+      date_end: new Date(dateEnd),
+      hour_start: hourStart,
+      hour_end: hourEnd,
+      imageUrl,
+      type,
+      latitude: null,
+      longitude: null,
+    }
+
+    try {
+      await api.post('/events', newEvent)
+      reset()
+      toast.success('Evento criado com sucesso!')
+    } catch (err) {
+      toast.error('Não foi possível criar o evento')
+    }
   }
 
   return (

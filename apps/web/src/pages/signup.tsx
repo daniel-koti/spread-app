@@ -2,12 +2,12 @@ import Link from 'next/link'
 import Head from 'next/head'
 import Image from 'next/image'
 
-import asideBackgroundImage from '../../assets/spread-tickets.jpg'
+import asideBackgroundImage from '../assets/spread-tickets.jpg'
 
 import { CheckCircle } from 'phosphor-react'
 import { useState } from 'react'
-import { CreateProducerForm } from '../signup/components/CreateProducerForm'
-import { CreateUserForm } from './components/CreateUserForm'
+import { CreateProducerForm } from '../components/CreateProducerForm'
+import { CreateUserForm } from '../components/CreateUserForm'
 
 export default function SignUp() {
   const [isProducer, setIsProducer] = useState(true)
