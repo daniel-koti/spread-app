@@ -2,10 +2,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { PencilSimpleLine, PersonSimple, Trash } from 'phosphor-react'
 
+import dayjs from 'dayjs'
+
 interface EventProps {
   id: string
   title: string
   imageUrl: string | null
+  description: string
   type: 'person' | 'online'
   date: Date
   disclosed: Date | null
@@ -18,9 +21,13 @@ export function Event({
   imageUrl,
   title,
   type,
+  description,
   isEdit,
   disclosed,
 }: EventProps) {
+  const monthFormatted = dayjs(date).format('MMM')
+  const dayNumber = dayjs(date).format('DD')
+
   return (
     <Link
       href={isEdit ? `my-events/${id}` : '#'}
@@ -42,11 +49,21 @@ export function Event({
         )}
       </header>
       <section className="mt-4 px-5">
-        <div className="flex flex-col gap-1">
-          <strong className="font-medium text-slate-900 text-lg">
-            {title}
-          </strong>
-          <span className="text-sm text-slate-400">29 de Dezembro, 2023</span>
+        <div className="flex items-start gap-4">
+          <div className="flex flex-col text-center">
+            <span className="text-sm font-medium text-primary-500">
+              {monthFormatted}
+            </span>
+            <strong className="text-2xl">{dayNumber}</strong>
+          </div>
+          <div className="flex flex-col gap-1">
+            <strong className="font-semibold text-slate-900 text-sm">
+              {title}
+            </strong>
+            <span className="text-xs text-slate-400 description-wrapper">
+              {description}
+            </span>
+          </div>
         </div>
       </section>
 

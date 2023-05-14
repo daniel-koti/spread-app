@@ -5,6 +5,9 @@ import { Barlow } from 'next/font/google'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { Toaster } from 'sonner'
 
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt'
+
 import Head from 'next/head'
 
 import '@/styles/globals.css'
@@ -27,6 +30,8 @@ export default function App({
   pageProps: { sessions, ...pageProps },
 }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page)
+
+  dayjs.locale('pt')
 
   return (
     <AuthProvider>

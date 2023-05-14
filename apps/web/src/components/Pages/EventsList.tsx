@@ -43,6 +43,7 @@ export function Events() {
               key={event.id}
               id={event.id}
               date={event.date_start}
+              description={event.description}
               imageUrl={event.imageUrl}
               title={event.title}
               type={event.type}

@@ -38,10 +38,11 @@ const MyEvents: NextPageWithLayout = ({ events }: ServerSideProps) => {
             return (
               <Event
                 key={event.id}
-                disclosed={event.disclosed}
-                date={event.date_start}
                 id={event.id}
                 title={event.title}
+                description={event.description}
+                disclosed={event.disclosed}
+                date={event.date_start}
                 imageUrl={event.imageUrl}
                 type={event.type}
                 isEdit
@@ -63,8 +64,6 @@ MyEvents.getLayout = (page: ReactElement) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx)
   const response = await apiClient.get('/events/producer')
-
-  console.log(ctx)
 
   const { events } = response.data
 
