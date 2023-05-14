@@ -6,8 +6,8 @@ import asideBackgroundImage from '../assets/spread-tickets.jpg'
 
 import { CheckCircle } from 'phosphor-react'
 import { useState } from 'react'
-import { CreateProducerForm } from '../components/CreateProducerForm'
-import { CreateUserForm } from '../components/CreateUserForm'
+import { CreateProducerForm } from '../components/Pages/CreateProducerForm'
+import { CreateUserForm } from '../components/Pages/CreateUserForm'
 
 export default function SignUp() {
   const [isProducer, setIsProducer] = useState(true)

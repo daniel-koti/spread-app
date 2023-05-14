@@ -4,7 +4,7 @@ import { DefaultLayout } from '@/components/DefaultLayout'
 import { GetServerSideProps } from 'next'
 
 import { getAPIClient } from '@/services/axios'
-import { CreateEventForm } from '../components/CreateEvent'
+import { CreateEventForm } from '../components/Pages/CreateEventForm'
 
 interface ServerSideProps {
   categories?: {

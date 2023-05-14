@@ -7,8 +7,8 @@ import { parseCookies } from 'nookies'
 import { getAPIClient } from '@/services/axios'
 import { NextPageWithLayout } from './_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
-import { Hero } from '@/components/Hero'
-import { Events } from '@/components/Events'
+import { Hero } from '@/components/UI/Hero'
+import { Events } from '../components/Pages/EventsList'
 
 interface ServerSidePropsResponse {
   profile?: {
