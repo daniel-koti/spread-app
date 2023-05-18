@@ -1,20 +1,27 @@
 import { ReactNode, ReactElement } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { Barlow } from 'next/font/google'
+import { Barlow, Heebo } from 'next/font/google'
+import Head from 'next/head'
+
 import { AuthProvider } from '@/contexts/AuthContext'
 import { Toaster } from 'sonner'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt'
 
-import Head from 'next/head'
-
 import '@/styles/globals.css'
 
-const poppins = Barlow({
+const barlow = Barlow({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
+  variable: '--font-barlow',
+})
+
+export const heebo = Heebo({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-heebo',
 })
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -41,7 +48,7 @@ export default function App({
       </Head>
 
       {getLayout(
-        <main className={poppins.className}>
+        <main className={`${barlow.variable} font-sans`}>
           <Component {...pageProps} />
         </main>,
       )}

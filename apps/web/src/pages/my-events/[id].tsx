@@ -6,14 +6,38 @@ import { DefaultLayout } from '@/components/DefaultLayout'
 import { GetServerSideProps } from 'next'
 import { getAPIClient } from '@/services/axios'
 
-import { Plus } from 'phosphor-react'
+import dayjs from 'dayjs'
+
 import { EventProps } from '@/components/Pages/EventsList'
+import { Coupon } from '@/components/UI/Coupon'
+import { Badge } from '@/components/UI/Badge'
+
+interface CouponProps {
+  id: string
+  price: string
+  coupon_type: {
+    name: string
+  }
+}
 
 interface ServerSideProps {
   event?: EventProps
+  coupons?: CouponProps[]
 }
 
-const MyEventDetails: NextPageWithLayout = ({ event }: ServerSideProps) => {
+const MyEventDetails: NextPageWithLayout = ({
+  event,
+  coupons,
+}: ServerSideProps) => {
+  const createdAt = dayjs(event?.created_at).format('DD [de] MMMM [de] YYYY')
+  const dateInitial = dayjs(event?.date_start).format('DD [de] MMMM [de] YYYY')
+
+  const disclosedDate = event?.disclosed
+    ? dayjs(event?.disclosed).format('DD [de] MMMM [de] YYYY')
+    : undefined
+
+  const isAlreadyToDisclose = coupons?.length! > 0
+
   return (
     <div className="my-6">
       {event?.imageUrl ? (
@@ -33,9 +57,16 @@ const MyEventDetails: NextPageWithLayout = ({ event }: ServerSideProps) => {
       <div className="mt-8 max-w-5xl mx-auto">
         <header className="">
           <div>
-            <span className="text-slate-800 mb-4 block">
-              23 de Janeiro de 2023
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-800 mb-4 block">
+                Criado em :{' '}
+                <span className="text-sm text-slate-400">{createdAt}</span>
+              </span>
+
+              {event?.disclosed && (
+                <Badge description="Divulgado" status="success" />
+              )}
+            </div>
             <h1 className="text-5xl font-semibold text-slate-700">
               {event?.title}
             </h1>
@@ -49,17 +80,27 @@ const MyEventDetails: NextPageWithLayout = ({ event }: ServerSideProps) => {
           </strong>
           <hr className="my-4" />
           <div className="flex flex-col gap-4">
+            {disclosedDate && (
+              <div className="flex items-center gap-2">
+                <span className="text-green-700 font-medium bg-green-400 px-2">
+                  Divulgado em:{' '}
+                </span>
+                <span className="font-medium text-slate-800">
+                  {disclosedDate}
+                </span>
+              </div>
+            )}
+
             <div>
               <span>Data oficial: </span>
-              <span className="font-medium text-slate-800">
-                23 de Janeiro de 2023
-              </span>
+              <span className="font-medium text-slate-800">{dateInitial}</span>
             </div>
 
             <div>
               <span>Horário: </span>
               <span className="font-medium text-slate-800">
-                18:30 <span className="text-green-700">-</span> 23:00
+                {event?.hour_start} <span className="text-green-700">-</span>{' '}
+                {event?.hour_end}
               </span>
             </div>
           </div>
@@ -78,26 +119,19 @@ const MyEventDetails: NextPageWithLayout = ({ event }: ServerSideProps) => {
                 divulgar o seu evento.
               </p>
 
-              <button className="mt-8 bg-green-600 p-4 text-white rounded-[10px] text-lg font-medium">
-                Divulgar evento
-              </button>
+              {!event?.disclosed && (
+                <button
+                  disabled={!isAlreadyToDisclose}
+                  className="mt-8 bg-green-600 hover:bg-green-700 disabled:bg-green-700 disabled:cursor-not-allowed p-4 text-white rounded-[10px] text-lg font-medium cursor-pointer"
+                >
+                  Divulgar evento
+                </button>
+              )}
             </div>
             <div className="flex justify-end mt-4 gap-2 border-[1px] border-dashed border-slate-400 p-4">
-              <article className="h-60 w-36 flex items-center justify-center rounded border-[1px] border-dashed border-primary-500 relative">
-                <button className="w-12 h-12 flex items-center justify-center bg-primary-500/90 hover:bg-primary-500">
-                  <Plus size={24} className="text-zinc-50" />
-                </button>
-              </article>
-              <article className="h-60 w-36 flex items-center justify-center rounded border-[1px] border-dashed border-primary-500 relative">
-                <button className="w-12 h-12 flex items-center justify-center bg-primary-500/90 hover:bg-primary-500">
-                  <Plus size={24} className="text-zinc-50" />
-                </button>
-              </article>
-              <article className="h-60 w-36 rounded flex items-center justify-center border-[1px] border-dashed border-primary-500 relative">
-                <button className="w-12 h-12 flex items-center justify-center bg-primary-500/90 hover:bg-primary-500">
-                  <Plus size={24} className="text-zinc-50" />
-                </button>
-              </article>
+              <Coupon coupon={coupons![0]} eventId={event?.id!} />
+              <Coupon coupon={coupons![1]} eventId={event?.id!} />
+              <Coupon coupon={coupons![2]} eventId={event?.id!} />
             </div>
           </div>
         </div>
@@ -127,11 +161,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const response = await apiClient.get(`events/${eventId}`)
 
-  const { event } = response.data
+  const { event, coupons } = response.data
 
   return {
     props: {
       event,
+      coupons,
     },
   }
 }

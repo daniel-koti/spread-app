@@ -17,8 +17,6 @@ const createEventSchema = z.object({
   hourEnd: z.string().nullable(),
   type: z.enum(['online', 'person']),
   address: z.string(),
-  // latitude: z.number().nullable(),
-  // longitude: z.number().nullable(),
 })
 
 type CreateNewEventInput = z.infer<typeof createEventSchema>
@@ -31,12 +29,20 @@ interface CreateEventFormProps {
 }
 
 export function CreateEventForm({ categories }: CreateEventFormProps) {
-  const { register, handleSubmit, reset } = useForm<CreateNewEventInput>({
-    resolver: zodResolver(createEventSchema),
-    defaultValues: {
-      type: 'person',
+  const { register, handleSubmit, reset, watch } = useForm<CreateNewEventInput>(
+    {
+      resolver: zodResolver(createEventSchema),
+      defaultValues: {
+        type: 'person',
+      },
     },
-  })
+  )
+
+  const typeEvent = watch('type')
+  const dateStart = watch('dateStart')
+  const currentDate = new Date().toISOString().split('T')[0] // 2023-05-17
+
+  console.log(dateStart)
 
   async function handleCreateEvent(data: CreateNewEventInput) {
     const {
@@ -160,6 +166,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
               {...register('dateStart')}
               id="date_start"
               type="date"
+              min={currentDate}
               className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
             />
           </div>
@@ -170,10 +177,11 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             </label>
             <input
               {...register('dateEnd')}
+              disabled={!dateStart}
               id="date_end"
               type="date"
-              max={24}
-              className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
+              min={dateStart}
+              className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none disabled:text-zinc-300 disabled:border-zinc-300"
             />
           </div>
 
@@ -230,13 +238,16 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
         <div className="grid grid-cols-1 gap-4">
           <div className="flex flex-col gap-2 items-start">
             <label htmlFor="address" className="text-sm text-slate-500">
-              Endereço
+              Endereço {typeEvent === 'online' && '(URL)'}
             </label>
             <input
               {...register('address')}
               id="address"
-              type="text"
+              type={`${typeEvent === 'online' ? 'url' : 'text'}`}
               className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
+              placeholder={`${
+                typeEvent === 'online' ? 'https://' : 'Localização'
+              }`}
             />
           </div>
         </div>

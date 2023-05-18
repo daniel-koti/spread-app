@@ -20,6 +20,7 @@ export interface EventProps {
   hour_end: string
   disclosed: Date | null
   type: 'online' | 'person'
+  created_at: Date
 }
 
 export function Events() {
