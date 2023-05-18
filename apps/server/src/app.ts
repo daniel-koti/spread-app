@@ -13,6 +13,7 @@ import { couponsRoutes } from './http/controllers/coupons/routes'
 import { discloseRoutes } from './http/controllers/discloses/routes'
 import { ticketRoutes } from './http/controllers/tickets/routes'
 import { transactionsRoutes } from './http/controllers/transactions/routes'
+import { categoriesRoutes } from './http/controllers/cateogories/routes'
 
 export const app = fastify()
 
@@ -28,6 +29,7 @@ app.register(cors)
 
 app.register(fastifyCookie)
 
+app.register(categoriesRoutes)
 app.register(transactionsRoutes)
 app.register(ticketRoutes)
 app.register(discloseRoutes)
