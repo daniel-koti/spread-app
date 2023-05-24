@@ -10,6 +10,7 @@ export interface User {
   email: string
   name: string
   wallet_id: string
+  amount: number
 }
 
 interface SignInProps {
@@ -34,6 +35,7 @@ export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
+  const isAuthenticated = !!user
 
   useEffect(() => {
     async function getProfile() {
@@ -57,8 +59,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     getProfile()
   }, [])
 
-  const isAuthenticated = !!user
-
   async function signIn({ email, password, isProducer }: SignInProps) {
     try {
       const { data } = await api.post(
@@ -67,11 +67,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       )
 
       setCookie(undefined, 'spread.token', data.token, {
-        maxAge: 60 * 60 * 1, // 1 hour
+        maxAge: 60 * 60 * 24 * 30, // 30 Days
       })
 
       setCookie(undefined, 'spread.isUser', data.isUser, {
-        maxAge: 60 * 60 * 1, // 1 hour
+        maxAge: 60 * 60 * 30, // 30 Days
       })
 
       api.defaults.headers.Authorization = `Bearer ${data.token}`
@@ -87,18 +87,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function saveNewInfoInContextUser(data: User) {
-    const { email, name, wallet_id: walletId } = data
+    const { email, name, wallet_id: walletId, amount } = data
 
     setUser({
       email,
       name,
       wallet_id: walletId,
+      amount,
     })
   }
 
   function signOut() {
     destroyCookie(undefined, 'spread.token')
-    destroyCookie(undefined, 'spread.refreshToken')
+    destroyCookie(undefined, 'spread.isUser')
 
     setUser(null)
 

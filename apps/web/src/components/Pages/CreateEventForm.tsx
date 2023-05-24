@@ -42,8 +42,6 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
   const dateStart = watch('dateStart')
   const currentDate = new Date().toISOString().split('T')[0] // 2023-05-17
 
-  console.log(dateStart)
-
   async function handleCreateEvent(data: CreateNewEventInput) {
     const {
       title,

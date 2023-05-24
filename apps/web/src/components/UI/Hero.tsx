@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <section className="my-4">
+    <section className="my-8">
       <div
         className="w-full h-[480px] bg-center bg-cover bg-no-repeat rounded-md p-8 flex gap-4 flex-col justify-center"
         style={{

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ProfileLinksMenuButton } from './MenuHeader/ProfileLinksMenuButton'
-import { WalletLinksMenuButton } from './MenuHeader/WalletLinksMenuButton'
 
 export function Header() {
   return (
@@ -33,10 +32,6 @@ export function Header() {
 
           <div className="flex items-center">
             <div className="flex items-center border-x border-gray-300">
-              <span className="px-2">
-                <WalletLinksMenuButton />
-              </span>
-
               <span className="px-2">
                 <ProfileLinksMenuButton />
               </span>

@@ -1,4 +1,5 @@
-import { HardDrives } from 'phosphor-react'
+import empty from '../../assets/empty.svg'
+import Image from 'next/image'
 
 interface EmptyProps {
   description: string
@@ -7,7 +8,7 @@ interface EmptyProps {
 export function Empty({ description }: EmptyProps) {
   return (
     <div className="h-full flex flex-col items-center max-w-sm mx-auto w-full text-slate-400">
-      <HardDrives size={48} weight="duotone" />
+      <Image src={empty} alt="" />
       <p className="text-xl">{description}</p>
     </div>
   )

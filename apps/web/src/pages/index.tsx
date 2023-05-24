@@ -15,6 +15,7 @@ interface ServerSidePropsResponse {
     name: string
     email: string
     wallet_id: string
+    amount: number
   }
 }
 
@@ -22,12 +23,13 @@ const HomePage: NextPageWithLayout = ({ profile }: ServerSidePropsResponse) => {
   const { saveNewInfoInContextUser } = useContext(AuthContext)
 
   useEffect(() => {
-    const { email, name, wallet_id: walletId } = profile!
+    const { email, name, wallet_id: walletId, amount } = profile!
 
     saveNewInfoInContextUser({
       name,
       email,
       wallet_id: walletId,
+      amount,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -2,7 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import { useContext } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
-import { CaretDown, Plus, SignOut, User } from 'phosphor-react'
+import { CaretDown, Plus, SignOut, User, Wallet } from 'phosphor-react'
 import { parseCookies } from 'nookies'
 
 import Link from 'next/link'
@@ -55,10 +55,20 @@ export function ProfileLinksMenuButton() {
               )}
             </div>
           </DropdownMenu.Item>
+
+          <DropdownMenu.Item className="outline-none" asChild>
+            <Link
+              href="/wallet"
+              className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
+            >
+              <Wallet weight="bold" />
+              Minha carteira
+            </Link>
+          </DropdownMenu.Item>
           {isProducer && (
             <DropdownMenu.Item className="outline-none" asChild>
               <Link
-                href="/events/create"
+                href="/create-event"
                 className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
               >
                 <Plus weight="bold" />

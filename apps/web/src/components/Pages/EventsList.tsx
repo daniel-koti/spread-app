@@ -21,6 +21,7 @@ export interface EventProps {
   disclosed: Date | null
   type: 'online' | 'person'
   created_at: Date
+  producer_id?: string
 }
 
 export function Events() {
@@ -37,7 +38,7 @@ export function Events() {
 
   return (
     <div className="my-4">
-      <div className="grid grid-cols-4 mt-8">
+      <div className="grid grid-cols-4 gap-4 mt-8">
         {events.map((event) => {
           return (
             <Event
@@ -49,7 +50,6 @@ export function Events() {
               title={event.title}
               type={event.type}
               disclosed={event.disclosed}
-              isEdit={false}
             />
           )
         })}
