@@ -1,33 +1,74 @@
-import {
-  PencilSimpleLine,
-  Ticket as TicketIcon,
-  Star,
-  TrashSimple,
-} from 'phosphor-react'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
-export function Ticket() {
+import { Star } from 'phosphor-react'
+import { useContext, useState } from 'react'
+import { Dialog } from '../Modals/Dialog'
+import { AuthContext } from '@/contexts/AuthContext'
+
+interface TicketProps {
+  name: string
+  price: number
+}
+
+export function Ticket({ name, price }: TicketProps) {
+  const { user } = useContext(AuthContext)
+  const [isDialogToBuyTicket, setIsDialogToBuyTicket] = useState(false)
+
+  function onToggleDialogToBuyTicket() {
+    setIsDialogToBuyTicket(!isDialogToBuyTicket)
+  }
+
+  async function onBuyTicket() {
+    console.log(user?.amount)
+  }
+
   return (
-    <article className="bg-white rounded-[20px] border-[1px] border-slate-300 relative">
+    <article className="bg-white rounded-lg  relative">
       <header className="p-4 border-b-[1px] border-slate-300">
-        <TicketIcon size={40} className="text-primary-500" />
+        <span className="bg-primary-500 px-2 py-1 rounded-full text-white font-semibold">
+          Bilhete {name}
+        </span>
       </header>
-      <div className="flex flex-col p-4 gap-2 border-b-[1px] border-slate-300">
+      <div className="flex justify-between p-4 gap-2  border-slate-300">
         <strong className="text-2xl font-semibold text-slate-700">
-          5.000,00 kz
+          {new Intl.NumberFormat('pt-AO', {
+            style: 'currency',
+            currency: 'AOA',
+          }).format(price)}
         </strong>
-        <span className="text-slate-400">VIP</span>
+
+        <AlertDialog.Root>
+          <AlertDialog.Trigger asChild>
+            <button
+              onClick={onToggleDialogToBuyTicket}
+              className="bg-green-600 px-4 py-1 rounded text-white font-semibold hover:bg-green-700"
+            >
+              Comprar
+            </button>
+          </AlertDialog.Trigger>
+
+          <Dialog
+            isOpen={isDialogToBuyTicket}
+            onToggle={onToggleDialogToBuyTicket}
+            title={`Bilhete ${name}`}
+            description="Antes de comprar por favor certifique de carregar a sua carteira com valor suficiente."
+            submitText="Comprar"
+            variant="create"
+            onSubmit={onBuyTicket}
+          />
+        </AlertDialog.Root>
       </div>
-      <div className="p-4 flex gap-2">
-        <button className="border-none bg-blue-200 p-2 rounded-lg hover:bg-blue-300">
-          <PencilSimpleLine size={20} className="text-blue-500" />
-        </button>
-        <button className="border-none bg-red-200 p-2 rounded-lg hover:bg-red-300">
-          <TrashSimple size={20} className="text-red-500" />
-        </button>
+
+      <div className="h-8 bg-primary-500 w-10 flex justify-center items-center text-white absolute rounded-b top-0 right-5">
+        <Star size={16} weight="duotone" />
       </div>
-      <div className="h-12 bg-primary-500 w-10 flex justify-center items-center text-white absolute rounded-b-3xl top-0 right-5">
-        <Star size={24} weight="duotone" />
-      </div>
+
+      <footer className="px-4 py-1 border-t border-slate-300">
+        <span className="text-[10px] text-slate-400">
+          Após a compra do bilhete, por favor não partilhe a sua referência com
+          mais ninguém. A sua entrada aos eventos dependerá desta referência.
+        </span>
+      </footer>
     </article>
   )
 }

@@ -14,6 +14,31 @@ export async function findById(request: FastifyRequest, reply: FastifyReply) {
     where: {
       id: eventId,
     },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      imageUrl: true,
+      address: true,
+      disclosed: true,
+      date_start: true,
+      date_end: true,
+      hour_start: true,
+      hour_end: true,
+      created_at: true,
+      type: true,
+      producer: {
+        select: {
+          name: true,
+          phone: true,
+        },
+      },
+      categoryEvent: {
+        select: {
+          name: true,
+        },
+      },
+    },
   })
 
   const coupons = await prisma.coupon.findMany({

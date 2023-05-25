@@ -1,8 +1,13 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
-import * as Dialog from '@radix-ui/react-dialog'
+import * as DialogRadix from '@radix-ui/react-dialog'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Plus, Trash } from 'phosphor-react'
 import { CreateCouponModal } from '../Modals/CreateCouponModal'
+import { Dialog } from '../Modals/Dialog'
+import { api } from '@/services/api'
+import { toast } from 'sonner'
 
 export interface CouponProps {
   id: string
@@ -15,16 +20,36 @@ export interface CouponProps {
 interface CouponComponentProps {
   coupon: CouponProps
   eventId: string
+  disclosed: Date | null
 }
 
-export function Coupon({ coupon, eventId }: CouponComponentProps) {
+export function Coupon({ coupon, eventId, disclosed }: CouponComponentProps) {
   const [isOpenModalToCreateCoupon, setIsOpenModalToCreateCoupon] =
     useState(false)
+
+  const router = useRouter()
+
+  const [isDialogDelete, setIsDialogDelete] = useState(false)
 
   const priceFormatted = Number(coupon?.price!)
 
   function toggleModalToCreateCoupon() {
     setIsOpenModalToCreateCoupon(!isOpenModalToCreateCoupon)
+  }
+
+  function onToggleDeleteDialog() {
+    setIsDialogDelete(!isDialogDelete)
+  }
+
+  async function onDeleteCoupon() {
+    try {
+      await api.delete(`coupon/remove/${coupon.id}`)
+
+      toast.success('Bilhete apagado com sucesso!')
+      router.replace(router.asPath)
+    } catch (error) {
+      toast.error('Não foi possível apagar o bilhete')
+    }
   }
 
   return (
@@ -41,26 +66,45 @@ export function Coupon({ coupon, eventId }: CouponComponentProps) {
             }).format(priceFormatted)}
           </span>
 
-          <button className="absolute top-4 right-4 bg-red-300 p-1 cursor-pointer hover:bg-red-400 rounded">
-            <Trash className="h-5 w-5 text-red-600" />
-          </button>
+          {!disclosed && (
+            <AlertDialog.Root>
+              <AlertDialog.Trigger asChild>
+                <button
+                  onClick={onToggleDeleteDialog}
+                  className="absolute top-4 right-4 bg-red-300 p-1 cursor-pointer hover:bg-red-400 rounded"
+                >
+                  <Trash className="h-5 w-5 text-red-600" />
+                </button>
+              </AlertDialog.Trigger>
+
+              <Dialog
+                isOpen={isDialogDelete}
+                onToggle={onToggleDeleteDialog}
+                title="Tem certeza que deseja apagar este bilhete ?"
+                description="Só pode apagar bilhetes enquanto o evento ainda não foi divulgado"
+                submitText="Apagar"
+                variant="delete"
+                onSubmit={onDeleteCoupon}
+              />
+            </AlertDialog.Root>
+          )}
         </div>
       ) : (
-        <Dialog.Root open={isOpenModalToCreateCoupon}>
-          <Dialog.Trigger asChild>
+        <DialogRadix.Root open={isOpenModalToCreateCoupon}>
+          <DialogRadix.Trigger asChild>
             <button
               onClick={toggleModalToCreateCoupon}
               className="w-12 h-12 flex items-center justify-center bg-primary-500/90 hover:bg-primary-500"
             >
               <Plus size={24} className="text-zinc-50" />
             </button>
-          </Dialog.Trigger>
+          </DialogRadix.Trigger>
 
           <CreateCouponModal
             onCloseModal={toggleModalToCreateCoupon}
             eventId={eventId}
           />
-        </Dialog.Root>
+        </DialogRadix.Root>
       )}
     </article>
   )

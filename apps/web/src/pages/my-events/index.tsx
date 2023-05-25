@@ -11,6 +11,7 @@ import { Empty } from '../../components/UI/Empty'
 import Image from 'next/image'
 import { ListBullets, PencilSimpleLine, Question } from 'phosphor-react'
 import Link from 'next/link'
+import { parseCookies } from 'nookies'
 
 interface ServerSideProps {
   events?: {
@@ -28,6 +29,8 @@ interface ServerSideProps {
 
 const MyEvents: NextPageWithLayout = ({ events }: ServerSideProps) => {
   const quantity = events?.length!
+
+  console.log(events)
 
   return (
     <div className="my-8">
@@ -145,6 +148,17 @@ MyEvents.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx)
+  const { 'spread.token': token } = parseCookies(ctx)
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
   const response = await apiClient.get('/events/producer')
 
   const { events } = response.data

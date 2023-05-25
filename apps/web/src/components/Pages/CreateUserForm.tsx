@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Input } from '@/components/FormsInputs/Input'
+import { Input } from '@/components/UI/Input'
 
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'

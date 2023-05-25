@@ -38,7 +38,7 @@ export function Events() {
 
   return (
     <div className="my-4">
-      <div className="grid grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-4 gap-8 mt-8">
         {events.map((event) => {
           return (
             <Event

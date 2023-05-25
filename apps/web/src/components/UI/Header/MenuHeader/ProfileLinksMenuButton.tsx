@@ -8,11 +8,17 @@ import { parseCookies } from 'nookies'
 import Link from 'next/link'
 
 export function ProfileLinksMenuButton() {
-  const { user, signOut } = useContext(AuthContext)
+  const { user, signOut, typeUser } = useContext(AuthContext)
 
   const { 'spread.isUser': isUser } = parseCookies()
 
   const isProducer = isUser !== 'true'
+
+  const style = {
+    containerUser: 'p-2 rounded-full text-zinc-200',
+    producer: 'bg-primary-500',
+    client: 'bg-blue-500',
+  }
 
   return (
     <DropdownMenu.Root>
@@ -21,9 +27,9 @@ export function ProfileLinksMenuButton() {
           <span className="sr-only">Menu</span>
 
           <span
-            className={`${
-              isProducer ? 'bg-primary-500' : 'bg-blue-500'
-            } p-2 rounded-full text-zinc-200`}
+            className={`${style.containerUser} ${
+              typeUser === 'producer' ? style.producer : style.client
+            }`}
           >
             <User />
           </span>

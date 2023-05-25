@@ -1,4 +1,4 @@
-import { makeFetchEventsByProducerUseCase } from '@/use-cases/factories/make-fetch-events-producer-use-case'
+import { prisma } from '@/lib/prisma'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function filterEventsByProducer(
@@ -7,11 +7,35 @@ export async function filterEventsByProducer(
 ) {
   const producerId = request.user.sub
 
-  const fetchEventByIdUseCase = makeFetchEventsByProducerUseCase()
-
-  const events = await fetchEventByIdUseCase.execute({
-    producerId,
+  const events = await prisma.event.findMany({
+    where: {
+      producer_id: producerId,
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      address: true,
+      imageUrl: true,
+      date_start: true,
+      date_end: true,
+      hour_start: true,
+      hour_end: true,
+      disclosed: true,
+      created_at: true,
+      status: true,
+      producer: {
+        select: {
+          name: true,
+        },
+      },
+      categoryEvent: {
+        select: {
+          name: true,
+        },
+      },
+    },
   })
 
-  return reply.status(200).send(events)
+  return reply.status(200).send({ events })
 }

@@ -13,12 +13,15 @@ interface EventProps {
   disclosed: Date | null
 }
 
-export function Event({ date, imageUrl, title, description }: EventProps) {
+export function Event({ id, date, imageUrl, title, description }: EventProps) {
   const monthFormatted = dayjs(date).format('MMM')
   const dayNumber = dayjs(date).format('DD')
 
   return (
-    <Link href="#" className="bg-zinc-50 shadow-md rounded-xl pb-6 h-72">
+    <Link
+      href={`events/${id}`}
+      className="bg-zinc-50 shadow-md rounded-xl pb-6 h-72"
+    >
       <header className="w-full">
         {imageUrl ? (
           <Image

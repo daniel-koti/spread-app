@@ -47,11 +47,11 @@ export class DiscloseEventUseCase {
       throw new ResourceNotFoundError()
     }
 
-    if (Number(wallet.amount) < 500) {
+    if (Number(wallet.amount) < 5000) {
       throw new InsufficientFundsInWalletError()
     }
 
-    wallet.amount = new Prisma.Decimal(Number(wallet.amount) - 500)
+    wallet.amount = new Prisma.Decimal(Number(wallet.amount) - 5000)
     this.walletsRepository.save(wallet)
 
     event.disclosed = new Date()

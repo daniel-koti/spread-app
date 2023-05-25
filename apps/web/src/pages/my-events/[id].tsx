@@ -226,9 +226,21 @@ const MyEventDetails: NextPageWithLayout = ({
               </div>
             </div>
             <div className="flex justify-end mt-4 gap-2 border-[1px] border-dashed border-slate-400 p-4">
-              <Coupon coupon={coupons![0]} eventId={event?.id!} />
-              <Coupon coupon={coupons![1]} eventId={event?.id!} />
-              <Coupon coupon={coupons![2]} eventId={event?.id!} />
+              <Coupon
+                coupon={coupons![0]}
+                eventId={event?.id!}
+                disclosed={event?.disclosed!}
+              />
+              <Coupon
+                coupon={coupons![1]}
+                eventId={event?.id!}
+                disclosed={event?.disclosed!}
+              />
+              <Coupon
+                coupon={coupons![2]}
+                eventId={event?.id!}
+                disclosed={event?.disclosed!}
+              />
             </div>
           </div>
         </div>

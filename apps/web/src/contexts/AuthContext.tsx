@@ -7,10 +7,15 @@ import Router from 'next/router'
 import { AxiosError } from 'axios'
 
 export interface User {
-  email: string
+  id: string
   name: string
+  email: string
   wallet_id: string
   amount: number
+  phone?: number
+  company?: boolean
+  nif?: string
+  status?: 'ENABLED' | 'DISABLED'
 }
 
 interface SignInProps {
@@ -22,9 +27,9 @@ interface SignInProps {
 interface AuthContextProps {
   user: User | null
   isAuthenticated: boolean
+  typeUser: 'client' | 'producer'
   signIn: (data: SignInProps) => Promise<void>
   signOut: () => void
-  saveNewInfoInContextUser: (data: User) => void
 }
 
 interface AuthProviderProps {
@@ -35,46 +40,60 @@ export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
+  const [typeUser, setTypeUser] = useState<'client' | 'producer'>('client')
+
   const isAuthenticated = !!user
+  /**
+   * * Preciso que toda vez que a aplicação é recarregada,
+   * * Os dados do usuário sejam carregados novamente
+   */
 
   useEffect(() => {
-    async function getProfile() {
-      const { 'spread.token': token } = parseCookies()
-      const { 'spread.isUser': isUser } = parseCookies()
+    const { 'spread.token': token } = parseCookies()
+    const { 'spread.isUser': isUser } = parseCookies()
 
-      if (token) {
-        try {
-          const response = await api.get(
-            `${isUser === 'true' ? 'users' : 'producers'}/me`,
-          )
-
+    if (token) {
+      api
+        .get(`${isUser === 'true' ? 'users' : 'producers'}/me`)
+        .then((response) => {
           const { user } = response.data
-          setUser(user)
-        } catch (err) {
-          Router.push('/signin')
-        }
-      }
-    }
 
-    getProfile()
+          setUser({
+            ...user,
+          })
+
+          isUser === 'true' ? setTypeUser('client') : setTypeUser('producer')
+        })
+        .catch(() => {
+          Router.push('/signin')
+        })
+    }
   }, [])
 
   async function signIn({ email, password, isProducer }: SignInProps) {
     try {
-      const { data } = await api.post(
+      const response = await api.post(
         `${isProducer ? 'producers' : 'users'}/sessions`,
         { email, password },
       )
 
-      setCookie(undefined, 'spread.token', data.token, {
+      const { token, isUser, user } = response.data
+
+      setCookie(undefined, 'spread.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 Days
       })
 
-      setCookie(undefined, 'spread.isUser', data.isUser, {
+      setCookie(undefined, 'spread.isUser', isUser, {
         maxAge: 60 * 60 * 30, // 30 Days
       })
 
-      api.defaults.headers.Authorization = `Bearer ${data.token}`
+      setUser({
+        ...user,
+      })
+
+      isProducer ? setTypeUser('producer') : setTypeUser('client')
+
+      api.defaults.headers.Authorization = `Bearer ${token}`
 
       Router.push('/')
     } catch (error: unknown) {
@@ -84,17 +103,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         toast.error('Não foi possível autenticar. Tente mais tarde')
       }
     }
-  }
-
-  function saveNewInfoInContextUser(data: User) {
-    const { email, name, wallet_id: walletId, amount } = data
-
-    setUser({
-      email,
-      name,
-      wallet_id: walletId,
-      amount,
-    })
   }
 
   function signOut() {
@@ -111,8 +119,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       value={{
         user,
         isAuthenticated,
+        typeUser,
         signIn,
-        saveNewInfoInContextUser,
         signOut,
       }}
     >

@@ -8,6 +8,9 @@ export async function fetchAll(request: FastifyRequest, reply: FastifyReply) {
         not: null,
       },
     },
+    orderBy: {
+      date_start: 'desc',
+    },
   })
 
   return reply.status(200).send({
