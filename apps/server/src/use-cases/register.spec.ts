@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeAll } from 'vitest'
 
-import { RegisterUserUseCase } from './register-user'
+import { RegisterUserUseCase } from './register'
 
 import { UsersRepository } from '@/repositories/users-repository'
 import { WalletsRepository } from '@/repositories/wallets-repository'

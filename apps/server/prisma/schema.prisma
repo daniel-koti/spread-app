@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  ADMIN
+  PRODUCER
+  USER
+}
+
+enum EventType {
+  PERSON
+  ONLINE
+}
+
 enum Status {
   ENABLED
   DISABLED
@@ -27,43 +38,29 @@ model User {
   name          String
   email         String   @unique
   password_hash String
-  is_admin      Boolean  @default(false)
+  phone         String?
+  nif           String?
+  isCompany     Boolean  @default(false)
   status        Status   @default(ENABLED)
-  created_at    DateTime @default(now())
+  type          UserType
 
-  wallet    Wallet   @relation(fields: [wallet_id], references: [id])
-  wallet_id String   @unique
-  Ticket    Ticket[]
+  created_at DateTime @default(now())
+
+  wallet     Wallet      @relation(fields: [wallet_id], references: [id])
+  wallet_id  String      @unique
+  Ticket     Ticket[]
+  Event      Event[]
+  Disclosure Disclosure?
 
   @@map("users")
 }
 
-model Producer {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  password_hash String
-  phone         String
-  nif           String
-  company       Boolean
-  status        Status   @default(ENABLED)
-  created_at    DateTime @default(now())
-
-  wallet    Wallet @relation(fields: [wallet_id], references: [id])
-  wallet_id String @unique
-
-  Event      Event[]
-  Disclosure Disclosure[]
-
-  @@map("producers")
-}
-
 model Wallet {
-  id          String        @id @default(cuid())
-  amount      Decimal       @default(0.0)
-  created_at  DateTime      @default(now())
-  User        User?
-  Producer    Producer?
+  id         String   @id @default(cuid())
+  amount     Decimal  @default(0.0)
+  created_at DateTime @default(now())
+  User       User?
+
   Transaction Transaction[]
 
   @@map("wallets")
@@ -89,24 +86,22 @@ model Event {
   id          String    @id @default(cuid())
   title       String
   description String
-  imageUrl    String?
+  image       String?
   date_start  DateTime
   date_end    DateTime
   hour_start  String
   hour_end    String
   address     String
-  type        String
-  latitude    Decimal?
-  longitude   Decimal?
-  status      Status    @default(ENABLED)
+  type        EventType
   disclosed   DateTime?
+  status      Status    @default(ENABLED)
   created_at  DateTime  @default(now())
 
   categoryEvent CategoryEvent @relation(fields: [category_id], references: [id])
   category_id   String
 
-  producer    Producer @relation(fields: [producer_id], references: [id])
-  producer_id String
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
 
   Coupon     Coupon[]
   Disclosure Disclosure?
@@ -151,8 +146,8 @@ model Disclosure {
   id             String        @id @default(cuid())
   approve_status ApproveStatus @default(APPROVED)
 
-  producer    Producer @relation(fields: [producer_id], references: [id])
-  producer_id String   @unique
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String @unique
 
   event    Event  @relation(fields: [event_id], references: [id])
   event_id String @unique

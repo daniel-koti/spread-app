@@ -3,13 +3,13 @@ import { EventsRepository } from '../repositories/events-repository'
 import { Disclosure, Prisma } from '@prisma/client'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '../repositories/transactions-repository'
-import { ProducersRepository } from '../repositories/producers-repository'
+import { UsersRepository } from '../repositories/users-repository'
 import { WalletsRepository } from '../repositories/wallets-repository'
 import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
 
 interface DiscloseEventUseCaseRequest {
   event_id: string
-  producer_id: string
+  user_id: string
 }
 
 interface DiscloseEventUseCaseResponse {
@@ -22,12 +22,12 @@ export class DiscloseEventUseCase {
     private discloseRepository: DiscloseRepository,
     private transactionRepository: TransactionsRepository,
     private eventsRepository: EventsRepository,
-    private producersRepository: ProducersRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({
     event_id,
-    producer_id,
+    user_id,
   }: DiscloseEventUseCaseRequest): Promise<DiscloseEventUseCaseResponse> {
     const event = await this.eventsRepository.findById(event_id)
 
@@ -35,7 +35,7 @@ export class DiscloseEventUseCase {
       throw new ResourceNotFoundError()
     }
 
-    const producer = await this.producersRepository.findById(producer_id)
+    const producer = await this.usersRepository.findById(user_id)
 
     if (!producer) {
       throw new ResourceNotFoundError()
@@ -67,7 +67,7 @@ export class DiscloseEventUseCase {
     const disclose = await this.discloseRepository.create({
       event_id,
       transaction_id: transaction.id,
-      producer_id,
+      user_id,
     })
 
     return {

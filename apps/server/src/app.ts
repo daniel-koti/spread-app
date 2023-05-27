@@ -13,7 +13,7 @@ import { couponsRoutes } from './http/controllers/coupons/routes'
 import { discloseRoutes } from './http/controllers/discloses/routes'
 import { ticketRoutes } from './http/controllers/tickets/routes'
 import { transactionsRoutes } from './http/controllers/transactions/routes'
-import { categoriesRoutes } from './http/controllers/cateogories/routes'
+import { categoriesRoutes } from './http/controllers/categories/routes'
 
 export const app = fastify()
 
@@ -23,11 +23,16 @@ app.register(fastifyJwt, {
     cookieName: 'refreshToken',
     signed: false,
   },
+  sign: {
+    expiresIn: '3m', // 1 minutes
+  },
 })
 
-app.register(cors)
-
 app.register(fastifyCookie)
+
+app.register(cors, {
+  origin: '*',
+})
 
 app.register(categoriesRoutes)
 app.register(transactionsRoutes)

@@ -1,5 +1,5 @@
 import { EventsRepository } from '@/repositories/events-repository'
-import { ProducersRepository } from '@/repositories/producers-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { NotAuthorizedError } from './errors/not-authorized'
 
 interface CreateEventUseCaseRequest {
@@ -11,17 +11,15 @@ interface CreateEventUseCaseRequest {
   date_end: Date
   hour_start: string
   hour_end: string
-  type: string
-  latitude: number | null
-  longitude: number | null
-  producer_id: string
-  imageUrl: string | null
+  type: 'ONLINE' | 'PERSON'
+  user_id: string
+  image: string | null
 }
 
 export class CreateEventUseCase {
   constructor(
     private eventsRepository: EventsRepository,
-    private producersRepository: ProducersRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({
@@ -33,13 +31,11 @@ export class CreateEventUseCase {
     date_end,
     hour_start,
     hour_end,
-    latitude,
     type,
-    longitude,
-    producer_id,
-    imageUrl,
+    user_id,
+    image,
   }: CreateEventUseCaseRequest) {
-    const isProducer = await this.producersRepository.findById(producer_id)
+    const isProducer = await this.usersRepository.findById(user_id)
 
     if (!isProducer) {
       throw new NotAuthorizedError()
@@ -55,10 +51,8 @@ export class CreateEventUseCase {
       hour_start,
       hour_end,
       type,
-      latitude,
-      longitude,
-      producer_id,
-      imageUrl,
+      image,
+      user_id,
     })
 
     return {

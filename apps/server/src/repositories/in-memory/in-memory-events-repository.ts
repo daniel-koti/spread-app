@@ -19,15 +19,10 @@ export class InMemoryEventsRepository implements EventsRepository {
       type: data.type,
       hour_end: data.hour_end,
       status: data.status ?? 'ENABLED',
-      imageUrl: data.imageUrl ?? null,
-      latitude: data.latitude
-        ? new Prisma.Decimal(data.latitude.toString())
-        : null,
-      longitude: data.longitude
-        ? new Prisma.Decimal(data.longitude.toString())
-        : null,
+      image: data.image ?? null,
+
       created_at: new Date(),
-      producer_id: data.producer_id,
+      user_id: data.user_id,
     }
 
     this.items.push(event)
@@ -44,7 +39,7 @@ export class InMemoryEventsRepository implements EventsRepository {
   }
 
   async findManyProducerId(producerId: string) {
-    return this.items.filter((item) => item.producer_id === producerId)
+    return this.items.filter((item) => item.user_id === producerId)
   }
 
   async findById(id: string) {

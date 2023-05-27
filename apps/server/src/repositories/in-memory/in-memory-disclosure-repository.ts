@@ -11,7 +11,7 @@ export class InMemoryDiscloseRepository implements DiscloseRepository {
       event_id: data.event_id,
       transaction_id: data.transaction_id,
       approve_status: 'APPROVED',
-      producer_id: data.producer_id,
+      user_id: data.user_id,
     }
 
     this.items.push(disclose)

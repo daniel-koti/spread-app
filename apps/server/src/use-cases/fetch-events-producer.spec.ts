@@ -21,8 +21,8 @@ describe('Fetch Events By Producer Id Use Case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: 'producer-01',
+      type: 'ONLINE',
+      user_id: 'producer-01',
     })
 
     await eventsRepository.create({
@@ -34,8 +34,8 @@ describe('Fetch Events By Producer Id Use Case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'present',
-      producer_id: 'producer-02',
+      type: 'ONLINE',
+      user_id: 'producer-02',
     })
 
     const { events } = await sut.execute({

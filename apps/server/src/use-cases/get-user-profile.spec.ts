@@ -19,6 +19,7 @@ describe('Get User Profile Use Case', () => {
       email: 'john.smith@gmail.com',
       password_hash: await hash('123456', 6),
       wallet_id: '01',
+      type: 'PRODUCER',
     })
 
     const { user } = await sut.execute({

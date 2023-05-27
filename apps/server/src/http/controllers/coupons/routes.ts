@@ -10,8 +10,8 @@ export async function couponsRoutes(app: FastifyInstance) {
    * Authenticated routes
    */
 
-  app.delete('/coupon/remove/:couponId', { onRequest: [verifyJWT] }, remove)
+  app.delete('/coupon/:couponId', { onRequest: [verifyJWT] }, remove)
 
-  app.post('/coupons', { onRequest: [verifyJWT] }, create)
-  app.get('/couponTypes', { onRequest: [verifyJWT] }, fetchTypes)
+  app.post('/coupon', { onRequest: [verifyJWT] }, create)
+  app.get('/coupon/types', { onRequest: [verifyJWT] }, fetchTypes)
 }

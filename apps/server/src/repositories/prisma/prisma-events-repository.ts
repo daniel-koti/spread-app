@@ -34,7 +34,7 @@ export class PrismaEventsRepository implements EventsRepository {
   async findManyProducerId(producerId: string) {
     const events = await prisma.event.findMany({
       where: {
-        producer_id: producerId,
+        user_id: producerId,
       },
     })
 

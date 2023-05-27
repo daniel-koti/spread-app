@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from '../../repositories/prisma/prisma-users-repository'
-import { RegisterUserUseCase } from '../register-user'
+import { RegisterUserUseCase } from '../register'
 import { PrismaWalletsRepository } from '../../repositories/prisma/prisma-wallets-repository'
 
 export function makeRegisterUserUseCase() {

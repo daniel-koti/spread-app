@@ -51,8 +51,6 @@ export async function authenticate(
       .status(200)
       .send({
         token,
-        isUser: true,
-        user,
       })
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {

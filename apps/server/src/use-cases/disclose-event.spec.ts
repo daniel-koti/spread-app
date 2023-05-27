@@ -7,14 +7,14 @@ import { DiscloseRepository } from '../repositories/disclose-repository'
 import { EventsRepository } from '../repositories/events-repository'
 import { InMemoryDiscloseRepository } from '../repositories/in-memory/in-memory-disclosure-repository'
 import { InMemoryEventsRepository } from '../repositories/in-memory/in-memory-events-repository'
-import { InMemoryProducerRepository } from '../repositories/in-memory/in-memory-producers-repository'
+import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository'
 import { InMemoryTransactionsRepository } from '../repositories/in-memory/in-memory-transactions-repository'
 import { InMemoryWalletsRepository } from '../repositories/in-memory/in-memory-wallets-repository'
 import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
 
 let discloseRepository: DiscloseRepository
 let eventsRepository: EventsRepository
-let producersRepository: InMemoryProducerRepository
+let usersRepository: InMemoryUsersRepository
 let transactionRepository: InMemoryTransactionsRepository
 let walletsRepository: InMemoryWalletsRepository
 
@@ -25,7 +25,7 @@ describe('Disclose Event Use case', () => {
     walletsRepository = new InMemoryWalletsRepository()
     discloseRepository = new InMemoryDiscloseRepository()
     eventsRepository = new InMemoryEventsRepository()
-    producersRepository = new InMemoryProducerRepository()
+    usersRepository = new InMemoryUsersRepository()
     transactionRepository = new InMemoryTransactionsRepository()
 
     sut = new DiscloseEventUseCase(
@@ -33,26 +33,28 @@ describe('Disclose Event Use case', () => {
       discloseRepository,
       transactionRepository,
       eventsRepository,
-      producersRepository,
+      usersRepository,
     )
   })
 
   it('should be able to disclose a event', async () => {
     const wallet = await walletsRepository.create()
 
-    wallet.amount = new Prisma.Decimal(1000)
+    wallet.amount = new Prisma.Decimal(6000)
 
     await walletsRepository.save(wallet)
 
-    const producer = await producersRepository.create({
+    const user = await usersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password_hash: '123456',
-      company: false,
+      type: 'PRODUCER',
       nif: '021',
       phone: '0123',
       wallet_id: wallet.id,
     })
+
+    console.log(user, wallet)
 
     const event = await eventsRepository.create({
       title: 'Event 1',
@@ -63,13 +65,13 @@ describe('Disclose Event Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: producer.id,
+      type: 'ONLINE',
+      user_id: user.id,
     })
 
     const { disclose } = await sut.execute({
       event_id: event.id,
-      producer_id: producer.id,
+      user_id: user.id,
     })
 
     expect(disclose.id).toEqual(expect.any(String))
@@ -78,11 +80,11 @@ describe('Disclose Event Use case', () => {
   it('should not be able to disclose a event with not valid amount in wallet', async () => {
     const wallet = await walletsRepository.create()
 
-    const producer = await producersRepository.create({
+    const producer = await usersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password_hash: '123456',
-      company: false,
+      type: 'PRODUCER',
       nif: '021',
       phone: '0123',
       wallet_id: wallet.id,
@@ -97,14 +99,14 @@ describe('Disclose Event Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: producer.id,
+      type: 'ONLINE',
+      user_id: producer.id,
     })
 
     await expect(() =>
       sut.execute({
         event_id: event.id,
-        producer_id: producer.id,
+        user_id: producer.id,
       }),
     ).rejects.toBeInstanceOf(InsufficientFundsInWalletError)
   })
@@ -112,13 +114,13 @@ describe('Disclose Event Use case', () => {
   it('should be able to update wallet amount after a disclose', async () => {
     const wallet = await walletsRepository.create()
 
-    wallet.amount = new Prisma.Decimal(1000)
+    wallet.amount = new Prisma.Decimal(6000)
 
-    const producer = await producersRepository.create({
+    const producer = await usersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password_hash: '123456',
-      company: false,
+      type: 'PRODUCER',
       nif: '021',
       phone: '0123',
       wallet_id: wallet.id,
@@ -133,15 +135,15 @@ describe('Disclose Event Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: '001',
+      type: 'ONLINE',
+      user_id: '001',
     })
 
     await sut.execute({
       event_id: event.id,
-      producer_id: producer.id,
+      user_id: producer.id,
     })
 
-    expect(wallet.amount).toEqual(new Prisma.Decimal(500))
+    expect(wallet.amount).toEqual(new Prisma.Decimal(1000))
   })
 })
