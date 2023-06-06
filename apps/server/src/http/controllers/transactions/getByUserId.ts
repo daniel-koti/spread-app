@@ -1,21 +1,21 @@
 import { prisma } from '@/lib/prisma'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-export async function getTransactionsByProducer(
+export async function getTransactionsByUserId(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const producerId = request.user.sub
+  const userId = request.user.sub
 
-  const producer = await prisma.producer.findFirstOrThrow({
+  const user = await prisma.user.findFirstOrThrow({
     where: {
-      id: producerId,
+      id: userId,
     },
   })
 
   const transactions = await prisma.transaction.findMany({
     where: {
-      wallet_id: producer.wallet_id,
+      wallet_id: user.wallet_id,
     },
     orderBy: {
       created_at: 'desc',

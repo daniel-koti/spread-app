@@ -49,6 +49,7 @@ describe('Buy Ticket Use case', () => {
       email: 'johndoe@example.com',
       password_hash: '123456',
       wallet_id: wallet.id,
+      type: 'USER',
     })
 
     const event = await eventsRepository.create({
@@ -60,8 +61,8 @@ describe('Buy Ticket Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: 'producer-01',
+      type: 'ONLINE',
+      user_id: 'producer-01',
     })
 
     const coupon = await couponsRepository.create({
@@ -76,6 +77,8 @@ describe('Buy Ticket Use case', () => {
       user_id: user.id,
     })
 
+    console.log('TICKET GERADO')
+
     expect(ticket.id).toEqual(expect.any(String))
   })
 
@@ -87,6 +90,7 @@ describe('Buy Ticket Use case', () => {
       email: 'johndoe@example.com',
       password_hash: '123456',
       wallet_id: wallet.id,
+      type: 'USER',
     })
 
     const event = await eventsRepository.create({
@@ -98,8 +102,8 @@ describe('Buy Ticket Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: '001',
+      type: 'ONLINE',
+      user_id: '001',
     })
 
     const coupon = await couponsRepository.create({
@@ -127,6 +131,7 @@ describe('Buy Ticket Use case', () => {
       email: 'johndoe@example.com',
       password_hash: '123456',
       wallet_id: wallet.id,
+      type: 'USER',
     })
 
     const event = await eventsRepository.create({
@@ -138,8 +143,8 @@ describe('Buy Ticket Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
-      type: 'online',
-      producer_id: '001',
+      type: 'ONLINE',
+      user_id: '001',
     })
 
     const coupon = await couponsRepository.create({

@@ -3,15 +3,15 @@ import { makeCreateTransactionUseCase } from '@/use-cases/factories/make-create-
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function incomeUserWallet(
+export async function incomeTransaction(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const incomeWalletSchemaBody = z.object({
+  const incomeTransactionBodySchema = z.object({
     amount: z.number(),
   })
 
-  const { amount } = incomeWalletSchemaBody.parse(request.body)
+  const { amount } = incomeTransactionBodySchema.parse(request.body)
 
   const user = await prisma.user.findFirstOrThrow({
     where: {

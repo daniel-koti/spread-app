@@ -9,31 +9,61 @@ import { toast } from 'sonner'
 import { api } from '@/services/api'
 
 const createProducerSchema = z.object({
-  name: z.string().min(3, 'Campo obrigatório'),
-  email: z.string().email(),
-  password: z.string().min(6, 'Campo obrigatório'),
-  phone: z.string().min(6, 'Campo obrigatório'),
-  nif: z.string().min(9, 'Campo obrigatório'),
-  company: z.boolean().default(false),
+  name: z
+    .string()
+    .nonempty('Nome do organizador é obrigatório')
+    .transform((name) => {
+      return name
+        .trim()
+        .split(' ')
+        .map((word) => {
+          return word[0].toLocaleUpperCase().concat(word.substring(1))
+        })
+    }),
+  email: z
+    .string()
+    .nonempty('O e-mail é obrigatório')
+    .email('Formato do e-mail inválido')
+    .toLowerCase(),
+  password: z
+    .string()
+    .nonempty('Password é obrigatório')
+    .min(6, 'Deve ter no mínimo 6 caracteres'),
+  phone: z.string().min(6, 'Deve ter no mínimo 6 caracteres'),
+  nif: z.string().min(9, 'Deve ter no mínimo 9 caracteres'),
+  isCompany: z.boolean().default(false),
+  type: z.enum(['ADMIN', 'PRODUCER', 'USER']),
 })
 
-type CreateProducerInputSchema = z.infer<typeof createProducerSchema>
+type CreateProducerInputData = z.infer<typeof createProducerSchema>
 
 export function CreateProducerForm() {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { isValid },
-  } = useForm<CreateProducerInputSchema>({
+    formState: { errors },
+  } = useForm<CreateProducerInputData>({
     resolver: zodResolver(createProducerSchema),
   })
 
   const router = useRouter()
 
-  async function handleCreateProducer(data: CreateProducerInputSchema) {
+  async function handleCreateProducer(data: CreateProducerInputData) {
     try {
-      await api.post('producers', data)
+      const { name, email, password, phone, nif, isCompany } = data
+
+      const newProducer: CreateProducerInputData = {
+        name,
+        email,
+        password,
+        phone,
+        nif,
+        isCompany,
+        type: 'PRODUCER',
+      }
+
+      await api.post('producers', newProducer)
 
       toast.success('Organizador criado com sucesso')
       router.push('/signin')
@@ -56,6 +86,9 @@ export function CreateProducerForm() {
           description="user"
           label="Nome do organizador"
         />
+        {errors.name && (
+          <span className="text-xs text-red-500">{errors.name.message}</span>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-2">
@@ -95,23 +128,21 @@ export function CreateProducerForm() {
             type="checkbox"
             id="isCompany"
             className="h-5 w-5 rounded-md border-gray-200 bg-white shadow-sm cursor-pointer"
-            {...register('company')}
+            {...register('isCompany')}
           />
         </label>
       </div>
 
-      {isValid && (
-        <button
-          type="submit"
-          className="group mt-4 relative inline-block overflow-hidden rounded-sm border border-primary-500 px-8 py-3 focus:outline-none focus:ring"
-        >
-          <span className="absolute inset-y-0 left-0 w-[2px] bg-primary-500 transition-all group-hover:w-full group-active:bg-primary-500"></span>
+      <button
+        type="submit"
+        className="group mt-4 relative inline-block overflow-hidden rounded-sm border border-primary-500 px-8 py-3 focus:outline-none focus:ring"
+      >
+        <span className="absolute inset-y-0 left-0 w-[2px] bg-primary-500 transition-all group-hover:w-full group-active:bg-primary-500"></span>
 
-          <span className="relative text-sm font-medium text-primary-500 transition-colors group-hover:text-white">
-            Cadastrar
-          </span>
-        </button>
-      )}
+        <span className="relative text-sm font-medium text-primary-500 transition-colors group-hover:text-white">
+          Cadastrar
+        </span>
+      </button>
     </form>
   )
 }

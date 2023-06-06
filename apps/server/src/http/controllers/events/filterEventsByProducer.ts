@@ -9,14 +9,14 @@ export async function filterEventsByProducer(
 
   const events = await prisma.event.findMany({
     where: {
-      producer_id: producerId,
+      user_id: producerId,
     },
     select: {
       id: true,
       title: true,
       description: true,
       address: true,
-      imageUrl: true,
+      image: true,
       date_start: true,
       date_end: true,
       hour_start: true,
@@ -24,7 +24,7 @@ export async function filterEventsByProducer(
       disclosed: true,
       created_at: true,
       status: true,
-      producer: {
+      user: {
         select: {
           name: true,
         },

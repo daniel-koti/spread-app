@@ -44,14 +44,28 @@ export default function SignUp() {
               </span>
             </header>
 
-            <h2 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-5xl">
-              Criar uma conta
+            <h2 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl">
+              Criar uma conta de{' '}
+              {isProducer ? (
+                <strong className="text-primary-500">Organizador</strong>
+              ) : (
+                <strong className="text-primary-500">Cliente</strong>
+              )}
             </h2>
 
-            <p className="mt-4 leading-relaxed text-gray-500">
-              Com a nossa plataforma, você pode criar uma conta e começar a
-              divulgar os seus eventos para um público maior.
-            </p>
+            {isProducer ? (
+              <p className="mt-4 leading-relaxed text-gray-500">
+                Como organizador poderá criar e gerenciar os seus eventos por
+                meio da nossa plataforma. Garantimos o controle dos seus
+                bilhetes e exposição do evento para diferentes pessoas.
+              </p>
+            ) : (
+              <p className="mt-4 leading-relaxed text-gray-500">
+                Seja nosso cliente e receba anúncios de eventos em primeira mão.
+                Garantimos a vericidade dos eventos e deixamos-lhe mais próximo
+                dos organizadores.
+              </p>
+            )}
 
             <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-2">
               <article>

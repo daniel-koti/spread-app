@@ -8,6 +8,10 @@ interface RegisterUseCaseRequest {
   name: string
   email: string
   password: string
+  phone: string | null
+  nif: string | null
+  isCompany: boolean
+  type: 'ADMIN' | 'PRODUCER' | 'USER'
 }
 
 interface RegisterUserUseCaseResponse {
@@ -24,6 +28,10 @@ export class RegisterUserUseCase {
     name,
     email,
     password,
+    phone,
+    isCompany,
+    nif,
+    type,
   }: RegisterUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
     const password_hash = await hash(password, 6)
 
@@ -39,8 +47,11 @@ export class RegisterUserUseCase {
       name,
       email,
       password_hash,
+      phone,
+      isCompany,
+      nif,
       wallet_id: wallet.id,
-      type: 'USER',
+      type,
     })
 
     return {

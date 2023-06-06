@@ -7,26 +7,14 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   const requestBodySchema = z.object({
     title: z.string(),
     description: z.string(),
-    imageUrl: z.string().nullable(),
+    image: z.string().nullable(),
     date_start: z.string().datetime(),
     date_end: z.string().datetime(),
     hour_start: z.string(),
     hour_end: z.string(),
     address: z.string(),
-    type: z.string(),
     category_id: z.string(),
-    latitude: z
-      .number()
-      .refine((value) => {
-        return Math.abs(value) <= 90
-      })
-      .nullable(),
-    longitude: z
-      .number()
-      .refine((value) => {
-        return Math.abs(value) <= 180
-      })
-      .nullable(),
+    type: z.enum(['PERSON', 'ONLINE']),
   })
 
   const {
@@ -38,9 +26,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     date_start,
     hour_end,
     hour_start,
-    imageUrl,
-    latitude,
-    longitude,
+    image,
     type,
   } = requestBodySchema.parse(request.body)
 
@@ -58,11 +44,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       date_start: new Date(date_start),
       hour_end,
       hour_start,
-      imageUrl,
-      latitude,
-      longitude,
+      image,
       type,
-      producer_id: authenticatedProfile,
+      user_id: authenticatedProfile,
     })
   } catch (error) {
     if (error instanceof NotAuthorizedError) {

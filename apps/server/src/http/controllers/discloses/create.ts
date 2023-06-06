@@ -16,7 +16,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   try {
     const disclose = await createDiscloseUseCase.execute({
       event_id: eventId,
-      producer_id: request.user.sub,
+      user_id: request.user.sub,
     })
 
     return reply.status(201).send(disclose)

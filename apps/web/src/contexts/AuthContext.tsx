@@ -63,6 +63,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           })
 
           isUser === 'true' ? setTypeUser('client') : setTypeUser('producer')
+
+          console.log('CONTEXT', user)
         })
         .catch(() => {
           Router.push('/signin')

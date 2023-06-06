@@ -4,13 +4,17 @@ import { Star } from 'phosphor-react'
 import { useContext, useState } from 'react'
 import { Dialog } from '../Modals/Dialog'
 import { AuthContext } from '@/contexts/AuthContext'
+import { toast } from 'sonner'
+import { api } from '@/services/api'
 
 interface TicketProps {
+  id: string
   name: string
   price: number
+  eventId: string
 }
 
-export function Ticket({ name, price }: TicketProps) {
+export function Ticket({ name, price, id, eventId }: TicketProps) {
   const { user } = useContext(AuthContext)
   const [isDialogToBuyTicket, setIsDialogToBuyTicket] = useState(false)
 
@@ -19,7 +23,20 @@ export function Ticket({ name, price }: TicketProps) {
   }
 
   async function onBuyTicket() {
-    console.log(user?.amount)
+    if (user?.amount! < price) {
+      toast.error('O valor em carteira é insuficiente')
+    }
+
+    try {
+      await api.post(`events/${eventId}/ticket`, {
+        couponId: id,
+      })
+
+      onToggleDialogToBuyTicket()
+      toast.success('Bilhete comprado com sucesso!')
+    } catch (err) {
+      toast.error('Não foi possível comprar o bilhete')
+    }
   }
 
   return (

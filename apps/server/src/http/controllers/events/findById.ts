@@ -18,7 +18,7 @@ export async function findById(request: FastifyRequest, reply: FastifyReply) {
       id: true,
       title: true,
       description: true,
-      imageUrl: true,
+      image: true,
       address: true,
       disclosed: true,
       date_start: true,
@@ -27,7 +27,7 @@ export async function findById(request: FastifyRequest, reply: FastifyReply) {
       hour_end: true,
       created_at: true,
       type: true,
-      producer: {
+      user: {
         select: {
           name: true,
           phone: true,

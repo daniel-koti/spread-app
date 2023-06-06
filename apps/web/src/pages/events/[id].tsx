@@ -167,9 +167,11 @@ const EventDetails: NextPageWithLayout = ({
               coupons?.map((coupon) => {
                 return (
                   <Ticket
+                    id={coupon.id}
                     key={coupon.id}
                     name={coupon.coupon_type.name}
                     price={Number(coupon.price)}
+                    eventId={event?.id!}
                   />
                 )
               })}

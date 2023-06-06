@@ -54,8 +54,6 @@ describe('Disclose Event Use case', () => {
       wallet_id: wallet.id,
     })
 
-    console.log(user, wallet)
-
     const event = await eventsRepository.create({
       title: 'Event 1',
       description: 'Description event 1',
