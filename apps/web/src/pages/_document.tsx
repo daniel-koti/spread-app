@@ -1,13 +1,13 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
-import { heebo } from './_app'
+import { inter, barlow } from './_app'
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en" className={`${inter.variable} ${barlow.variable}`}>
       <Head />
 
-      <body className={`${heebo.variable} font-alt bg-slate-100`}>
+      <body className="bg-slate-100">
         <Main />
         <NextScript />
       </body>

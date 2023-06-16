@@ -5,13 +5,13 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { toast } from 'sonner'
 import { api } from '@/services/api'
+import { toast } from 'react-toastify'
 
 const createProducerSchema = z.object({
   name: z
     .string()
-    .nonempty('Nome do organizador é obrigatório')
+    .nonempty({ message: 'Nome do organizador é obrigatório' })
     .transform((name) => {
       return name
         .trim()
@@ -19,18 +19,22 @@ const createProducerSchema = z.object({
         .map((word) => {
           return word[0].toLocaleUpperCase().concat(word.substring(1))
         })
+        .join(' ')
     }),
   email: z
     .string()
-    .nonempty('O e-mail é obrigatório')
-    .email('Formato do e-mail inválido')
+    .nonempty({ message: 'O e-mail é obrigatório' })
+    .email({ message: 'Formato do e-mail inválido' })
     .toLowerCase(),
   password: z
     .string()
-    .nonempty('Password é obrigatório')
-    .min(6, 'Deve ter no mínimo 6 caracteres'),
-  phone: z.string().min(6, 'Deve ter no mínimo 6 caracteres'),
-  nif: z.string().min(9, 'Deve ter no mínimo 9 caracteres'),
+    .nonempty({ message: 'Password é obrigatória' })
+    .min(6, { message: 'Deve ter no mínimo 6 caracteres' }),
+  phone: z
+    .string()
+    .nonempty({ message: 'O número de telefone é obrigatório' })
+    .min(6, { message: 'Deve ter no mínimo 6 caracteres' }),
+  nif: z.string().min(9, { message: 'Deve ter no mínimo 9 caracteres' }),
   isCompany: z.boolean().default(false),
   type: z.enum(['ADMIN', 'PRODUCER', 'USER']),
 })
@@ -45,13 +49,18 @@ export function CreateProducerForm() {
     formState: { errors },
   } = useForm<CreateProducerInputData>({
     resolver: zodResolver(createProducerSchema),
+    defaultValues: {
+      type: 'PRODUCER',
+    },
   })
 
   const router = useRouter()
 
   async function handleCreateProducer(data: CreateProducerInputData) {
+    console.log(data)
+
     try {
-      const { name, email, password, phone, nif, isCompany } = data
+      const { name, email, password, phone, nif, isCompany, type } = data
 
       const newProducer: CreateProducerInputData = {
         name,
@@ -60,10 +69,10 @@ export function CreateProducerForm() {
         phone,
         nif,
         isCompany,
-        type: 'PRODUCER',
+        type,
       }
 
-      await api.post('producers', newProducer)
+      await api.post('/users', newProducer)
 
       toast.success('Organizador criado com sucesso')
       router.push('/signin')
@@ -79,6 +88,8 @@ export function CreateProducerForm() {
       className="flex flex-col gap-2"
     >
       <div className="grid grid-cols-1 gap-2">
+        <input type="hidden" {...register('type')} />
+
         <Input
           type="text"
           placeholder="Ex: John Doe"
@@ -92,35 +103,68 @@ export function CreateProducerForm() {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Input
-          type="email"
-          label="E-mail"
-          placeholder="Ex: john@example.com"
-          description="email"
-          {...register('email')}
-        />
-        <Input
-          type="password"
-          label="Palavra-passe"
-          placeholder=""
-          description="password"
-          {...register('password')}
-        />
+        <div>
+          <Input
+            type="email"
+            label="E-mail"
+            placeholder="Ex: john@example.com"
+            description="email"
+            {...register('email')}
+          />
+
+          {errors.email && (
+            <span className="text-xs text-red-500">{errors.email.message}</span>
+          )}
+        </div>
+
+        <div>
+          <Input
+            type="password"
+            label="Palavra-passe"
+            placeholder=""
+            description="password"
+            {...register('password')}
+          />
+
+          {errors.password && (
+            <span className="text-xs text-red-500">
+              {errors.password.message}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <Input
-          type="tel"
-          label="Telefone"
-          description="phone"
-          placeholder="(+244) 000 000 000"
-          {...register('phone')}
-        />
-        <Input type="text" label="NIF" description="nif" {...register('nif')} />
+        <div>
+          <Input
+            type="tel"
+            label="Telefone"
+            description="phone"
+            placeholder="(+244) 000 000 000"
+            {...register('phone')}
+          />
+
+          {errors.phone && (
+            <span className="text-xs text-red-500">{errors.phone.message}</span>
+          )}
+        </div>
+
+        <div>
+          <Input
+            type="text"
+            label="NIF"
+            description="nif"
+            {...register('nif')}
+          />
+
+          {errors.nif && (
+            <span className="text-xs text-red-500">{errors.nif.message}</span>
+          )}
+        </div>
       </div>
 
       <div className="col-span-6 mt-6">
-        <label htmlFor="isCompany" className="inline-block">
+        <label htmlFor="isCompany" className="inline-flex items-center">
           <span className="text-sm text-gray-700 mr-2">
             É uma pessoa jurídica ? (Empresa)
           </span>

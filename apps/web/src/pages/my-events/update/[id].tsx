@@ -13,7 +13,7 @@ import { getAPIClient } from '@/services/axios'
 import { EventProps } from '@/components/Pages/EventsList'
 import { Clock, MapPin } from 'phosphor-react'
 import { api } from '@/services/api'
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 
 const updateEventSchema = z.object({
   title: z.string(),

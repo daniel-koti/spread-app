@@ -4,18 +4,18 @@ import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '@/services/api'
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 
 const createEventSchema = z.object({
   title: z.string(),
   description: z.string(),
-  imageUrl: z.string().nullable(),
+  image: z.string().nullable(),
   categoryId: z.string(),
   dateStart: z.string(),
   dateEnd: z.string(),
   hourStart: z.string().nullable(),
   hourEnd: z.string().nullable(),
-  type: z.enum(['online', 'person']),
+  type: z.enum(['ONLINE', 'PERSON']),
   address: z.string(),
 })
 
@@ -33,7 +33,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
     {
       resolver: zodResolver(createEventSchema),
       defaultValues: {
-        type: 'person',
+        type: 'PERSON',
       },
     },
   )
@@ -52,7 +52,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       dateStart,
       hourEnd,
       hourStart,
-      imageUrl,
+      image,
       type,
     } = data
 
@@ -65,7 +65,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       date_end: new Date(dateEnd),
       hour_start: hourStart,
       hour_end: hourEnd,
-      imageUrl,
+      image,
       type,
       latitude: null,
       longitude: null,
@@ -103,6 +103,12 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
         </div>
 
         <div className="flex flex-col items-start gap-3">
+          <div className="flex flex-col justify-center items-center border-2 border-dashed border-slate-300 h-72 w-full cursor-pointer rounded hover:border-primary-500">
+            <input type="file" accept="image/*" hidden />
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start gap-3">
           <label htmlFor="description" className="text-sm text-slate-500">
             Descrição do evento
           </label>
@@ -110,24 +116,11 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             {...register('description')}
             id="description"
             rows={5}
-            className="w-full flex items-center bg-slate-50 rounded-[10px] border-[1px] outline-primary-500 border-slate-300 px-4 text-slate-700 text-base resize-none"
+            className="w-full flex items-center bg-slate-50 rounded-[10px] border outline-primary-500 border-slate-300 px-4 py-2 text-slate-700 text-base resize-none"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3 items-center">
-          <div className="flex flex-col gap-3 items-start">
-            <label htmlFor="image" className="text-sm text-slate-500">
-              Imagem URL
-            </label>
-            <input
-              {...register('imageUrl')}
-              id="image"
-              type="url"
-              placeholder="http://"
-              className="w-full bg-slate-50 border-[1px] border-dashed rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
-            />
-          </div>
-
           <div className="flex flex-col gap-2 items-start">
             <label htmlFor="category" className="text-sm text-slate-500">
               Categoria do evento
@@ -236,15 +229,15 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
         <div className="grid grid-cols-1 gap-4">
           <div className="flex flex-col gap-2 items-start">
             <label htmlFor="address" className="text-sm text-slate-500">
-              Endereço {typeEvent === 'online' && '(URL)'}
+              Endereço {typeEvent === 'ONLINE' && '(URL)'}
             </label>
             <input
               {...register('address')}
               id="address"
-              type={`${typeEvent === 'online' ? 'url' : 'text'}`}
+              type={`${typeEvent === 'ONLINE' ? 'url' : 'text'}`}
               className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
               placeholder={`${
-                typeEvent === 'online' ? 'https://' : 'Localização'
+                typeEvent === 'ONLINE' ? 'https://' : 'Localização'
               }`}
             />
           </div>

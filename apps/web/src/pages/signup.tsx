@@ -13,7 +13,7 @@ export default function SignUp() {
   const [isProducer, setIsProducer] = useState(true)
 
   return (
-    <section className="bg-white">
+    <section className="h-full">
       <Head>
         <title>Criar conta | Spread Events</title>
       </Head>
@@ -26,10 +26,7 @@ export default function SignUp() {
           />
         </aside>
 
-        <main
-          aria-label="Main"
-          className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
-        >
+        <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
           <div className="max-w-xl lg:max-w-3xl">
             <header className="flex flex-col md:flex-row items-center justify-between mb-16 gap-4">
               <h1 className="text-5xl font-bold text-primary-500 ">
@@ -67,7 +64,7 @@ export default function SignUp() {
               </p>
             )}
 
-            <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="my-8 grid grid-cols-2 gap-2">
               <article>
                 <input
                   type="radio"
@@ -81,7 +78,7 @@ export default function SignUp() {
 
                 <label
                   htmlFor="DeliveryStandard"
-                  className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-primary-500"
+                  className="block cursor-pointer rounded-[10px] border p-4 text-sm font-medium border-gray-200 hover:border-primary-500  peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-primary-500"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-gray-900">Organizador</p>
@@ -93,7 +90,7 @@ export default function SignUp() {
                   </div>
 
                   <p className="mt-1 text-gray-400 font-light">
-                    Perfil para organizadores de eventos
+                    Perfil para organizadores
                   </p>
                 </label>
               </article>
@@ -110,7 +107,7 @@ export default function SignUp() {
 
                 <label
                   htmlFor="DeliveryPriority"
-                  className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-primary-500"
+                  className="block cursor-pointer rounded-[10px] border p-4 text-sm font-medium border-gray-200 hover:border-primary-500 peer-checked:border-primary-500 peer-checked:ring-1 peer-checked:ring-primary-500"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-gray-700">Cliente</p>

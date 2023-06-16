@@ -7,7 +7,7 @@ import { Modal } from './Modal'
 
 import * as z from 'zod'
 import { api } from '@/services/api'
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 
 interface RechargeWalletModalProps {
   onClose: () => void

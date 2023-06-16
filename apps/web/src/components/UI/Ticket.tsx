@@ -4,8 +4,9 @@ import { Star } from 'phosphor-react'
 import { useContext, useState } from 'react'
 import { Dialog } from '../Modals/Dialog'
 import { AuthContext } from '@/contexts/AuthContext'
-import { toast } from 'sonner'
+
 import { api } from '@/services/api'
+import { toast } from 'react-toastify'
 
 interface TicketProps {
   id: string

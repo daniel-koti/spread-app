@@ -6,8 +6,9 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { api } from '@/services/api'
-import { toast } from 'sonner'
+
 import { Modal } from './Modal'
+import { toast } from 'react-toastify'
 
 interface CreateCouponModalProps {
   onCloseModal: () => void

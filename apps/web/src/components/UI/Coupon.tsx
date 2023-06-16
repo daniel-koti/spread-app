@@ -7,7 +7,7 @@ import { Plus, Trash } from 'phosphor-react'
 import { CreateCouponModal } from '../Modals/CreateCouponModal'
 import { Dialog } from '../Modals/Dialog'
 import { api } from '@/services/api'
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 
 export interface CouponProps {
   id: string

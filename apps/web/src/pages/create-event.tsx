@@ -1,11 +1,10 @@
 import { ReactElement } from 'react'
 import { NextPageWithLayout } from './_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
-import { GetServerSideProps } from 'next'
 
-import { getAPIClient } from '@/services/axios'
+import { setupAPIClient } from '@/services/api'
 import { CreateEventForm } from '../components/Pages/CreateEventForm'
-import { parseCookies } from 'nookies'
+import { withSSRAuth } from '@/utils/withSSRAuth'
 
 interface ServerSideProps {
   categories?: {
@@ -32,19 +31,8 @@ CreateEvent.getLayout = (page: ReactElement) => {
   return <DefaultLayout>{page}</DefaultLayout>
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const apiClient = getAPIClient(ctx)
-  const { 'spread.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    }
-  }
-
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
   const response = await apiClient.get('/categories')
 
   const { categories } = response.data
@@ -54,6 +42,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       categories,
     },
   }
-}
+})
 
 export default CreateEvent

@@ -16,8 +16,9 @@ import { Coupon } from '@/components/UI/Coupon'
 import { Badge } from '@/components/UI/Badge'
 import { Dialog } from '@/components/Modals/Dialog'
 import { AuthContext } from '@/contexts/AuthContext'
-import { toast } from 'sonner'
+
 import { api } from '@/services/api'
+import { toast } from 'react-toastify'
 
 interface CouponProps {
   id: string

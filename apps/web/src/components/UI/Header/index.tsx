@@ -1,26 +1,26 @@
-import Link from 'next/link'
-import { ProfileLinksMenuButton } from './MenuHeader/ProfileLinksMenuButton'
 import { useContext } from 'react'
-import { AuthContext } from '@/contexts/AuthContext'
+import Link from 'next/link'
+import Image from 'next/image'
+
+import { ProfileLinksMenuButton } from './MenuHeader/ProfileLinksMenuButton'
+
+import logoImage from '../../../assets/logo.svg'
 
 export function Header() {
-  const { typeUser } = useContext(AuthContext)
-
   return (
-    <header aria-label="Site Header" className="border-b border-gray-300">
-      <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-2 sm:px-6 lg:px-8">
+    <header className="bg-white border-b">
+      <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex font-medium text-2xl text-primary-500">
-            SPREAD 🦑
+          <Link href="/">
+            <Image src={logoImage} alt="" />
           </Link>
         </div>
 
-        <div className="flex flex-1 items-center justify-end gap-8">
-          <nav
-            aria-label="Site Nav"
-            className="hidden lg:flex lg:gap-4 lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide lg:text-gray-500"
-          >
-            {typeUser === 'client' && (
+        <ProfileLinksMenuButton />
+
+        {/* <div className="flex flex-1 items-center justify-end gap-8">
+          <nav className="hidden lg:flex lg:gap-4 font-medium  lg:tracking-wide lg:text-gray-500">
+            {!isProducer && (
               <Link
                 href="/my-tickets"
                 className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-primary-500"
@@ -29,7 +29,7 @@ export function Header() {
               </Link>
             )}
 
-            {typeUser === 'producer' && (
+            {isProducer && (
               <>
                 <Link
                   href="/create-event"
@@ -54,7 +54,7 @@ export function Header() {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </header>
   )

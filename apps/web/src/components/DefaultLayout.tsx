@@ -10,9 +10,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
     <>
       <Header />
       <main className="h-full">
-        <div className="max-w-screen-xl mx-auto sm:px-6 lg:px-8 h-full">
-          {children}
-        </div>
+        <div className="">{children}</div>
       </main>
     </>
   )

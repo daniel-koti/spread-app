@@ -148,7 +148,7 @@ MyEvents.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apiClient = getAPIClient(ctx)
-  const { 'spread.token': token } = parseCookies(ctx)
+  const { '@spread.token': token } = parseCookies(ctx)
 
   if (!token) {
     return {

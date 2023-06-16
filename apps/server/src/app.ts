@@ -24,14 +24,15 @@ app.register(fastifyJwt, {
     signed: false,
   },
   sign: {
-    expiresIn: '3m', // 1 minutes
+    expiresIn: '3m', // 3 minutes
   },
 })
 
 app.register(fastifyCookie)
 
 app.register(cors, {
-  origin: '*',
+  origin: true,
+  credentials: true,
 })
 
 app.register(categoriesRoutes)

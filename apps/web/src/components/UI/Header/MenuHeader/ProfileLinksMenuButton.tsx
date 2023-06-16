@@ -2,45 +2,47 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import { useContext } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
-import { CaretDown, Plus, SignOut, User, Wallet } from 'phosphor-react'
-import { parseCookies } from 'nookies'
+import { CaretDown, SignOut } from 'phosphor-react'
+import {
+  CalendarHeart,
+  CalendarPlus,
+  Tags,
+  User,
+  WalletIcon,
+} from 'lucide-react'
 
 import Link from 'next/link'
 
 export function ProfileLinksMenuButton() {
-  const { user, signOut, typeUser } = useContext(AuthContext)
+  const { user, signOut } = useContext(AuthContext)
 
-  const { 'spread.isUser': isUser } = parseCookies()
-
-  const isProducer = isUser !== 'true'
+  const isProducer = user?.type === 'PRODUCER'
 
   const style = {
-    containerUser: 'p-2 rounded-full text-zinc-200',
+    containerUser: 'p-1 rounded-full text-white',
     producer: 'bg-primary-500',
     client: 'bg-blue-500',
   }
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger className="outline-none">
-        <div className="group bg-slate-100 flex shrink-0 items-center gap-2 transition pr-4 pl-2 py-1 rounded-full">
-          <span className="sr-only">Menu</span>
-
+      <DropdownMenu.Trigger className="outline-none text-gray-800 hover:text-gray-100 border rounded-full px-4 py-2 hover:bg-primary-500 transition-all ease-in-out">
+        <div className="group flex shrink-0 items-center">
           <span
             className={`${style.containerUser} ${
-              typeUser === 'producer' ? style.producer : style.client
+              user?.type === 'PRODUCER' ? style.producer : style.client
             }`}
           >
-            <User />
+            <User strokeWidth={1.5} size={18} />
           </span>
-          <span className="text-gray-900 text-sm">{user?.email}</span>
-          <CaretDown className="w-4 h-4 text-zinc-500" />
+          <span className="text-sm ml-2 mr-1 font-medium">{user?.name}</span>
+          <CaretDown className="w-2 h-2" />
         </div>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="bg-white z-10 flex-col rounded-lg overflow-auto shadow-2xl"
+          className="bg-white z-10 flex-col rounded mt-1 overflow-auto shadow-2xl"
           sideOffset={5}
         >
           <DropdownMenu.Item className="outline-none">
@@ -67,20 +69,44 @@ export function ProfileLinksMenuButton() {
               href="/wallet"
               className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
             >
-              <Wallet weight="bold" />
+              <WalletIcon className="h-4 w-4" />
               Minha carteira
             </Link>
           </DropdownMenu.Item>
           {isProducer && (
-            <DropdownMenu.Item className="outline-none" asChild>
-              <Link
-                href="/create-event"
-                className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
-              >
-                <Plus weight="bold" />
-                Cadastrar evento
-              </Link>
-            </DropdownMenu.Item>
+            <>
+              <DropdownMenu.Item className="outline-none" asChild>
+                <Link
+                  href="/create-event"
+                  className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                >
+                  <CalendarPlus className="h-4 w-4" />
+                  Cadastrar evento
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="outline-none" asChild>
+                <Link
+                  href="/my-events"
+                  className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                >
+                  <CalendarHeart className="h-4 w-4" />
+                  Meus eventos
+                </Link>
+              </DropdownMenu.Item>
+            </>
+          )}
+          {!isProducer && (
+            <>
+              <DropdownMenu.Item className="outline-none" asChild>
+                <Link
+                  href="/create-event"
+                  className="flex items-center gap-2 text-sm px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                >
+                  <Tags className="h-4 w-4" />
+                  Meus bilhetes
+                </Link>
+              </DropdownMenu.Item>
+            </>
           )}
 
           <DropdownMenu.Item className="outline-none" asChild>

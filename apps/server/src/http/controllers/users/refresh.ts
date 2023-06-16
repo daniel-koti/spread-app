@@ -38,6 +38,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
         token,
       })
   } catch (err) {
+    console.log(err)
     return reply.status(401).send({ message: 'Refresh token is expired' })
   }
 }

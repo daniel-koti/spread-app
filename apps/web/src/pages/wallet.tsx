@@ -9,7 +9,7 @@ import {
   CurrencyDollar,
   Wallet as WalletIcon,
 } from 'phosphor-react'
-import { getAPIClient } from '@/services/axios'
+import { setupAPIClient } from '@/services/api'
 import { parseCookies } from 'nookies'
 import { GetServerSideProps } from 'next'
 import dayjs from 'dayjs'
@@ -163,9 +163,8 @@ Wallet.getLayout = (page: ReactElement) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const apiClient = getAPIClient(ctx)
-  const { 'spread.isUser': isUser } = parseCookies(ctx)
-  const { 'spread.token': token } = parseCookies(ctx)
+  const apiClient = setupAPIClient(ctx)
+  const { '@spread.token': token } = parseCookies(ctx)
 
   if (!token) {
     return {
@@ -176,9 +175,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
-  const response = await apiClient.get(
-    `${isUser === 'true' ? 'transactionsUser' : 'transactionsProducer'}`,
-  )
+  const response = await apiClient.get('/transactions/user')
 
   const { transactions } = response.data
 

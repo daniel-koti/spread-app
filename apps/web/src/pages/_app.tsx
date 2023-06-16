@@ -1,27 +1,29 @@
 import { ReactNode, ReactElement } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { Barlow, Heebo } from 'next/font/google'
+import { Barlow, Inter } from 'next/font/google'
+
 import Head from 'next/head'
 
 import { AuthProvider } from '@/contexts/AuthContext'
-import { Toaster } from 'sonner'
+import { Toast } from '@/components/UI/Toast'
 
 import dayjs from 'dayjs'
+
 import 'dayjs/locale/pt'
 
 import '@/styles/globals.css'
 
-const barlow = Barlow({
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-inter',
+})
+
+export const barlow = Barlow({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-barlow',
-})
-
-export const heebo = Heebo({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-heebo',
 })
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -42,13 +44,13 @@ export default function App({
 
   return (
     <AuthProvider>
-      <Toaster richColors theme="light" position="top-center" closeButton />
+      <Toast />
       <Head>
         <title>Spread 🦑</title>
       </Head>
 
       {getLayout(
-        <main className={`${barlow.variable} font-sans`}>
+        <main>
           <Component {...pageProps} />
         </main>,
       )}

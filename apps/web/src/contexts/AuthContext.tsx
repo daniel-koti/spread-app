@@ -1,19 +1,20 @@
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
-import { api } from '@/services/api'
-import { toast } from 'sonner'
+import { api } from '@/services/apiClient'
 
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export interface User {
-  id: string
-  name: string
+  id?: string
+  name?: string
   email: string
-  wallet_id: string
-  amount: number
+  amount?: number
+  wallet_id?: string
   phone?: number
-  company?: boolean
+  isCompany?: boolean
+  type?: 'PRODUCER' | 'ADMIN' | 'USER'
   nif?: string
   status?: 'ENABLED' | 'DISABLED'
 }
@@ -21,13 +22,12 @@ export interface User {
 interface SignInProps {
   email: string
   password: string
-  isProducer: boolean
 }
 
 interface AuthContextProps {
   user: User | null
   isAuthenticated: boolean
-  typeUser: 'client' | 'producer'
+  fetchProfileData: () => void
   signIn: (data: SignInProps) => Promise<void>
   signOut: () => void
 }
@@ -40,8 +40,7 @@ export const AuthContext = createContext({} as AuthContextProps)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
-  const [typeUser, setTypeUser] = useState<'client' | 'producer'>('client')
-
+  const router = useRouter()
   const isAuthenticated = !!user
   /**
    * * Preciso que toda vez que a aplicação é recarregada,
@@ -49,55 +48,69 @@ export function AuthProvider({ children }: AuthProviderProps) {
    */
 
   useEffect(() => {
-    const { 'spread.token': token } = parseCookies()
-    const { 'spread.isUser': isUser } = parseCookies()
+    const { '@spread.token': token } = parseCookies()
 
     if (token) {
       api
-        .get(`${isUser === 'true' ? 'users' : 'producers'}/me`)
+        .get('/me')
         .then((response) => {
           const { user } = response.data
 
           setUser({
             ...user,
           })
-
-          isUser === 'true' ? setTypeUser('client') : setTypeUser('producer')
-
-          console.log('CONTEXT', user)
         })
         .catch(() => {
-          Router.push('/signin')
+          router.push('/')
         })
     }
   }, [])
 
-  async function signIn({ email, password, isProducer }: SignInProps) {
+  async function fetchProfileData() {
+    const { '@spread.token': token } = parseCookies()
+
+    if (token) {
+      api
+        .get('me')
+        .then((response) => {
+          setUser({
+            id: response.data.user.id,
+            name: response.data.user.name,
+            email: response.data.user.email,
+            phone: response.data.user.phone,
+            nif: response.data.user.nif,
+            isCompany: response.data.user.isCompany,
+            type: response.data.user.type,
+            wallet_id: response.data.user.wallet_id,
+            amount: response.data.user.amount,
+            status: response.data.user.status,
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+          router.push('/')
+        })
+    }
+  }
+
+  async function signIn({ email, password }: SignInProps) {
     try {
-      const response = await api.post(
-        `${isProducer ? 'producers' : 'users'}/sessions`,
-        { email, password },
-      )
+      const response = await api.post(`/sessions`, { email, password })
 
-      const { token, isUser, user } = response.data
+      const { token } = response.data
 
-      setCookie(undefined, 'spread.token', token, {
+      setCookie(undefined, '@spread.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 Days
-      })
-
-      setCookie(undefined, 'spread.isUser', isUser, {
-        maxAge: 60 * 60 * 30, // 30 Days
+        path: '/',
       })
 
       setUser({
-        ...user,
+        email,
       })
-
-      isProducer ? setTypeUser('producer') : setTypeUser('client')
 
       api.defaults.headers.Authorization = `Bearer ${token}`
 
-      Router.push('/')
+      await router.push('/')
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         toast.error('Credenciais inválidas')
@@ -107,13 +120,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  function signOut() {
-    destroyCookie(undefined, 'spread.token')
-    destroyCookie(undefined, 'spread.isUser')
+  async function signOut() {
+    destroyCookie(undefined, '@spread.token')
+    destroyCookie(undefined, 'refreshToken')
 
-    setUser(null)
-
-    Router.push('/signin')
+    await router.push('/signin')
   }
 
   return (
@@ -121,7 +132,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       value={{
         user,
         isAuthenticated,
-        typeUser,
+        fetchProfileData,
         signIn,
         signOut,
       }}
