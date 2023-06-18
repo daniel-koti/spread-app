@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
+import fastifyFormBody from '@fastify/formbody'
 import cors from '@fastify/cors'
 
 import { env } from './env'
@@ -17,6 +18,11 @@ import { categoriesRoutes } from './http/controllers/categories/routes'
 
 export const app = fastify()
 
+app.register(cors, {
+  credentials: true,
+  origin: true,
+})
+
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
@@ -24,16 +30,12 @@ app.register(fastifyJwt, {
     signed: false,
   },
   sign: {
-    expiresIn: '3m', // 3 minutes
+    expiresIn: '2m', // 2 minutes
   },
 })
 
+app.register(fastifyFormBody)
 app.register(fastifyCookie)
-
-app.register(cors, {
-  origin: true,
-  credentials: true,
-})
 
 app.register(categoriesRoutes)
 app.register(transactionsRoutes)
@@ -44,6 +46,12 @@ app.register(usersRoutes)
 app.register(eventsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
+  if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_COOKIE') {
+    return reply
+      .status(401)
+      .send({ message: 'Invalid JWT token', code: error.code })
+  }
+
   if (error instanceof ZodError) {
     return reply
       .status(400)

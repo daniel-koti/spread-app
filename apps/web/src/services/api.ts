@@ -1,7 +1,8 @@
+import { signOut } from '@/contexts/AuthContext'
 import axios, { AxiosError } from 'axios'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+
+import { parseCookies, setCookie } from 'nookies'
 import { AuthTokenError } from './errors/AuthTokenError'
-import Router from 'next/router'
 
 interface AxiosErrorResponse {
   code?: string
@@ -21,23 +22,24 @@ export function setupAPIClient(ctx = undefined) {
     },
   })
 
-  /**
-   * Interceptors
-   */
+  // Interceptors Requests
 
   api.interceptors.response.use(
     (response) => {
       return response
     },
     (error: AxiosError<AxiosErrorResponse>) => {
-      if (error?.response?.status === 401) {
-        if (error?.response?.data?.code === 'token.expired') {
-          cookies = parseCookies(ctx)
+      if (error.response.status === 401) {
+        if (error.response.data?.code === 'token.expired') {
+          // renovar token
 
+          cookies = parseCookies(ctx)
           const originalConfig = error.config
 
           if (!isRefreshing) {
             isRefreshing = true
+
+            console.log('refresh')
 
             api
               .patch('/token/refresh')
@@ -45,7 +47,7 @@ export function setupAPIClient(ctx = undefined) {
                 const { token } = response.data
 
                 setCookie(ctx, '@spread.token', token, {
-                  maxAge: 60 * 60 * 24 * 30, // 30 days
+                  maxAge: 60 * 60 * 24 * 30, // 30 Days
                   path: '/',
                 })
 
@@ -60,10 +62,9 @@ export function setupAPIClient(ctx = undefined) {
                 failedRequestsQueue.forEach((request) => request.onFailure(err))
                 failedRequestsQueue = []
 
+                console.log(err)
                 if (typeof window !== 'undefined') {
-                  destroyCookie(undefined, '@spread.token')
-                  destroyCookie(undefined, 'refreshToken')
-                  Router.push('/signin')
+                  signOut()
                 }
               })
               .finally(() => {
@@ -74,9 +75,9 @@ export function setupAPIClient(ctx = undefined) {
           return new Promise((resolve, reject) => {
             failedRequestsQueue.push({
               onSuccess: (token: string) => {
-                originalConfig!.headers.Authorization = `Bearer ${token}`
+                originalConfig.headers.Authorization = `Bearer ${token}`
 
-                resolve(api(originalConfig!))
+                resolve(api(originalConfig))
               },
               onFailure: (err: AxiosError) => {
                 reject(err)
@@ -85,9 +86,7 @@ export function setupAPIClient(ctx = undefined) {
           })
         } else {
           if (typeof window !== 'undefined') {
-            destroyCookie(undefined, '@spread.token')
-            destroyCookie(undefined, 'refreshToken')
-            Router.push('/signin')
+            signOut()
           } else {
             return Promise.reject(new AuthTokenError())
           }
@@ -97,5 +96,6 @@ export function setupAPIClient(ctx = undefined) {
       return Promise.reject(error)
     },
   )
+
   return api
 }

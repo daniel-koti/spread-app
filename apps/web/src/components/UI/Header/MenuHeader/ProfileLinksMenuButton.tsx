@@ -1,7 +1,7 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
 import { useContext } from 'react'
-import { AuthContext } from '@/contexts/AuthContext'
+import { AuthContext, signOut } from '@/contexts/AuthContext'
 import { CaretDown, SignOut } from 'phosphor-react'
 import {
   CalendarHeart,
@@ -14,7 +14,7 @@ import {
 import Link from 'next/link'
 
 export function ProfileLinksMenuButton() {
-  const { user, signOut } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const isProducer = user?.type === 'PRODUCER'
 

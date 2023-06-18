@@ -4,14 +4,17 @@ import { NextPageWithLayout } from './_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
 import { Hero } from '@/components/UI/Hero'
 
-import { AuthContext } from '@/contexts/AuthContext'
 import { withSSRAuth } from '@/utils/withSSRAuth'
+import { api } from '@/services/apiClient'
+import { setupAPIClient } from '@/services/api'
+
+import { AuthContext } from '@/contexts/AuthContext'
 
 const HomePage: NextPageWithLayout = () => {
-  const { fetchProfileData } = useContext(AuthContext)
-
   useEffect(() => {
-    fetchProfileData()
+    api.get('/me').then((response) => {
+      console.log(response)
+    })
   }, [])
 
   return (
@@ -26,6 +29,11 @@ HomePage.getLayout = (page: ReactElement) => {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
+  const response = await apiClient.get('/me')
+
+  console.log(response.data)
+
   return {
     props: {},
   }

@@ -7,11 +7,12 @@ import loginImage from '../assets/sign-in.avif'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { AuthContext } from '@/contexts/AuthContext'
 
 import { withSRRGuest } from '@/utils/withSSRGuest'
+import { destroyCookie } from 'nookies'
 
 const authenticateSchema = z.object({
   email: z.string().email({ message: 'Insira um e-mail válido' }),
@@ -21,6 +22,11 @@ const authenticateSchema = z.object({
 type AuthenticateSchemaInputs = z.infer<typeof authenticateSchema>
 
 export default function SignIn() {
+  useEffect(() => {
+    destroyCookie(undefined, '@spread.token')
+    destroyCookie(undefined, 'refreshToken')
+  }, [])
+
   const { signIn } = useContext(AuthContext)
 
   const { register, handleSubmit } = useForm<AuthenticateSchemaInputs>({

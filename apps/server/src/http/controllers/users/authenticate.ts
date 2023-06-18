@@ -27,7 +27,7 @@ export async function authenticate(
       {
         sign: {
           sub: user.id,
-          expiresIn: '3m',
+          expiresIn: '2m',
         },
       },
     )
@@ -57,5 +57,7 @@ export async function authenticate(
     if (error instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: error.message })
     }
+
+    throw error
   }
 }

@@ -2,7 +2,7 @@ import { ReactNode, createContext, useEffect, useState } from 'react'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { api } from '@/services/apiClient'
 
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
@@ -26,10 +26,9 @@ interface SignInProps {
 
 interface AuthContextProps {
   user: User | null
+  setUser: (user: User) => void
   isAuthenticated: boolean
-  fetchProfileData: () => void
   signIn: (data: SignInProps) => Promise<void>
-  signOut: () => void
 }
 
 interface AuthProviderProps {
@@ -37,6 +36,12 @@ interface AuthProviderProps {
 }
 
 export const AuthContext = createContext({} as AuthContextProps)
+
+export function signOut() {
+  destroyCookie(undefined, '@spread.token')
+  destroyCookie(undefined, 'refreshToken')
+  Router.push('/signin')
+}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
@@ -61,37 +66,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
           })
         })
         .catch(() => {
-          router.push('/')
+          signOut()
         })
     }
   }, [])
-
-  async function fetchProfileData() {
-    const { '@spread.token': token } = parseCookies()
-
-    if (token) {
-      api
-        .get('me')
-        .then((response) => {
-          setUser({
-            id: response.data.user.id,
-            name: response.data.user.name,
-            email: response.data.user.email,
-            phone: response.data.user.phone,
-            nif: response.data.user.nif,
-            isCompany: response.data.user.isCompany,
-            type: response.data.user.type,
-            wallet_id: response.data.user.wallet_id,
-            amount: response.data.user.amount,
-            status: response.data.user.status,
-          })
-        })
-        .catch((err) => {
-          console.log(err)
-          router.push('/')
-        })
-    }
-  }
 
   async function signIn({ email, password }: SignInProps) {
     try {
@@ -120,21 +98,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signOut() {
-    destroyCookie(undefined, '@spread.token')
-    destroyCookie(undefined, 'refreshToken')
-
-    await router.push('/signin')
-  }
-
   return (
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         isAuthenticated,
-        fetchProfileData,
         signIn,
-        signOut,
       }}
     >
       {children}

@@ -1,9 +1,10 @@
+import { AuthTokenError } from '@/services/errors/AuthTokenError'
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
 } from 'next'
-import { parseCookies } from 'nookies'
+import { destroyCookie, parseCookies } from 'nookies'
 
 export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
   return async (
@@ -20,6 +21,21 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
       }
     }
 
-    return await fn(ctx)
+    try {
+      return await fn(ctx)
+    } catch (err) {
+      console.log('RRRR', err)
+      if (err instanceof AuthTokenError) {
+        destroyCookie(ctx, '@spread.token')
+        destroyCookie(ctx, 'refreshToken')
+
+        return {
+          redirect: {
+            destination: '/signin',
+            permanent: false,
+          },
+        }
+      }
+    }
   }
 }
