@@ -29,6 +29,7 @@ HomePage.getLayout = (page: ReactElement) => {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
+  console.log('contexto atual', ctx)
   const apiClient = setupAPIClient(ctx)
   const response = await apiClient.get('/me')
 
