@@ -26,8 +26,8 @@ interface SignInProps {
 
 interface AuthContextProps {
   user: User | null
-  setUser: (user: User) => void
   isAuthenticated: boolean
+  setUser: (user: User) => void
   signIn: (data: SignInProps) => Promise<void>
 }
 
@@ -47,6 +47,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
   const isAuthenticated = !!user
+
   /**
    * * Preciso que toda vez que a aplicação é recarregada,
    * * Os dados do usuário sejam carregados novamente

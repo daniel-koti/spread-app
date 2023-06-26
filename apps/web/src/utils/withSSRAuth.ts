@@ -24,7 +24,6 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>) {
     try {
       return await fn(ctx)
     } catch (err) {
-      console.log('RRRR', err)
       if (err instanceof AuthTokenError) {
         destroyCookie(ctx, '@spread.token')
         destroyCookie(ctx, 'refreshToken')

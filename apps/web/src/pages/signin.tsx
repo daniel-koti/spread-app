@@ -29,7 +29,11 @@ export default function SignIn() {
 
   const { signIn } = useContext(AuthContext)
 
-  const { register, handleSubmit } = useForm<AuthenticateSchemaInputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<AuthenticateSchemaInputs>({
     resolver: zodResolver(authenticateSchema),
   })
 
@@ -97,7 +101,10 @@ export default function SignIn() {
             </p>
           </div>
 
-          <button className="inline-block w-full mt-4 rounded-[10px] bg-primary-500  py-6 text-base font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-primary-500">
+          <button
+            disabled={isSubmitting}
+            className="inline-block w-full mt-4 rounded-[10px] bg-primary-500  py-6 text-base font-medium text-white transition hover:scale-110 hover:shadow-xl focus:outline-none focus:ring active:bg-primary-500 disabled:cursor-not-allowed disabled:bg-orange-700"
+          >
             Acessar plataforma
           </button>
         </form>

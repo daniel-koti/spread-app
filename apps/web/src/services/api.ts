@@ -39,7 +39,7 @@ export function setupAPIClient(ctx = undefined) {
           if (!isRefreshing) {
             isRefreshing = true
 
-            console.log('refresh')
+            console.log('REFRESHING')
 
             api
               .patch('/token/refresh')
@@ -62,7 +62,6 @@ export function setupAPIClient(ctx = undefined) {
                 failedRequestsQueue.forEach((request) => request.onFailure(err))
                 failedRequestsQueue = []
 
-                console.log(err)
                 if (typeof window !== 'undefined') {
                   signOut()
                 }

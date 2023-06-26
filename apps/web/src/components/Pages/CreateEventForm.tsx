@@ -3,13 +3,13 @@ import { Clock, MapPin } from 'phosphor-react'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
+import { ChangeEvent, useState } from 'react'
 
 const createEventSchema = z.object({
   title: z.string(),
   description: z.string(),
-  image: z.string().nullable(),
   categoryId: z.string(),
   dateStart: z.string(),
   dateEnd: z.string(),
@@ -29,6 +29,9 @@ interface CreateEventFormProps {
 }
 
 export function CreateEventForm({ categories }: CreateEventFormProps) {
+  const [selectedImages, setSelectedImages] = useState([])
+  const [imageBase64File, setImageBase64File] = useState<String | null>(null)
+
   const { register, handleSubmit, reset, watch } = useForm<CreateNewEventInput>(
     {
       resolver: zodResolver(createEventSchema),
@@ -52,7 +55,6 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       dateStart,
       hourEnd,
       hourStart,
-      image,
       type,
     } = data
 
@@ -65,19 +67,62 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       date_end: new Date(dateEnd),
       hour_start: hourStart,
       hour_end: hourEnd,
-      image,
+      image: imageBase64File,
       type,
       latitude: null,
       longitude: null,
     }
 
-    try {
-      await api.post('/events', newEvent)
-      reset()
-      toast.success('Evento criado com sucesso!')
-    } catch (err) {
-      toast.error('Não foi possível criar o evento')
-    }
+    console.log(newEvent)
+
+    // try {
+    //   await api.post('/events', newEvent)
+    //   reset()
+    //   toast.success('Evento criado com sucesso!')
+    // } catch (err) {
+    //   toast.error('Não foi possível criar o evento')
+    // }
+  }
+
+  function handleRemoveImage() {
+    setSelectedImages([])
+    setImageBase64File(null)
+  }
+
+  async function onSelectImage(event: ChangeEvent<HTMLInputElement>) {
+    const selectedFiles = event.target.files
+    const selectedFilesArray = Array.from(selectedFiles)
+
+    const imagesArray = selectedFilesArray.map((file) => {
+      return URL.createObjectURL(file)
+    })
+
+    const base64File = await convertFileToBase64(selectedFiles[0])
+
+    setImageBase64File(String(base64File))
+    setSelectedImages(imagesArray)
+
+    event.target.value = ''
+  }
+
+  const convertFileToBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+
+      reader.readAsDataURL(file)
+
+      reader.onload = () => {
+        if (reader.result) {
+          const base64String = reader.result?.toString()
+          resolve(base64String)
+        } else {
+          reject(new Error('Erro ao converter o arquivo para base64'))
+        }
+      }
+      reader.onerror = (error) => {
+        reject(error)
+      }
+    })
   }
 
   return (
@@ -91,7 +136,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col items-start gap-3">
-          <label htmlFor="title" className="text-sm text-slate-500 block ">
+          <label htmlFor="title" className="text-sm text-slate-500 flex">
             Título
           </label>
           <input
@@ -100,12 +145,6 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             id="title"
             className="bg-slate-50 w-full flex items-center rounded-[10px] h-12 border-[1px] border-slate-300 px-4 outline-primary-500 text-slate-700 text-base"
           />
-        </div>
-
-        <div className="flex flex-col items-start gap-3">
-          <div className="flex flex-col justify-center items-center border-2 border-dashed border-slate-300 h-72 w-full cursor-pointer rounded hover:border-primary-500">
-            <input type="file" accept="image/*" hidden />
-          </div>
         </div>
 
         <div className="flex flex-col items-start gap-3">
@@ -118,6 +157,55 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             rows={5}
             className="w-full flex items-center bg-slate-50 rounded-[10px] border outline-primary-500 border-slate-300 px-4 py-2 text-slate-700 text-base resize-none"
           />
+        </div>
+
+        <div className="flex flex-col items-start gap-3">
+          <label
+            htmlFor="image"
+            className="flex flex-col justify-center items-center  bg-slate-50  border-slate-300 h-72 w-full cursor-pointer rounded-[10px] hover:border-primary-500"
+          >
+            <input
+              type="file"
+              className="hidden"
+              id="image"
+              multiple
+              accept="image/*"
+              onChange={onSelectImage}
+            />
+
+            <div className=" w-full h-full rounded-[10px] border-1 border-slate-300 border-2 border-dashed flex items-center justify-center">
+              {selectedImages.length ? (
+                selectedImages.map((image, index) => {
+                  return (
+                    <img
+                      key={index}
+                      src={image}
+                      alt=""
+                      className="h-72 w-full object-cover rounded-[10px] px-[1px] py-[3px]"
+                    />
+                  )
+                })
+              ) : (
+                <span className="text-primary-500">+ Adicionar uma foto</span>
+              )}
+            </div>
+          </label>
+
+          <div>
+            {selectedImages &&
+              selectedImages.map((image, index) => {
+                return (
+                  <div key={index}>
+                    <button
+                      onClick={handleRemoveImage}
+                      className="bg-red-400 my-4 px-8 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )
+              })}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3 items-center">
@@ -220,8 +308,8 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
               id="type"
               className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
             >
-              <option value="person">Presencial</option>
-              <option value="online">Online</option>
+              <option value="PERSON">Presencial</option>
+              <option value="ONLINE">Online</option>
             </select>
           </div>
         </div>

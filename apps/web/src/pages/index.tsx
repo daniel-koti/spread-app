@@ -5,17 +5,19 @@ import { DefaultLayout } from '@/components/DefaultLayout'
 import { Hero } from '@/components/UI/Hero'
 
 import { withSSRAuth } from '@/utils/withSSRAuth'
-import { api } from '@/services/apiClient'
 import { setupAPIClient } from '@/services/api'
+import { AuthContext, User } from '@/contexts/AuthContext'
 
-import { AuthContext } from '@/contexts/AuthContext'
+interface ServerSideProps {
+  user?: User
+}
 
-const HomePage: NextPageWithLayout = () => {
+const HomePage: NextPageWithLayout = ({ user }: ServerSideProps) => {
+  const { setUser } = useContext(AuthContext)
+
   useEffect(() => {
-    api.get('/me').then((response) => {
-      console.log(response)
-    })
-  }, [])
+    setUser(user)
+  }, [setUser, user])
 
   return (
     <>
@@ -29,14 +31,15 @@ HomePage.getLayout = (page: ReactElement) => {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-  console.log('contexto atual', ctx)
   const apiClient = setupAPIClient(ctx)
   const response = await apiClient.get('/me')
 
-  console.log(response.data)
+  const { user } = response.data
 
   return {
-    props: {},
+    props: {
+      user,
+    },
   }
 })
 
