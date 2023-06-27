@@ -8,26 +8,14 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
     id: z.string(),
     title: z.string(),
     description: z.string(),
-    imageUrl: z.string().nullable(),
+    image: z.string().nullable(),
     date_start: z.string().datetime(),
     date_end: z.string().datetime(),
     hour_start: z.string(),
     hour_end: z.string(),
     address: z.string(),
-    type: z.string(),
+    type: z.enum(['ONLINE', 'PERSON']),
     category_id: z.string(),
-    latitude: z
-      .number()
-      .refine((value) => {
-        return Math.abs(value) <= 90
-      })
-      .nullable(),
-    longitude: z
-      .number()
-      .refine((value) => {
-        return Math.abs(value) <= 180
-      })
-      .nullable(),
   })
 
   const data = requestBodySchema.parse(request.body)
@@ -41,7 +29,7 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
       },
       data: {
         ...data,
-        producer_id: authenticatedProfile,
+        user_id: authenticatedProfile,
       },
     })
 

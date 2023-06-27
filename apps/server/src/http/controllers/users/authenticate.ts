@@ -27,7 +27,7 @@ export async function authenticate(
       {
         sign: {
           sub: user.id,
-          expiresIn: '2m',
+          expiresIn: '1440m',
         },
       },
     )
@@ -37,7 +37,7 @@ export async function authenticate(
       {
         sign: {
           sub: user.id,
-          expiresIn: '7d',
+          expiresIn: '10d',
         },
       },
     )
@@ -48,6 +48,7 @@ export async function authenticate(
         secure: true,
         sameSite: true,
         httpOnly: true,
+        domain: 'http://localhost:3333',
       })
       .status(200)
       .send({

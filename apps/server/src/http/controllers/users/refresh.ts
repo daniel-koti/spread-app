@@ -11,7 +11,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
       {
         sign: {
           sub: request.user.sub,
-          expiresIn: '2m',
+          expiresIn: '1440m',
         },
       },
     )
@@ -21,7 +21,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
       {
         sign: {
           sub: request.user.sub,
-          expiresIn: '7d',
+          expiresIn: '10d',
         },
       },
     )
@@ -32,6 +32,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
         secure: true,
         sameSite: true,
         httpOnly: true,
+        domain: 'http://localhost:3333',
       })
       .status(200)
       .send({

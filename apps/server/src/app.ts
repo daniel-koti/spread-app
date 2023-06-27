@@ -16,7 +16,9 @@ import { ticketRoutes } from './http/controllers/tickets/routes'
 import { transactionsRoutes } from './http/controllers/transactions/routes'
 import { categoriesRoutes } from './http/controllers/categories/routes'
 
-export const app = fastify()
+export const app = fastify({
+  bodyLimit: 30 * 1024 * 1024,
+})
 
 app.register(cors, {
   credentials: true,
@@ -25,12 +27,8 @@ app.register(cors, {
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
-  cookie: {
-    cookieName: 'refreshToken',
-    signed: false,
-  },
   sign: {
-    expiresIn: '2m', // 2 minutes
+    expiresIn: '1440m', // 24 hours
   },
 })
 

@@ -1,4 +1,4 @@
-import { Event, Prisma } from '@prisma/client'
+import { Event } from '@prisma/client'
 import { EventsRepository } from '@/repositories/events-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
@@ -11,9 +11,7 @@ interface UpdateEventUseCaseRequestParams {
   date_end?: Date
   hour_start?: string
   hour_end?: string
-  type?: string
-  latitude?: Prisma.Decimal
-  longitude?: Prisma.Decimal
+  type?: 'ONLINE' | 'PERSON'
 }
 
 interface UpdateEventUseCaseRequest {
