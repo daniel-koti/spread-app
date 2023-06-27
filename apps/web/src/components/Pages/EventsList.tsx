@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import { Event } from '../UI/Event'
 
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 
 export interface EventProps {
   id: string
   title: string
   description: string
-  imageUrl: string
+  image: string
   address: string
   category_id: string
   date_start: Date
@@ -19,7 +19,7 @@ export interface EventProps {
   hour_start: string
   hour_end: string
   disclosed: Date | null
-  type: 'online' | 'person'
+  type: 'ONLINE' | 'PERSON'
   created_at: Date
   producer_id?: string
 }
@@ -46,7 +46,7 @@ export function Events() {
               id={event.id}
               date={event.date_start}
               description={event.description}
-              imageUrl={event.imageUrl}
+              imageUrl={event.image}
               title={event.title}
               type={event.type}
               disclosed={event.disclosed}

@@ -1,13 +1,20 @@
-import { ArrowRight } from 'lucide-react'
+import { AuthContext } from '@/contexts/AuthContext'
 import Link from 'next/link'
+import { useContext } from 'react'
 
-export function Hero() {
+interface HeroProps {
+  username: string
+}
+
+export function Hero({ username }: HeroProps) {
+  const { user } = useContext(AuthContext)
+
   return (
     <section className="border-b bg-white">
-      <div className="hero lg:pl-4  grid grid-cols-1 lg:grid-cols-2 items-center gap-4">
+      <div className="lg:pl-4  grid grid-cols-1 lg:grid-cols-2 items-center gap-4">
         <div className="lg:pr-10 lg:pl-0 pr-4 pl-4 lg:text-left text-center">
           <span className="text-gray-600 text-lg font-medium mb-4 block">
-            Somos a <span className="text-primary-500">Spread</span> 🥳
+            Bem-vindo, <span className="text-primary-500">{username}</span> 🥳
           </span>
           <h1 className="text-gray-800 font-bold text-5xl block mb-4">
             Viva experiências únicas nos eventos mais incríveis.
@@ -19,13 +26,14 @@ export function Hero() {
             a explorar agora mesmo!
           </p>
 
-          <Link
-            href="/create-event"
-            className="bg-pink-400 mt-4 h-12 border px-6 inline-flex items-center justify-center gap-4 rounded-full hover:bg-pink-500 transition-all ease-in-out"
-          >
-            Cadastrar evento
-            <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
-          </Link>
+          {user?.type === 'PRODUCER' && (
+            <Link
+              href="/create-event"
+              className="bg-pink-400 mt-5 h-12 px-6 inline-flex items-center justify-center rounded-[10px] text-white hover:bg-pink-500 transition-all ease-in-out"
+            >
+              + Cadastrar evento
+            </Link>
+          )}
         </div>
         <div
           className="w-full h-[480px] bg-center bg-cover bg-no-repeat"

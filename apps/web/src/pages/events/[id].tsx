@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 import { NextPageWithLayout } from '../_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
-import { GetServerSideProps } from 'next'
-import { getAPIClient } from '@/services/axios'
+
+import { setupAPIClient } from '@/services/api'
 
 import dayjs from 'dayjs'
 
@@ -13,6 +13,7 @@ import { Calendar, Info, WhatsappLogo } from 'phosphor-react'
 import { AuthContext } from '@/contexts/AuthContext'
 
 import { Ticket } from '@/components/UI/Ticket'
+import { withSSRAuth } from '@/utils/withSSRAuth'
 
 interface CouponProps {
   id: string
@@ -26,16 +27,14 @@ interface EventProps {
   id: string
   title: string
   description: string
-  imageUrl: string
+  image: string | null
   address: string
   date_start: Date
   date_end: Date
-  latitude: number | null
-  longitude: number | null
   hour_start: string
   hour_end: string
   disclosed: Date | null
-  type: 'online' | 'person'
+  type: 'ONLINE' | 'PERSON'
   created_at: Date
   categoryEvent: {
     name: string
@@ -55,20 +54,20 @@ const EventDetails: NextPageWithLayout = ({
   event,
   coupons,
 }: ServerSideProps) => {
-  const { typeUser } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   return (
     <div className="my-8">
-      {event?.imageUrl ? (
+      {event?.image ? (
         <Image
-          className="w-full h-[400px] object-cover rounded-xl"
-          src={event?.imageUrl!}
+          className="w-full h-[400px] object-cover"
+          src={event?.image!}
           alt=""
           width={750}
           height={450}
         />
       ) : (
-        <div className="w-full flex items-center justify-center h-[400px] bg-slate-400 rounded-xl">
+        <div className="w-full flex items-center justify-center h-[400px] bg-slate-400">
           <h2 className="text-zinc-50">Sem imagem</h2>
         </div>
       )}
@@ -95,9 +94,9 @@ const EventDetails: NextPageWithLayout = ({
                 {event?.hour_end}
               </span>
             </div>
-            {typeUser === 'client' && (
+            {user?.type === 'USER' && (
               <Link
-                href={`https://wa.me/${event?.producer.phone}`}
+                href={`https://wa.me/${event?.producer?.phone}`}
                 target="_blank"
                 className="text-white font-medium bg-green-600 px-4 py-2 flex items-center rounded-full gap-2 hover:bg-green-700"
               >
@@ -144,7 +143,7 @@ const EventDetails: NextPageWithLayout = ({
             <div className="flex flex-col my-4">
               <span className="text-xs text-gray-400">Tipo de evento</span>
               <strong className="text-sm font-medium text-slate-800">
-                {event?.type === 'online' ? 'Online' : 'Presencial'}
+                {event?.type === 'ONLINE' ? 'Online' : 'Presencial'}
               </strong>
             </div>
 
@@ -158,12 +157,12 @@ const EventDetails: NextPageWithLayout = ({
             <div className="flex flex-col my-4">
               <span className="text-xs text-gray-400">Organizador</span>
               <strong className="text-sm font-medium text-primary-500">
-                {event?.producer.name}
+                {event?.producer?.name}
               </strong>
             </div>
           </div>
-          <div className="col-span-2 py-8 rounded-lg flex flex-col gap-4">
-            {typeUser === 'client' &&
+          <div className="col-span-2 rounded-lg flex flex-col gap-4">
+            {user?.type === 'USER' &&
               coupons?.map((coupon) => {
                 return (
                   <Ticket
@@ -186,20 +185,11 @@ EventDetails.getLayout = (page: ReactElement) => {
   return <DefaultLayout>{page}</DefaultLayout>
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = withSSRAuth(async (ctx) => {
   const { params } = ctx
 
-  if (!params?.id) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
   const eventId = params.id
-  const apiClient = getAPIClient(ctx)
+  const apiClient = setupAPIClient(ctx)
 
   const response = await apiClient.get(`events/${eventId}`)
 
@@ -211,6 +201,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       coupons,
     },
   }
-}
+})
 
 export default EventDetails

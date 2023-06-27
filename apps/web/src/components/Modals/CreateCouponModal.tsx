@@ -5,7 +5,7 @@ import * as z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 
 import { Modal } from './Modal'
 import { toast } from 'react-toastify'
@@ -40,7 +40,7 @@ export function CreateCouponModal({
 
   useEffect(() => {
     async function fetchCouponTypes() {
-      const response = await api.get('couponTypes')
+      const response = await api.get('coupon/types')
 
       const { couponsTypes } = response.data
       setCouponTypes(couponsTypes)
@@ -59,7 +59,7 @@ export function CreateCouponModal({
     }
 
     try {
-      await api.post('coupons', newCoupon)
+      await api.post('coupon', newCoupon)
 
       toast.success('Bilhete criado com sucesso!')
       reset()
@@ -75,7 +75,7 @@ export function CreateCouponModal({
     <Modal title="Criar um bilhete" onClose={onCloseModal}>
       <form
         onSubmit={handleSubmit(handleCreateCoupon)}
-        className="bg-slate-100 p-8 mb-4 flex flex-col gap-4"
+        className="bg-slate-100 p-8 mb-12 flex flex-col gap-4"
       >
         <div className="flex flex-col gap-2 items-start">
           <label htmlFor="couponId" className="text-sm text-slate-500  ">
@@ -83,7 +83,7 @@ export function CreateCouponModal({
           </label>
           <select
             id="couponId"
-            className="rounded-lg border-slate-300 w-full"
+            className="rounded-lg border-slate-300 border w-full px-2 py-4 outline-none"
             {...register('coupon_type_id')}
           >
             {couponTypes.map((coupon) => {
@@ -101,7 +101,7 @@ export function CreateCouponModal({
           </label>
           <input
             type="number"
-            className="rounded-lg border-slate-300"
+            className="rounded-lg border-slate-300 border px-2 py-4 w-full outline-none"
             placeholder="0,00 Kz"
             {...register('price', {
               valueAsNumber: true,
@@ -109,7 +109,10 @@ export function CreateCouponModal({
           />
         </div>
         <div className="flex flex-col items-start">
-          <button className="bg-green-600 px-8 py-2 rounded-lg text-slate-50 font-medium hover:bg-green-500">
+          <button
+            type="submit"
+            className="bg-green-600 px-8 h-12 flex items-center justify-center rounded-[10px] text-slate-50 font-medium hover:bg-green-500"
+          >
             Cadastrar
           </button>
         </div>

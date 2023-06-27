@@ -8,7 +8,7 @@ interface EventProps {
   title: string
   imageUrl: string | null
   description: string
-  type: 'person' | 'online'
+  type: 'PERSON' | 'ONLINE'
   date: Date
   disclosed: Date | null
 }

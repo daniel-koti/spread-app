@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header } from './UI/Header'
+import { Sidebar } from './UI/Sidebar'
 
 interface DefaultLayoutProps {
   children: React.ReactNode
@@ -7,11 +7,9 @@ interface DefaultLayoutProps {
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <>
-      <Header />
-      <main className="h-full">
-        <div className="">{children}</div>
-      </main>
-    </>
+    <div className="flex flex-col-reverse md:flex-row h-screen">
+      <Sidebar />
+      <main className="flex flex-col flex-1 overflow-scroll">{children}</main>
+    </div>
   )
 }

@@ -1,17 +1,17 @@
-import { GetServerSideProps } from 'next'
-
 import { ReactElement } from 'react'
 import { NextPageWithLayout } from '../_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
-import { getAPIClient } from '@/services/axios'
+import { setupAPIClient } from '@/services/api'
 
 import dayjs from 'dayjs'
 
 import { Empty } from '../../components/UI/Empty'
-import Image from 'next/image'
-import { ListBullets, PencilSimpleLine, Question } from 'phosphor-react'
+
+import { ArrowLeft } from 'phosphor-react'
 import Link from 'next/link'
-import { parseCookies } from 'nookies'
+
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { CardEvent } from './components/CardEvent'
 
 interface ServerSideProps {
   events?: {
@@ -20,7 +20,7 @@ interface ServerSideProps {
     date_start: Date
     created_at: Date
     disclosed: Date | null
-    imageUrl: string | null
+    image: string | null
     categoryEvent: {
       name: true
     }
@@ -33,110 +33,55 @@ const MyEvents: NextPageWithLayout = ({ events }: ServerSideProps) => {
   console.log(events)
 
   return (
-    <div className="my-8">
+    <div className="">
+      <header className="bg-white px-6 h-[72px] flex justify-between items-center">
+        <Link
+          className="border border-gray-300 p-2 rounded-[10px] text-gray-400 hover:bg-gray-50"
+          href="/"
+        >
+          <ArrowLeft size={16} />
+        </Link>
+
+        <strong className="font-medium text-gray-500">Meus eventos</strong>
+
+        <Link
+          href="/create-event"
+          className="bg-green-600 h-12 font-medium px-6 inline-flex items-center justify-center rounded-[10px] text-white hover:bg-green-800 transition-all ease-in-out"
+        >
+          + Cadastrar evento
+        </Link>
+      </header>
       {quantity >= 1 ? (
-        <div className="flex flex-col gap-2 w-full border-separate border-spacing-y-2 mt-4">
-          {events?.map((event) => {
-            const dateEvent = dayjs(event.date_start).format(
-              'DD [de] MMMM [de] YYYY',
-            )
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col gap-2 w-full border-separate border-spacing-y-2 mt-4">
+            {events?.map((event) => {
+              const dateEvent = dayjs(event.date_start).format(
+                'DD [de] MMMM [de] YYYY',
+              )
 
-            const createdAt = dayjs(event.created_at).format(
-              'DD [de] MMMM [de] YYYY',
-            )
+              const createdAt = dayjs(event.created_at).format(
+                'DD [de] MMMM [de] YYYY',
+              )
 
-            return (
-              <article
-                key={event.id}
-                className="bg-white flex items-center border-[1px] border-slate-200 rounded-2xl py-5 px-8"
-              >
-                <div className="w-[30%] text-lg font-semibold flex items-center gap-4">
-                  {event.imageUrl?.length ? (
-                    <Image
-                      src={event.imageUrl}
-                      alt=""
-                      height={80}
-                      width={80}
-                      className="h-10 object-cover rounded-md"
-                    />
-                  ) : (
-                    <div className="h-10 w-20 bg-slate-400 flex items-center justify-center rounded-md">
-                      <Question size={24} className="text-white" />
-                    </div>
-                  )}
-
-                  <strong className="font-semibold text-zinc-900">
-                    {event.title}
-                  </strong>
-                </div>
-                <div className="flex-1 flex gap-4 justify-between items-center">
-                  {event.disclosed ? (
-                    <span className="bg-green-300 text-green-700 px-4 py-1 rounded-xl font-medium text-sm">
-                      Divulgado
-                    </span>
-                  ) : (
-                    <span className="bg-gray-300 text-gray-700 px-4 py-1 rounded-xl font-medium text-sm">
-                      Pendente
-                    </span>
-                  )}
-                  <div className="flex flex-col justify-center items-center">
-                    <strong className="uppercase text-xs text-gray-400">
-                      Categoria
-                    </strong>
-                    <span className="text-gray-700 font-medium">
-                      {event.categoryEvent.name}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center">
-                    <strong className="uppercase text-xs text-gray-400">
-                      Data do evento
-                    </strong>
-                    <span className="text-gray-700 font-medium">
-                      {dateEvent}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center">
-                    <strong className="uppercase text-xs text-gray-400">
-                      Criado em
-                    </strong>
-                    <span className="text-gray-700 font-medium">
-                      {createdAt}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {event.disclosed ? (
-                      <button
-                        disabled
-                        className="h-10 w-10 border-[1px] border-gray-100 flex items-center justify-center rounded-md hover:bg-gray-100 disabled:cursor-not-allowed hover:disabled:bg-transparent disabled:opacity-40"
-                      >
-                        <PencilSimpleLine size={20} />
-                      </button>
-                    ) : (
-                      <Link
-                        href={`my-events/update/${event.id}`}
-                        className="h-10 w-10 border-[1px] border-gray-100 flex items-center justify-center rounded-md hover:bg-gray-100 disabled:cursor-not-allowed hover:disabled:bg-transparent disabled:opacity-40"
-                      >
-                        <PencilSimpleLine size={20} />
-                      </Link>
-                    )}
-
-                    <Link
-                      href={`my-events/${event.id}`}
-                      className="h-10 w-10 border-[1px] border-gray-100 flex items-center justify-center rounded-md hover:bg-gray-100"
-                    >
-                      <ListBullets size={20} />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            )
-          })}
+              return (
+                <CardEvent
+                  key={event.id}
+                  id={event.id}
+                  date={dateEvent}
+                  category={String(event?.categoryEvent?.name)}
+                  disclosed={event?.disclosed}
+                  image={event?.image}
+                  title={event.title}
+                  createdAt={createdAt}
+                />
+              )
+            })}
+          </div>
         </div>
       ) : (
-        <Empty description="Não existem eventos criados por si 😮‍💨" />
+        <div>
+          <Empty description="Não existem eventos criados por si 😮‍💨" />
+        </div>
       )}
     </div>
   )
@@ -146,18 +91,8 @@ MyEvents.getLayout = (page: ReactElement) => {
   return <DefaultLayout>{page}</DefaultLayout>
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const apiClient = getAPIClient(ctx)
-  const { '@spread.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  const apiClient = setupAPIClient(ctx)
 
   const response = await apiClient.get('/events/producer')
 
@@ -168,6 +103,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       events,
     },
   }
-}
+})
 
 export default MyEvents

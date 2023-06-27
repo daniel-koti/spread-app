@@ -1,48 +1,58 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import {
-  Cardholder,
-  HouseSimple,
-  Power,
-  RocketLaunch,
-  Ticket,
-} from 'phosphor-react'
+
+import { CalendarDays, LayoutGrid, LogOut, Tag, Wallet } from 'lucide-react'
+import logoImage from '../../assets/logo.svg'
+import { AuthContext, signOut } from '@/contexts/AuthContext'
+import { useContext } from 'react'
 
 export function Sidebar() {
+  const { user } = useContext(AuthContext)
+
   return (
-    <aside className="w-20 bg-zinc-800 h-full p-4 text-zinc-500 flex flex-col items-center justify-between">
-      <header className="h-8 w-8 flex items-center justify-center bg-gray-950 p-2 rounded-md">
-        🦑
-      </header>
+    <aside
+      className={`md:w-20 w-full md:h-screen h-[72px] ${
+        user?.type === 'PRODUCER' ? 'bg-primary-500' : 'bg-blue-900'
+      }  px-8  py-8 flex md:flex-col items-center justify-between fixed sticky top-0 left-0 `}
+    >
+      <Image src={logoImage} width={18} alt="" />
 
-      <ul className="flex flex-col gap-6">
-        <li className="hover:text-zinc-50">
+      <ul className="flex md:flex-col gap-6">
+        <li className="hover:text-gray-200 text-gray-50">
           <Link href="/">
-            <HouseSimple size={28} />
+            <LayoutGrid size={20} />
           </Link>
         </li>
 
-        <li className="hover:text-zinc-50">
-          <Link href="/my-events">
-            <RocketLaunch size={28} />
+        {user?.type === 'PRODUCER' && (
+          <li className="hover:text-gray-200 text-gray-50/40">
+            <Link href="/my-events">
+              <CalendarDays size={20} />
+            </Link>
+          </li>
+        )}
+
+        <li className="hover:text-gray-200 text-gray-50/40">
+          <Link href="/wallet">
+            <Wallet size={20} />
           </Link>
         </li>
 
-        <li className="hover:text-zinc-50">
-          <Link href="#">
-            <Cardholder size={28} />
-          </Link>
-        </li>
-
-        <li className="hover:text-zinc-50">
-          <Link href="#">
-            <Ticket size={28} />
-          </Link>
-        </li>
+        {user?.type === 'USER' && (
+          <li className="hover:text-gray-200 text-gray-50/30">
+            <Link href="#">
+              <Tag size={20} />
+            </Link>
+          </li>
+        )}
       </ul>
 
       <footer>
-        <button className="h-10 w-10 rounded flex items-center justify-center hover:bg-zinc-700 hover:text-zinc-100">
-          <Power size={28} />
+        <button
+          onClick={() => signOut()}
+          className="h-10 w-10 rounded flex items-center justify-center  hover:text-gray-200 text-gray-50"
+        >
+          <LogOut size={20} />
         </button>
       </footer>
     </aside>

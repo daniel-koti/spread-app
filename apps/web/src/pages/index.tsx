@@ -7,6 +7,7 @@ import { Hero } from '@/components/UI/Hero'
 import { withSSRAuth } from '@/utils/withSSRAuth'
 import { setupAPIClient } from '@/services/api'
 import { AuthContext, User } from '@/contexts/AuthContext'
+import { Events } from '@/components/Pages/EventsList'
 
 interface ServerSideProps {
   user?: User
@@ -21,7 +22,10 @@ const HomePage: NextPageWithLayout = ({ user }: ServerSideProps) => {
 
   return (
     <>
-      <Hero />
+      <Hero username={user.name} />
+      <div className="px-4">
+        <Events />
+      </div>
     </>
   )
 }

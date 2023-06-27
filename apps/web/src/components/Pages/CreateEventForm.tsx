@@ -69,19 +69,16 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       hour_end: hourEnd,
       image: imageBase64File,
       type,
-      latitude: null,
-      longitude: null,
     }
 
-    console.log(newEvent)
-
-    // try {
-    //   await api.post('/events', newEvent)
-    //   reset()
-    //   toast.success('Evento criado com sucesso!')
-    // } catch (err) {
-    //   toast.error('Não foi possível criar o evento')
-    // }
+    try {
+      await api.post('/events', newEvent)
+      reset()
+      handleRemoveImage()
+      toast.success('Evento criado com sucesso!')
+    } catch (err) {
+      toast.error('Não foi possível criar o evento')
+    }
   }
 
   function handleRemoveImage() {
@@ -198,9 +195,9 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
                   <div key={index}>
                     <button
                       onClick={handleRemoveImage}
-                      className="bg-red-400 my-4 px-8 py-2 rounded"
+                      className="bg-red-200 text-red-700 my-4 px-8 py-2 rounded hover:bg-red-300"
                     >
-                      Delete
+                      Apagar fotografia
                     </button>
                   </div>
                 )
@@ -216,7 +213,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             <select
               {...register('categoryId')}
               id="category"
-              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
+              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 border px-4 outline-primary-500 text-slate-700 text-sm"
             >
               {categories?.map((category) => {
                 return (
@@ -263,31 +260,30 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
               className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none disabled:text-zinc-300 disabled:border-zinc-300"
             />
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="hour_start" className="text-sm text-slate-500">
+              Hora inicial
+            </label>
+            <input
+              {...register('hourStart')}
+              id="hour_start"
+              type="time"
+              className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
+            />
+          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="hour_start" className="text-sm text-slate-500">
-                Hora inicial
-              </label>
-              <input
-                {...register('hourStart')}
-                id="hour_start"
-                type="time"
-                className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="hour_end" className="text-sm text-slate-500">
-                Hora final
-              </label>
-              <input
-                {...register('hourEnd')}
-                id="hour_end"
-                type="time"
-                className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
-              />
-            </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="hour_end" className="text-sm text-slate-500">
+              Hora final
+            </label>
+            <input
+              {...register('hourEnd')}
+              id="hour_end"
+              type="time"
+              className="bg-slate-50 h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
+            />
           </div>
         </div>
 
@@ -306,7 +302,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
             <select
               {...register('type')}
               id="type"
-              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
+              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 border px-4 outline-primary-500 text-slate-700 text-sm"
             >
               <option value="PERSON">Presencial</option>
               <option value="ONLINE">Online</option>
@@ -323,7 +319,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
               {...register('address')}
               id="address"
               type={`${typeEvent === 'ONLINE' ? 'url' : 'text'}`}
-              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm"
+              className="w-full bg-slate-50 rounded-[10px] h-12 border-slate-300 border px-4 outline-primary-500 text-slate-700 text-sm"
               placeholder={`${
                 typeEvent === 'ONLINE' ? 'https://' : 'Localização'
               }`}

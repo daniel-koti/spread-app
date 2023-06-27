@@ -50,7 +50,7 @@ export default function App({
       </Head>
 
       {getLayout(
-        <main>
+        <main className="w-full">
           <Component {...pageProps} />
         </main>,
       )}

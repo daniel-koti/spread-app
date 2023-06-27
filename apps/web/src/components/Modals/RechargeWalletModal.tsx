@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router'
-import { parseCookies } from 'nookies'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from './Modal'
 
 import * as z from 'zod'
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
 
 interface RechargeWalletModalProps {
@@ -25,14 +24,10 @@ export function RechargeWalletModal({ onClose }: RechargeWalletModalProps) {
   })
 
   const router = useRouter()
-  const { 'spread.isUser': isUser } = parseCookies()
 
   async function handleRechargeWallet(data: RechargeWalletSchemaInput) {
     try {
-      await api.post(
-        `wallet/${isUser === 'true' ? 'income-users' : 'income-producers'}`,
-        data,
-      )
+      await api.post('transactions/income', data)
 
       reset()
       onClose()
@@ -46,7 +41,10 @@ export function RechargeWalletModal({ onClose }: RechargeWalletModalProps) {
 
   return (
     <Modal title="Carregar carteira" onClose={onClose}>
-      <form className="p-8" onSubmit={handleSubmit(handleRechargeWallet)}>
+      <form
+        className="bg-slate-100 p-8 mb-12 "
+        onSubmit={handleSubmit(handleRechargeWallet)}
+      >
         <div className="flex flex-col gap-2 items-start">
           <label htmlFor="couponId" className="text-sm text-slate-500">
             Quantidade a depositar
@@ -55,7 +53,7 @@ export function RechargeWalletModal({ onClose }: RechargeWalletModalProps) {
             type="number"
             min={100}
             step={50}
-            className="rounded-lg border-slate-300 w-full"
+            className="rounded-lg border-slate-300 w-full px-2 py-4 outline-none"
             placeholder="100,00 Kz"
             {...register('amount', {
               valueAsNumber: true,

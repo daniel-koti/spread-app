@@ -14,8 +14,8 @@ export function Modal({ onClose, title, children }: ModalProps) {
     <Dialog.Portal>
       <Dialog.Overlay className="fixed h-screen w-screen inset-0 bg-black/50" />
       <Dialog.Content className="min-w-[512px] rounded-xl bg-white fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] shadow-xl focus:outline-none">
-        <Dialog.Title className="px-8 py-4 text-xl font-medium text-slate-700 border-b border-slate-200 font-sans">
-          {title}
+        <Dialog.Title className="px-8 py-4  border-slate-200 font-sans">
+          <h1 className="text-xl font-medium text-slate-700">{title}</h1>
         </Dialog.Title>
 
         <Dialog.Close

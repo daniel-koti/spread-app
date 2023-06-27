@@ -6,7 +6,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Plus, Trash } from 'phosphor-react'
 import { CreateCouponModal } from '../Modals/CreateCouponModal'
 import { Dialog } from '../Modals/Dialog'
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
 
 export interface CouponProps {
@@ -43,8 +43,9 @@ export function Coupon({ coupon, eventId, disclosed }: CouponComponentProps) {
 
   async function onDeleteCoupon() {
     try {
-      await api.delete(`coupon/remove/${coupon.id}`)
+      await api.delete(`coupon/${coupon.id}`)
 
+      onToggleDeleteDialog()
       toast.success('Bilhete apagado com sucesso!')
       router.replace(router.asPath)
     } catch (error) {

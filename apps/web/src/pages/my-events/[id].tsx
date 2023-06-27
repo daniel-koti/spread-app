@@ -1,11 +1,13 @@
 import { ReactElement, useContext, useState } from 'react'
 import Image from 'next/image'
-import Router from 'next/router'
+import Link from 'next/link'
+import Router, { useRouter } from 'next/router'
 
 import { NextPageWithLayout } from '../_app'
 import { DefaultLayout } from '@/components/DefaultLayout'
-import { GetServerSideProps } from 'next'
-import { getAPIClient } from '@/services/axios'
+
+import { setupAPIClient } from '@/services/api'
+import { api } from '@/services/apiClient'
 
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
@@ -17,8 +19,9 @@ import { Badge } from '@/components/UI/Badge'
 import { Dialog } from '@/components/Modals/Dialog'
 import { AuthContext } from '@/contexts/AuthContext'
 
-import { api } from '@/services/api'
 import { toast } from 'react-toastify'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { ArrowLeft } from 'lucide-react'
 
 interface CouponProps {
   id: string
@@ -40,6 +43,7 @@ const MyEventDetails: NextPageWithLayout = ({
   const { user } = useContext(AuthContext)
   const [isDialogDisclose, setIsDialogDisclose] = useState(false)
   const [isDialogDelete, setIsDialogDelete] = useState(false)
+  const router = useRouter()
 
   const createdAt = dayjs(event?.created_at).format('DD [de] MMMM [de] YYYY')
   const dateInitial = dayjs(event?.date_start).format('DD [de] MMMM [de] YYYY')
@@ -71,6 +75,8 @@ const MyEventDetails: NextPageWithLayout = ({
         eventId: event?.id,
       })
 
+      onToggleDiscloseDialog()
+      router.replace(router.asPath)
       toast.success('Evento divulgado com sucesso!')
     } catch (error) {
       toast.error('Não foi possível divulgar o evento')
@@ -98,17 +104,34 @@ const MyEventDetails: NextPageWithLayout = ({
   }
 
   return (
-    <div className="my-8">
-      {event?.imageUrl ? (
+    <div className="">
+      <header className="bg-white px-6 h-[72px] flex justify-between items-center">
+        <Link
+          className="border border-gray-300 p-2 rounded-[10px] text-gray-400 hover:bg-gray-50"
+          href="/my-events"
+        >
+          <ArrowLeft size={16} />
+        </Link>
+
+        <strong className="font-medium text-gray-500">Evento</strong>
+
+        <Link
+          href="/create-event"
+          className="bg-green-600 h-12 px-6 inline-flex items-center justify-center rounded-[10px] text-white hover:bg-green-800 transition-all ease-in-out"
+        >
+          + Cadastrar evento
+        </Link>
+      </header>
+      {event?.image ? (
         <Image
-          className="w-full h-[400px] object-cover rounded-xl"
-          src={event?.imageUrl!}
+          className="w-full h-[400px] object-cover "
+          src={event?.image}
           alt=""
           width={750}
           height={450}
         />
       ) : (
-        <div className="w-full flex items-center justify-center h-[400px] bg-slate-400 rounded-xl">
+        <div className="w-full flex items-center justify-center h-[400px] bg-slate-400  ">
           <h2 className="text-zinc-50">Sem imagem</h2>
         </div>
       )}
@@ -254,20 +277,11 @@ MyEventDetails.getLayout = (page: ReactElement) => {
   return <DefaultLayout>{page}</DefaultLayout>
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = withSSRAuth(async (ctx) => {
   const { params } = ctx
 
-  if (!params?.id) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
   const eventId = params.id
-  const apiClient = getAPIClient(ctx)
+  const apiClient = setupAPIClient(ctx)
 
   const response = await apiClient.get(`events/${eventId}`)
 
@@ -279,6 +293,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       coupons,
     },
   }
-}
+})
 
 export default MyEventDetails
