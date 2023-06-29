@@ -1,13 +1,47 @@
+'use client'
+
+import { ReactNode, useContext } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { usePathname } from 'next/navigation'
+
 import { CalendarDays, LayoutGrid, LogOut, Tag, Wallet } from 'lucide-react'
-import logoImage from '../../assets/logo.svg'
 import { AuthContext, signOut } from '@/contexts/AuthContext'
-import { useContext } from 'react'
+import logoImage from '../../assets/logo.svg'
+
+interface NavLinks {
+  href: any
+  icon: ReactNode
+  permission: 'PRODUCER' | 'USER' | 'BOTH'
+}
+
+const navLinks: NavLinks[] = [
+  {
+    href: '/',
+    icon: <LayoutGrid size={20} />,
+    permission: 'BOTH',
+  },
+  {
+    href: '/my-events',
+    icon: <CalendarDays size={20} />,
+    permission: 'PRODUCER',
+  },
+  {
+    href: '/wallet',
+    icon: <Wallet size={20} />,
+    permission: 'BOTH',
+  },
+  {
+    href: '/my-tickets',
+    icon: <Tag size={20} />,
+    permission: 'USER',
+  },
+]
 
 export function Sidebar() {
   const { user } = useContext(AuthContext)
+  const pathname = usePathname()
 
   return (
     <aside
@@ -18,33 +52,24 @@ export function Sidebar() {
       <Image src={logoImage} width={18} alt="" />
 
       <ul className="flex md:flex-col gap-6">
-        <li className="hover:text-gray-200 text-gray-50">
-          <Link href="/">
-            <LayoutGrid size={20} />
-          </Link>
-        </li>
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href
+          const canShow =
+            link.permission === 'BOTH' || link.permission === user?.type
 
-        {user?.type === 'PRODUCER' && (
-          <li className="hover:text-gray-200 text-gray-50/40">
-            <Link href="/my-events">
-              <CalendarDays size={20} />
-            </Link>
-          </li>
-        )}
-
-        <li className="hover:text-gray-200 text-gray-50/40">
-          <Link href="/wallet">
-            <Wallet size={20} />
-          </Link>
-        </li>
-
-        {user?.type === 'USER' && (
-          <li className="hover:text-gray-200 text-gray-50/30">
-            <Link href="/my-tickets">
-              <Tag size={20} />
-            </Link>
-          </li>
-        )}
+          return (
+            canShow && (
+              <li
+                className={`hover:text-gray-200 ${
+                  isActive ? 'text-gray-200' : 'text-gray-50/40'
+                } `}
+                key={link.href}
+              >
+                <Link href={link.href}>{link.icon}</Link>
+              </li>
+            )
+          )
+        })}
       </ul>
 
       <footer>
