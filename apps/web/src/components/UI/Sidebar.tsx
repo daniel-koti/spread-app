@@ -40,7 +40,7 @@ export function Sidebar() {
 
         {user?.type === 'USER' && (
           <li className="hover:text-gray-200 text-gray-50/30">
-            <Link href="#">
+            <Link href="/my-tickets">
               <Tag size={20} />
             </Link>
           </li>

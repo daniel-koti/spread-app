@@ -14,6 +14,7 @@ import { AuthContext } from '@/contexts/AuthContext'
 
 import { Ticket } from '@/components/UI/Ticket'
 import { withSSRAuth } from '@/utils/withSSRAuth'
+import { ArrowLeft } from 'lucide-react'
 
 interface CouponProps {
   id: string
@@ -39,7 +40,7 @@ interface EventProps {
   categoryEvent: {
     name: string
   }
-  producer: {
+  user: {
     name: string
     phone: string
   }
@@ -57,7 +58,20 @@ const EventDetails: NextPageWithLayout = ({
   const { user } = useContext(AuthContext)
 
   return (
-    <div className="my-8">
+    <div className="">
+      <header className="bg-white px-6 h-[72px] flex justify-between items-center">
+        <Link
+          className="border border-gray-400 p-2 rounded-[10px] text-gray-400 hover:bg-gray-50"
+          href="/"
+        >
+          <ArrowLeft size={16} />
+        </Link>
+
+        <strong className="font-medium text-gray-500">{event?.title}</strong>
+
+        <strong className="text-xs text-gray-500">SPREAD</strong>
+      </header>
+
       {event?.image ? (
         <Image
           className="w-full h-[400px] object-cover"
@@ -72,7 +86,7 @@ const EventDetails: NextPageWithLayout = ({
         </div>
       )}
 
-      <div className="mt-8 max-w-5xl mx-auto">
+      <div className="my-8 max-w-5xl mx-auto">
         <header className="">
           <div>
             <h1 className="text-5xl font-semibold text-slate-700">
@@ -96,7 +110,7 @@ const EventDetails: NextPageWithLayout = ({
             </div>
             {user?.type === 'USER' && (
               <Link
-                href={`https://wa.me/${event?.producer?.phone}`}
+                href={`https://wa.me/${event?.user?.phone}`}
                 target="_blank"
                 className="text-white font-medium bg-green-600 px-4 py-2 flex items-center rounded-full gap-2 hover:bg-green-700"
               >
@@ -157,7 +171,7 @@ const EventDetails: NextPageWithLayout = ({
             <div className="flex flex-col my-4">
               <span className="text-xs text-gray-400">Organizador</span>
               <strong className="text-sm font-medium text-primary-500">
-                {event?.producer?.name}
+                {event?.user?.name}
               </strong>
             </div>
           </div>
@@ -170,7 +184,8 @@ const EventDetails: NextPageWithLayout = ({
                     key={coupon.id}
                     name={coupon.coupon_type.name}
                     price={Number(coupon.price)}
-                    eventId={event?.id!}
+                    eventId={event?.id}
+                    eventTitle={event?.title}
                   />
                 )
               })}

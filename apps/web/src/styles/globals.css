@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer components {
   .description-wrapper {
     display: -webkit-box;
@@ -11,11 +12,9 @@
     -webkit-line-clamp: 2;
   }
 
-  
   .shape-dividers_com-1749{
     overflow:hidden;
     position:relative;
-  
   }
 
   .shape-dividers_com-1749::before{ 
@@ -33,10 +32,7 @@
     background-position: 0% 50%;  background-image: url('data:image/svg+xml;charset=utf8, <svg preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 2000.4"><g fill="%23f2f5f9"><path d="M49 63H11l-1-1L0 45V16L9 0h41l18 30-19 33z" opacity=".5"/><path d="M30 133H0V74h30l17 30-17 29z"/><path d="M60 284H11l-1-2-5-8-5-9v-45l9-15 1-2 1-2h49l24 41-24 42zM44 157h20l10-17-10-18H44l-10 18 10 17z" opacity=".75"/><path d="M59 189h13l6-10-6-11H59l-6 11 6 10z"/><path d="M32 205H0v-59h32l17 29-15 26-2 4z" opacity=".5"/><path d="M9 186H0v-59h9l1 3 2 3 7 13 6 11-15 27-1 2zM50 99h19l9-17-9-16H50L40 82l10 17zM43 340H5l-5-8v-50l5-8h38l6 10 13 23-19 33z"/><path d="M24 410H0v-59h24l17 29-17 30z" opacity=".5"/><path d="M54 569H5l-3-5-2-4v-66l3-5 2-4h49l24 42-21 37-3 5zM38 433h20l10-17-10-17H38l-10 17 10 17zM53 466h13l6-11-6-11H53l-6 11 6 11z"/><path d="M28 496H0v-63h28l18 31-16 28-2 4z"/><path d="M3 463H0v-59h3l3 6 4 7 3 5 6 11-9 17-7 13z"/><path d="M44 375h19l9-16-9-17H44l-10 17 10 16z" opacity=".5"/><path d="M43 837H5l-5-8v-50l5-8h38l19 33-19 33zM38 677h20l10 18-10 17H38l-10-17 10-18z"/><path d="M53 645h13l6 10-6 11H53l-6-11 6-10z" opacity=".5"/><path d="M67 546h11l6 9-6 10H67l-5-10 5-9z" opacity=".75"/><path d="M26 688H0v-58h26l2 4 15 25-17 29z"/><path d="M3 707H0v-59h3l7 13 9 16-6 11-3 6-4 7-3 6z"/><path d="M3 791H0v-58h3l7 13 9 16-6 11-3 5-4 8-3 5z" opacity=".5"/><path d="M44 736h19l9 16-9 16H44l-10-16 10-16z"/><path d="M47 918H9l-9-16v-35l9-15h38l19 33-19 33z" opacity=".75"/><path d="M29 988H0v-59h29l17 29-17 30z"/><path d="M58 1139H10l-6-11-4-6v-50l7-13 3-4h48l24 42-24 42z" opacity=".5"/><path d="M42 1011h20l10-17-10-17H42l-10 17 10 17zM60 858h15l8-14-8-13H60l-8 13 8 14z" opacity=".75"/><path d="M0 868v-39l10 17 1 2-1 3-10 17zM8 293H0v-39h8l2 3 9 17-9 16-2 3zM8 359H0v-39h8l2 3 9 17-9 16-2 3zM0 226v-38l10 17 1 2-1 2-10 17zM0 81V43l10 17 1 2-1 2L0 81zM0 940v-39l10 17 1 2-1 3-10 17zM9 1081H0v-39h9l1 3 10 16-10 17-1 3zM0 1147v-38l10 17 1 2-1 2-10 17zM0 1642v-39l10 17 1 2-1 3-10 17zM17 1722H0v-38h17l11 19-11 19zM7 1794H0v-38h7l3 5 8 14-5 8-3 6-3 5zM58 1044h12l7-11-7-11H58l-6 11 6 11z"/><path d="M30 1059H0v-59h30l17 30-14 25-3 4z"/><path d="M7 1041H0v-59h7l3 5v1l8 12 6 11-14 24-3 6z"/><path d="M48 953h19l10-16-10-17H48l-9 17 9 16z" opacity=".5"/><path d="M41 1194H3l-3-5v-56l3-5h38l6 11 13 22-19 33z"/><path d="M23 1264H0v-59h23l17 30-17 29zM52 1415H4l-3-5-1-1v-71l1-3 3-4h48l24 42-21 37-3 5zM36 1288h20l10-18-10-17H36l-10 17 10 18z" opacity=".5"/><path d="M52 1320h12l7-10-7-11H52l-6 11 6 10zM24 1335H0v-58h24l17 29-15 25-2 4z"/><path d="M1 1317H0v-59h1l3 6 6 10 2 3 6 11-8 13-9 16zM1 1222H0v-59h1l3 6 6 10 2 3 6 11-8 13-9 16z"/><path d="M42 1230h19l10-17-10-16H42l-9 16 9 17z" opacity=".75"/><path d="M41 1691H3l-3-5v-55l3-5h38l19 32-19 33z" opacity=".5"/><path d="M23 1614H0v-59h23l17 30-17 29zM52 1488H4l-3-4-1-2v-71l1-1 3-6h48l3 6 21 36-24 42z"/><path d="M36 1532h20l10 17-10 17H36l-10-17 10-17z" opacity=".75"/><path d="M52 1499h12l7 11-7 11H52l-6-11 6-11z" opacity=".5"/><path d="M66 1400h11l5 10-5 9H66l-6-9 6-10z"/><path d="M24 1543H0v-59h24l2 4 15 25-17 30z" opacity=".75"/><path d="M1 1561H0v-59h1l9 16 8 14-6 11-2 2-6 10-3 6z" opacity=".75"/><path d="M42 1590h19l10 16-10 17H42l-9-17 9-16z" opacity=".5"/><path d="M43 1772H5l-5-8v-50l5-8h38l19 33-19 33z"/><path d="M24 1842H0v-59h24l17 30-17 29z" opacity=".5"/><path d="M54 1988H5l-5-10v-65l3-5 2-4h49l24 42-24 42zM38 1866h20l10-17-10-18H38l-10 18 10 17z"/><path d="M54 1898h12l6-10-6-11H54l-7 11 7 10zM68 1997h11l5-9-5-10H68l-6 10 6 9z" opacity=".5"/><path d="M26 1913H0v-58h26l17 29-15 25-2 4z" opacity=".75"/><path d="M3 1895H0v-59h3l3 6 4 7 3 6 7 11-10 16-7 13zM9 2000H0v-42l5 4 5 5 11 9-6 12-3 7-2 3-1 2z"/><path d="M44 1808h19l9-17-9-16H44l-9 16 9 17z" opacity=".75"/><path d="M55 1709h15l7-13-7-12H55l-7 12 7 13z"/><path d="M54 634H5l-2-4-3-5v-66l2-4 3-5h49l3 5 21 37-24 42z" opacity=".75"/><path d="M10 3l1-2V0H0v20L10 3z"/><path d="M24 760H0v-59h24l17 29-17 30z" opacity=".5"/></g></svg>'); 
   } 
 
-  .hero {
-    max-width: calc(100vw - (100vw - 1280px) / 2);
-    margin-left: auto;
-  }
+
 }
 
 html {

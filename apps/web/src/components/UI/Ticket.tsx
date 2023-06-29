@@ -1,23 +1,27 @@
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { Star } from 'phosphor-react'
 import { useContext, useState } from 'react'
-import { Dialog } from '../Modals/Dialog'
 import { AuthContext } from '@/contexts/AuthContext'
 
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
+import { CheckoutTicketDialog } from '../Modals/CheckoutTicketDialog'
+import { useRouter } from 'next/router'
 
 interface TicketProps {
   id: string
   name: string
   price: number
   eventId: string
+  eventTitle: string
 }
 
-export function Ticket({ name, price, id, eventId }: TicketProps) {
+export function Ticket({ name, price, id, eventId, eventTitle }: TicketProps) {
   const { user } = useContext(AuthContext)
   const [isDialogToBuyTicket, setIsDialogToBuyTicket] = useState(false)
+
+  const router = useRouter()
 
   function onToggleDialogToBuyTicket() {
     setIsDialogToBuyTicket(!isDialogToBuyTicket)
@@ -26,6 +30,7 @@ export function Ticket({ name, price, id, eventId }: TicketProps) {
   async function onBuyTicket() {
     if (user?.amount! < price) {
       toast.error('O valor em carteira é insuficiente')
+      return false
     }
 
     try {
@@ -34,6 +39,7 @@ export function Ticket({ name, price, id, eventId }: TicketProps) {
       })
 
       onToggleDialogToBuyTicket()
+      await router.push('/my-tickets')
       toast.success('Bilhete comprado com sucesso!')
     } catch (err) {
       toast.error('Não foi possível comprar o bilhete')
@@ -55,26 +61,26 @@ export function Ticket({ name, price, id, eventId }: TicketProps) {
           }).format(price)}
         </strong>
 
-        <AlertDialog.Root>
-          <AlertDialog.Trigger asChild>
+        <Dialog.Root>
+          <Dialog.Trigger asChild>
             <button
               onClick={onToggleDialogToBuyTicket}
               className="bg-green-600 px-4 py-1 rounded text-white font-semibold hover:bg-green-700"
             >
               Comprar
             </button>
-          </AlertDialog.Trigger>
+          </Dialog.Trigger>
 
-          <Dialog
-            isOpen={isDialogToBuyTicket}
-            onToggle={onToggleDialogToBuyTicket}
-            title={`Bilhete ${name}`}
-            description="Antes de comprar por favor certifique de carregar a sua carteira com valor suficiente."
-            submitText="Comprar"
-            variant="create"
-            onSubmit={onBuyTicket}
+          <CheckoutTicketDialog
+            price={new Intl.NumberFormat('pt-AO', {
+              style: 'currency',
+              currency: 'AOA',
+            }).format(price)}
+            ticketType={name}
+            eventTitle={eventTitle}
+            onBuyTicket={onBuyTicket}
           />
-        </AlertDialog.Root>
+        </Dialog.Root>
       </div>
 
       <div className="h-8 bg-primary-500 w-10 flex justify-center items-center text-white absolute rounded-b top-0 right-5">

@@ -37,10 +37,10 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext({} as AuthContextProps)
 
-export function signOut() {
+export async function signOut() {
   destroyCookie(undefined, '@spread.token')
-  destroyCookie(undefined, 'refreshToken')
-  Router.push('/signin')
+
+  await Router.push('/signin')
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {

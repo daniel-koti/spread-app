@@ -5,7 +5,6 @@ import { DefaultLayout } from '@/components/DefaultLayout'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowCircleDown, ArrowCircleUp, CurrencyDollar } from 'phosphor-react'
 import { setupAPIClient } from '@/services/api'
-import { parseCookies } from 'nookies'
 
 import dayjs from 'dayjs'
 import { Empty } from '@/components/UI/Empty'
@@ -171,16 +170,6 @@ Wallet.getLayout = (page: ReactElement) => {
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx)
-  const { '@spread.token': token } = parseCookies(ctx)
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    }
-  }
 
   const response = await apiClient.get('/transactions/user')
 
