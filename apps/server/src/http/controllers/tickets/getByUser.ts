@@ -7,15 +7,26 @@ export async function getTicketsByUser(
 ) {
   const userId = request.user.sub
 
-  const user = await prisma.user.findFirstOrThrow({
-    where: {
-      id: userId,
-    },
-  })
-
   const tickets = await prisma.ticket.findMany({
     where: {
-      user_id: user.wallet_id,
+      user_id: userId,
+    },
+    include: {
+      event: {
+        select: {
+          title: true,
+          address: true,
+        },
+      },
+      coupon: {
+        select: {
+          coupon_type: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       created_at: 'desc',
