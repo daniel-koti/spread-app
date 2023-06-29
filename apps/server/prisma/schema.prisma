@@ -33,6 +33,13 @@ enum TransactionsType {
   OUTCOME
 }
 
+enum TicketStatus {
+  USED
+  EXPIRED
+  VALID
+  INVALID
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -159,10 +166,10 @@ model Disclosure {
 }
 
 model Ticket {
-  id             String        @id @default(cuid())
-  approve_status ApproveStatus @default(APPROVED)
-  reference      String        @unique
-  created_at     DateTime      @default(now())
+  id         String       @id @default(cuid())
+  status     TicketStatus @default(VALID)
+  reference  String       @unique
+  created_at DateTime     @default(now())
 
   transaction    Transaction @relation(fields: [transaction_id], references: [id])
   transaction_id String      @unique

@@ -59,7 +59,7 @@ export class DiscloseEventUseCase {
 
     const transaction = await this.transactionRepository.create({
       description: 'Divulgar evento',
-      price: new Prisma.Decimal(500),
+      price: new Prisma.Decimal(5000),
       type: 'OUTCOME',
       wallet_id: producer.wallet_id,
     })

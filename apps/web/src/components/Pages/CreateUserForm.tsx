@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { api } from '@/services/api'
+import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
 
 const createUserSchema = z.object({
