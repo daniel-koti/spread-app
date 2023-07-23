@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, Ticket } from '@prisma/client'
 import { TicketRepository } from '../ticket-repository'
 import { prisma } from '@/lib/prisma'
 
@@ -19,5 +19,18 @@ export class PrismaTicketRepository implements TicketRepository {
     })
 
     return tickets
+  }
+
+  async validateTicket(ticket: Ticket): Promise<Ticket> {
+    const newTicket = await prisma.ticket.update({
+      where: {
+        id: ticket.id,
+      },
+      data: {
+        ...ticket,
+      },
+    })
+
+    return newTicket
   }
 }

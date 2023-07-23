@@ -10,9 +10,9 @@ export class InMemoryTicketRepository implements TicketRepository {
       id: randomUUID(),
       event_id: data.event_id,
       transaction_id: data.transaction_id,
-      approve_status: 'APPROVED',
       coupon_id: data.coupon_id,
       reference: data.reference,
+      status: 'VALID',
       created_at: new Date(),
       user_id: data.user_id,
     }
@@ -20,6 +20,16 @@ export class InMemoryTicketRepository implements TicketRepository {
     this.items.push(ticket)
 
     return ticket
+  }
+
+  async validateTicket(data: Ticket): Promise<Ticket> {
+    const ticketIndex = this.items.findIndex((ticket) => ticket.id === data.id)
+
+    if (ticketIndex >= 0) {
+      this.items[ticketIndex] = data
+    }
+
+    return data
   }
 
   async fetchByUserId(userId: string) {

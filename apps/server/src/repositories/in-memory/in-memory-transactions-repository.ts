@@ -10,7 +10,9 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
       id: randomUUID(),
       description: data.description,
       price: new Prisma.Decimal(data.price.toString()),
+      file: data.file ? data.file : null,
       type: data.type,
+      status: data.status ? data.status : 'SUCCESS',
       wallet_id: data.wallet_id,
       created_at: new Date(),
     }
@@ -22,5 +24,17 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
   async findByWalletId(walletId: string) {
     return this.items.filter((item) => item.wallet_id === walletId)
+  }
+
+  async verifyTransaction(data: Transaction): Promise<Transaction> {
+    const transactionIndex = this.items.findIndex(
+      (transaction) => transaction.id === data.id,
+    )
+
+    if (transactionIndex >= 0) {
+      this.items[transactionIndex] = data
+    }
+
+    return data
   }
 }

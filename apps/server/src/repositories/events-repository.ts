@@ -7,5 +7,6 @@ export interface EventsRepository {
   findManyProducerId(producerId: string): Promise<Event[]>
   findById(id: string): Promise<Event | null>
   fetch(): Promise<Event[]>
+  fetchAvailable(): Promise<Event[]>
   save(data: Event): Promise<Event>
 }

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, Transaction } from '@prisma/client'
 import { TransactionsRepository } from '../transactions-repository'
 import { prisma } from '@/lib/prisma'
 
@@ -19,5 +19,18 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     })
 
     return transactions
+  }
+
+  async verifyTransaction(data: Transaction): Promise<Transaction> {
+    const newTransaction = await prisma.transaction.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        ...data,
+      },
+    })
+
+    return newTransaction
   }
 }

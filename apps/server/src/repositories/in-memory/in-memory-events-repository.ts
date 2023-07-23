@@ -16,6 +16,7 @@ export class InMemoryEventsRepository implements EventsRepository {
       date_end: new Date(data.date_end),
       disclosed: data.disclosed ? new Date(data.disclosed) : null,
       hour_start: data.hour_start,
+      tickets_qtd: data.tickets_qtd,
       type: data.type,
       hour_end: data.hour_end,
       status: data.status ?? 'ENABLED',
@@ -64,6 +65,11 @@ export class InMemoryEventsRepository implements EventsRepository {
 
   async fetch() {
     const events = this.items.map((item) => item)
+    return events
+  }
+
+  async fetchAvailable(): Promise<Event[]> {
+    const events = this.items.filter((event) => event.disclosed)
     return events
   }
 }

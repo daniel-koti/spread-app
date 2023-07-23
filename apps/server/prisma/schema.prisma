@@ -28,6 +28,12 @@ enum ApproveStatus {
   RECUSED
 }
 
+enum TransactionsStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
 enum TransactionsType {
   INCOME
   OUTCOME
@@ -74,11 +80,13 @@ model Wallet {
 }
 
 model Transaction {
-  id          String           @id @default(cuid())
+  id          String             @id @default(cuid())
   type        TransactionsType
   description String
   price       Decimal
-  created_at  DateTime         @default(now())
+  file        String?
+  created_at  DateTime           @default(now())
+  status      TransactionsStatus @default(SUCCESS)
 
   wallet    Wallet @relation(fields: [wallet_id], references: [id])
   wallet_id String
@@ -99,6 +107,7 @@ model Event {
   hour_start  String
   hour_end    String
   address     String
+  tickets_qtd Int
   type        EventType
   disclosed   DateTime?
   status      Status    @default(ENABLED)
