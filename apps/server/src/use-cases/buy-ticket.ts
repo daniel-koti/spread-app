@@ -5,8 +5,10 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '@/repositories/transactions-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 import { generateTicketReference } from '../utils/generateTicketReference'
-import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet-error'
 import { WalletsRepository } from '../repositories/wallets-repository'
+import { EventsRepository } from '../repositories/events-repository'
+import { InsufficientTicketsAvailableError } from './errors/insufficient-tickets-available-error'
 
 interface BuyTicketUseCaseRequest {
   event_id: string
@@ -25,6 +27,7 @@ export class BuyTicketUseCase {
     private couponsRepository: CouponsRepository,
     private usersRepository: UsersRepository,
     private transactionRepository: TransactionsRepository,
+    private eventsRepository: EventsRepository,
   ) {}
 
   async execute({
@@ -32,6 +35,16 @@ export class BuyTicketUseCase {
     coupon_id,
     user_id,
   }: BuyTicketUseCaseRequest): Promise<BuyTicketUseCaseResponse> {
+    const event = await this.eventsRepository.findById(event_id)
+
+    if (!event) {
+      throw new ResourceNotFoundError()
+    }
+
+    if (event.tickets_qtd <= 0) {
+      throw new InsufficientTicketsAvailableError()
+    }
+
     const user = await this.usersRepository.findById(user_id)
 
     if (!user) {
@@ -54,11 +67,14 @@ export class BuyTicketUseCase {
       throw new InsufficientFundsInWalletError()
     }
 
+    event.tickets_qtd -= 1
+
     wallet.amount = new Prisma.Decimal(
       Number(wallet.amount) - Number(coupon.price),
     )
 
     this.walletsRepository.save(wallet)
+    this.eventsRepository.save(event)
 
     const transaction = await this.transactionRepository.create({
       description: 'Compra de bilhete',

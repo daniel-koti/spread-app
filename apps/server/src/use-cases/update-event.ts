@@ -8,6 +8,7 @@ interface UpdateEventUseCaseRequestParams {
   address?: string
   category_id?: string
   date_start?: Date
+  tickets_qtd?: number
   date_end?: Date
   hour_start?: string
   hour_end?: string

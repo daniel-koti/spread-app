@@ -35,4 +35,24 @@ export class InMemoryTicketRepository implements TicketRepository {
   async fetchByUserId(userId: string) {
     return this.items.filter((item) => item.user_id === userId)
   }
+
+  async findById(ticketId: string): Promise<Ticket | null> {
+    const ticket = this.items.find((ticket) => ticket.id === ticketId)
+
+    if (!ticket) {
+      return null
+    }
+
+    return ticket
+  }
+
+  async save(data: Ticket): Promise<Ticket> {
+    const ticketIndex = this.items.findIndex((item) => item.id === data.id)
+
+    if (ticketIndex >= 0) {
+      this.items[ticketIndex] = data
+    }
+
+    return data
+  }
 }
