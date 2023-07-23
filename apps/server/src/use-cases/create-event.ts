@@ -10,6 +10,7 @@ interface CreateEventUseCaseRequest {
   date_start: Date
   date_end: Date
   hour_start: string
+  tickets_qtd: number
   hour_end: string
   type: 'ONLINE' | 'PERSON'
   user_id: string
@@ -34,6 +35,7 @@ export class CreateEventUseCase {
     type,
     user_id,
     image,
+    tickets_qtd,
   }: CreateEventUseCaseRequest) {
     const isProducer = await this.usersRepository.findById(user_id)
 
@@ -51,8 +53,9 @@ export class CreateEventUseCase {
       hour_start,
       hour_end,
       type,
-      image,
       user_id,
+      tickets_qtd,
+      image,
     })
 
     return {

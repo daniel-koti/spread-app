@@ -8,7 +8,9 @@ interface CreateTransactionUseCaseRequest {
   description: string
   price: number
   type: 'INCOME' | 'OUTCOME'
+  file: string | null
   wallet_id: string
+  status: 'SUCCESS' | 'FAILED' | 'PENDING'
 }
 
 interface CreateTransactionUseCaseResponse {
@@ -26,6 +28,8 @@ export class CreateTransactionUseCase {
     price,
     type,
     wallet_id,
+    file,
+    status,
   }: CreateTransactionUseCaseRequest): Promise<CreateTransactionUseCaseResponse> {
     // Funcionalidade responsável por dar tratamento a todas as transações
     const wallet = await this.walletRepository.findById(wallet_id)
@@ -42,16 +46,17 @@ export class CreateTransactionUseCase {
         throw new InsufficientFundsInWalletError()
       } else {
         wallet.amount = new Prisma.Decimal(Number(wallet.amount) - price)
+        await this.walletRepository.save(wallet)
       }
     }
-
-    await this.walletRepository.save(wallet)
 
     const transaction = await this.transactionRepository.create({
       description,
       price,
       type,
       wallet_id,
+      file,
+      status: type === 'INCOME' ? 'PENDING' : 'SUCCESS',
     })
 
     return {

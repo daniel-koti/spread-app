@@ -33,4 +33,29 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
     return newTransaction
   }
+
+  async findById(transactionId: string) {
+    const transaction = await prisma.transaction.findFirst({
+      where: {
+        id: transactionId,
+      },
+    })
+
+    if (!transaction) {
+      return null
+    }
+
+    return transaction
+  }
+
+  async save(data: Transaction): Promise<Transaction> {
+    const transaction = await prisma.transaction.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+
+    return transaction
+  }
 }

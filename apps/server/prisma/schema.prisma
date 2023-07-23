@@ -85,8 +85,8 @@ model Transaction {
   description String
   price       Decimal
   file        String?
-  created_at  DateTime           @default(now())
   status      TransactionsStatus @default(SUCCESS)
+  created_at  DateTime           @default(now())
 
   wallet    Wallet @relation(fields: [wallet_id], references: [id])
   wallet_id String

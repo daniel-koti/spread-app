@@ -37,4 +37,26 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
     return data
   }
+
+  async findById(transactionId: string): Promise<Transaction | null> {
+    const transaction = this.items.find((item) => item.id === transactionId)
+
+    if (!transaction) {
+      return null
+    }
+
+    return transaction
+  }
+
+  async save(transaction: Transaction) {
+    const transactionIndex = this.items.findIndex(
+      (item) => item.id === transaction.id,
+    )
+
+    if (transactionIndex >= 0) {
+      this.items[transactionIndex] = transaction
+    }
+
+    return transaction
+  }
 }
