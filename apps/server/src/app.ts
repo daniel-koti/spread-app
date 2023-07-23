@@ -15,6 +15,7 @@ import { discloseRoutes } from './http/controllers/discloses/routes'
 import { ticketRoutes } from './http/controllers/tickets/routes'
 import { transactionsRoutes } from './http/controllers/transactions/routes'
 import { categoriesRoutes } from './http/controllers/categories/routes'
+import { adminRoutes } from './http/controllers/admin/routes'
 
 export const app = fastify({
   bodyLimit: 30 * 1024 * 1024,
@@ -36,6 +37,7 @@ app.register(fastifyFormBody)
 app.register(fastifyCookie)
 
 app.register(categoriesRoutes)
+app.register(adminRoutes)
 app.register(transactionsRoutes)
 app.register(ticketRoutes)
 app.register(discloseRoutes)

@@ -9,9 +9,10 @@ export async function incomeTransaction(
 ) {
   const incomeTransactionBodySchema = z.object({
     amount: z.number(),
+    file: z.string(),
   })
 
-  const { amount } = incomeTransactionBodySchema.parse(request.body)
+  const { amount, file } = incomeTransactionBodySchema.parse(request.body)
 
   const user = await prisma.user.findFirstOrThrow({
     where: {
@@ -33,6 +34,7 @@ export async function incomeTransaction(
       price: amount,
       type: 'INCOME',
       wallet_id: user.wallet_id,
+      file,
     })
 
     return reply.status(201).send(transaction)

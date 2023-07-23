@@ -1,19 +1,14 @@
-import { prisma } from '@/lib/prisma'
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { makeFetchAllEventsUseCase } from '../../../use-cases/factories/make-fetch-all-events-use-case'
 
 export async function fetchAll(request: FastifyRequest, reply: FastifyReply) {
-  const events = await prisma.event.findMany({
-    where: {
-      disclosed: {
-        not: null,
-      },
-    },
-    orderBy: {
-      date_start: 'desc',
-    },
-  })
+  const fetchAllEventsUseCase = makeFetchAllEventsUseCase()
 
-  return reply.status(200).send({
-    events,
-  })
+  try {
+    const events = await fetchAllEventsUseCase.execute()
+
+    return reply.status(200).send(events)
+  } catch (error) {
+    return reply.status(400)
+  }
 }

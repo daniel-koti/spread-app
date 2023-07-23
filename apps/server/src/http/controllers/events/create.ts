@@ -13,6 +13,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     hour_start: z.string(),
     hour_end: z.string(),
     address: z.string(),
+    tickets_qtd: z.number(),
     category_id: z.string(),
     type: z.enum(['PERSON', 'ONLINE']),
   })
@@ -26,6 +27,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     date_start,
     hour_end,
     hour_start,
+    tickets_qtd,
     image,
     type,
   } = requestBodySchema.parse(request.body)
@@ -46,6 +48,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       hour_start,
       image,
       type,
+      tickets_qtd,
       user_id: authenticatedProfile,
     })
   } catch (error) {

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { makeDiscloseEventUseCase } from '../../../use-cases/factories/make-disclose-event-use-case'
-import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet-error'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {

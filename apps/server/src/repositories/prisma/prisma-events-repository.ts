@@ -63,7 +63,11 @@ export class PrismaEventsRepository implements EventsRepository {
   }
 
   async fetch() {
-    const events = await prisma.event.findMany()
+    const events = await prisma.event.findMany({
+      orderBy: {
+        date_start: 'desc',
+      },
+    })
     return events
   }
 
@@ -71,6 +75,9 @@ export class PrismaEventsRepository implements EventsRepository {
     const events = await prisma.event.findMany({
       where: {
         disclosed: typeof Date(),
+      },
+      orderBy: {
+        date_start: 'desc',
       },
     })
 

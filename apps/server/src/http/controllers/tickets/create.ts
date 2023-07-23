@@ -1,20 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { makeBuyTicketUseCase } from '@/use-cases/factories/make-buy-ticket-use-case'
-import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from '@/use-cases/errors/insufficient-funds-in-wallet-error'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
-  const buyTicketParamsSchema = z.object({
+  const buyTicketBodySchema = z.object({
+    couponId: z.string(),
     eventId: z.string(),
   })
 
-  const buyTicketBodySchema = z.object({
-    couponId: z.string(),
-  })
-
-  const { eventId } = buyTicketParamsSchema.parse(request.params)
-  const { couponId } = buyTicketBodySchema.parse(request.body)
+  const { couponId, eventId } = buyTicketBodySchema.parse(request.body)
 
   const buyTicketUseCase = makeBuyTicketUseCase()
 
