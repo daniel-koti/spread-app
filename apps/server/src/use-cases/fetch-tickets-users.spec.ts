@@ -19,7 +19,7 @@ describe('Fetch Tickets By User Id Use Case', () => {
       event_id: 'event-01',
       reference: '01',
       transaction_id: '022',
-      approve_status: 'APPROVED',
+      status: 'VALID',
     })
 
     await ticketsRepository.create({
@@ -28,7 +28,7 @@ describe('Fetch Tickets By User Id Use Case', () => {
       event_id: 'event-01',
       reference: '012',
       transaction_id: '0223',
-      approve_status: 'APPROVED',
+      status: 'VALID',
     })
 
     const { tickets } = await sut.execute({

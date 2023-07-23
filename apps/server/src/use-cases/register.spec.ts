@@ -24,6 +24,10 @@ describe('Register User Use case', () => {
   it('should be able to register an user', async () => {
     const { user } = await sut.execute({
       name: 'John Doe',
+      isCompany: false,
+      nif: '2313',
+      phone: '1234',
+      type: 'USER',
       email: 'johndoe@example.com',
       password: '123456',
     })
@@ -38,6 +42,10 @@ describe('Register User Use case', () => {
       name: 'John Doe',
       email,
       password: '123456',
+      isCompany: false,
+      nif: '00',
+      phone: '123',
+      type: 'USER',
     })
 
     await expect(() =>
@@ -45,6 +53,10 @@ describe('Register User Use case', () => {
         name: 'John Doe',
         email,
         password: '123456',
+        isCompany: false,
+        nif: '00',
+        phone: '123',
+        type: 'USER',
       }),
     ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })

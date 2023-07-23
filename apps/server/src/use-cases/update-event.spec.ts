@@ -21,6 +21,7 @@ describe('Update Event Use case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
+      tickets_qtd: 10,
       type: 'ONLINE',
       user_id: 'producer-01',
     })

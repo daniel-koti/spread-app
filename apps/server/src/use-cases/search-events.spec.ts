@@ -21,6 +21,7 @@ describe('Search Events Use Case', () => {
       date_end: new Date('2023/12/31'),
       hour_start: '18',
       hour_end: '22',
+      tickets_qtd: 20,
       type: 'ONLINE',
       user_id: 'producer-01',
     })
@@ -33,6 +34,7 @@ describe('Search Events Use Case', () => {
       date_start: new Date('2023/12/30'),
       date_end: new Date('2023/12/31'),
       hour_start: '18',
+      tickets_qtd: 20,
       hour_end: '22',
       type: 'ONLINE',
       user_id: 'producer-02',

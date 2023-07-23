@@ -38,6 +38,7 @@ describe('Create Event Use case', () => {
       type: 'ONLINE',
       image: null,
       user_id: producer.id,
+      tickets_qtd: 10,
     })
 
     expect(event.id).toEqual(expect.any(String))

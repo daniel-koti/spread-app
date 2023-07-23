@@ -23,6 +23,7 @@ describe('Fetch Events By Producer Id Use Case', () => {
       hour_end: '22',
       type: 'ONLINE',
       user_id: 'producer-01',
+      tickets_qtd: 10,
     })
 
     await eventsRepository.create({
@@ -36,6 +37,7 @@ describe('Fetch Events By Producer Id Use Case', () => {
       hour_end: '22',
       type: 'ONLINE',
       user_id: 'producer-02',
+      tickets_qtd: 10,
     })
 
     const { events } = await sut.execute({

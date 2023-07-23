@@ -10,7 +10,7 @@ import { InMemoryEventsRepository } from '../repositories/in-memory/in-memory-ev
 import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository'
 import { InMemoryTransactionsRepository } from '../repositories/in-memory/in-memory-transactions-repository'
 import { InMemoryWalletsRepository } from '../repositories/in-memory/in-memory-wallets-repository'
-import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet-error'
 
 let discloseRepository: DiscloseRepository
 let eventsRepository: EventsRepository
@@ -64,6 +64,7 @@ describe('Disclose Event Use case', () => {
       hour_start: '18',
       hour_end: '22',
       type: 'ONLINE',
+      tickets_qtd: 10,
       user_id: user.id,
     })
 
@@ -98,6 +99,7 @@ describe('Disclose Event Use case', () => {
       hour_start: '18',
       hour_end: '22',
       type: 'ONLINE',
+      tickets_qtd: 10,
       user_id: producer.id,
     })
 
@@ -134,6 +136,7 @@ describe('Disclose Event Use case', () => {
       hour_start: '18',
       hour_end: '22',
       type: 'ONLINE',
+      tickets_qtd: 10,
       user_id: '001',
     })
 

@@ -2,7 +2,7 @@ import { Prisma, Transaction } from '@prisma/client'
 import { TransactionsRepository } from '../repositories/transactions-repository'
 import { WalletsRepository } from '../repositories/wallets-repository'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet-error'
 
 interface CreateTransactionUseCaseRequest {
   description: string
@@ -10,7 +10,6 @@ interface CreateTransactionUseCaseRequest {
   type: 'INCOME' | 'OUTCOME'
   file: string | null
   wallet_id: string
-  status: 'SUCCESS' | 'FAILED' | 'PENDING'
 }
 
 interface CreateTransactionUseCaseResponse {
@@ -29,9 +28,7 @@ export class CreateTransactionUseCase {
     type,
     wallet_id,
     file,
-    status,
   }: CreateTransactionUseCaseRequest): Promise<CreateTransactionUseCaseResponse> {
-    // Funcionalidade responsável por dar tratamento a todas as transações
     const wallet = await this.walletRepository.findById(wallet_id)
 
     if (!wallet) {

@@ -5,7 +5,7 @@ import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { TransactionsRepository } from '../repositories/transactions-repository'
 import { UsersRepository } from '../repositories/users-repository'
 import { WalletsRepository } from '../repositories/wallets-repository'
-import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet'
+import { InsufficientFundsInWalletError } from './errors/insufficient-funds-in-wallet-error'
 
 interface DiscloseEventUseCaseRequest {
   event_id: string
