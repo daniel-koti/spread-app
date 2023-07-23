@@ -4,6 +4,7 @@ import { PrismaCouponsRepository } from '../../repositories/prisma/prisma-coupon
 import { PrismaUsersRepository } from '../../repositories/prisma/prisma-users-repository'
 import { PrismaTransactionsRepository } from '../../repositories/prisma/prisma-transactions-repository'
 import { PrismaWalletsRepository } from '../../repositories/prisma/prisma-wallets-repository'
+import { PrismaEventsRepository } from '../../repositories/prisma/prisma-events-repository'
 
 export function makeBuyTicketUseCase() {
   const prismaTicketRepository = new PrismaTicketRepository()
@@ -11,6 +12,7 @@ export function makeBuyTicketUseCase() {
   const prismaUsersRepository = new PrismaUsersRepository()
   const prismaTransactionsRepository = new PrismaTransactionsRepository()
   const prismaWalletsRepository = new PrismaWalletsRepository()
+  const prismaEventsRepository = new PrismaEventsRepository()
 
   const useCase = new BuyTicketUseCase(
     prismaWalletsRepository,
@@ -18,6 +20,7 @@ export function makeBuyTicketUseCase() {
     prismaCouponRepository,
     prismaUsersRepository,
     prismaTransactionsRepository,
+    prismaEventsRepository,
   )
 
   return useCase
