@@ -34,8 +34,9 @@ export function Ticket({ name, price, id, eventId, eventTitle }: TicketProps) {
     }
 
     try {
-      await api.post(`events/${eventId}/ticket`, {
+      await api.post('buy-ticket', {
         couponId: id,
+        eventId,
       })
 
       onToggleDialogToBuyTicket()

@@ -14,8 +14,7 @@ export interface EventProps {
   category_id: string
   date_start: Date
   date_end: Date
-  latitude: number | null
-  longitude: number | null
+  tickets_qtd: number
   hour_start: string
   hour_end: string
   disclosed: Date | null

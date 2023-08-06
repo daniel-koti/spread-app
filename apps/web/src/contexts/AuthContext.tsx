@@ -29,6 +29,7 @@ interface AuthContextProps {
   isAuthenticated: boolean
   setUser: (user: User) => void
   signIn: (data: SignInProps) => Promise<void>
+  signInAdmin: (data: SignInProps) => Promise<void>
 }
 
 interface AuthProviderProps {
@@ -41,6 +42,12 @@ export async function signOut() {
   destroyCookie(undefined, '@spread.token')
 
   await Router.push('/signin')
+}
+
+export async function signOutAdmin() {
+  destroyCookie(undefined, '@spread.token.admin')
+
+  await Router.push('/admin')
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -99,6 +106,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signInAdmin({ email, password }: SignInProps) {
+    try {
+      const response = await api.post(`/sessions-admin`, { email, password })
+
+      const { token } = response.data
+
+      setCookie(undefined, '@spread.token.admin', token, {
+        maxAge: 60 * 60 * 24 * 30, // 30 Days
+        path: '/',
+      })
+
+      setUser({
+        email,
+      })
+
+      api.defaults.headers.Authorization = `Bearer ${token}`
+
+      await router.push('/admin/dashboard')
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error('Credenciais inválidas')
+      } else {
+        toast.error('Não foi possível autenticar. Tente mais tarde')
+      }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -106,6 +140,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser,
         isAuthenticated,
         signIn,
+        signInAdmin,
       }}
     >
       {children}

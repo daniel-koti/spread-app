@@ -16,6 +16,7 @@ interface ServerSideProps {
   transactions?: {
     id: string
     type: 'INCOME' | 'OUTCOME'
+    status: 'SUCCESS' | 'PENDING' | 'FAILED'
     description: string
     price: string
     created_at: Date
@@ -25,7 +26,11 @@ interface ServerSideProps {
 const Wallet: NextPageWithLayout = ({ transactions }: ServerSideProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const summary = transactions?.reduce(
+  const validTransactions = transactions.filter(
+    (transaction) => transaction.status === 'SUCCESS',
+  )
+
+  const summary = validTransactions?.reduce(
     (acc, transaction) => {
       if (transaction.type === 'INCOME') {
         acc.income += Number(transaction.price)
@@ -129,7 +134,7 @@ const Wallet: NextPageWithLayout = ({ transactions }: ServerSideProps) => {
 
                   return (
                     <tr key={transaction.id}>
-                      <td className="w-[50%] py-5 px-8 bg-white text-lg font-semibold rounded-s-lg">
+                      <td className="w-[30%] py-5 px-8 bg-white text-lg font-semibold rounded-s-lg">
                         {transaction.description}
                       </td>
                       <td
@@ -145,8 +150,20 @@ const Wallet: NextPageWithLayout = ({ transactions }: ServerSideProps) => {
                           currency: 'AOA',
                         }).format(Number(transaction.price))}
                       </td>
+                      <td className="py-5 px-8 bg-white font-medium">{date}</td>
                       <td className="py-5 px-8 bg-white rounded-e-lg font-medium">
-                        {date}
+                        <span
+                          data-success={transaction.status === 'SUCCESS'}
+                          data-error={transaction.status === 'FAILED'}
+                          data-pending={transaction.status === 'PENDING'}
+                          className="text-sm data-[success=true]:bg-green-200 data-[error=true]:bg-red-200 data-[pending=true]:bg-zinc-300 px-4 py-1 rounded-full"
+                        >
+                          {transaction.status === 'SUCCESS'
+                            ? 'Aprovado'
+                            : transaction.status === 'PENDING'
+                            ? 'Pendente'
+                            : 'Rejeitado'}
+                        </span>
                       </td>
                     </tr>
                   )

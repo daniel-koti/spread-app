@@ -11,6 +11,7 @@ const createEventSchema = z.object({
   title: z.string(),
   description: z.string(),
   categoryId: z.string(),
+  ticketsQtd: z.string(),
   dateStart: z.string(),
   dateEnd: z.string(),
   hourStart: z.string().nullable(),
@@ -56,6 +57,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       hourEnd,
       hourStart,
       type,
+      ticketsQtd,
     } = data
 
     const newEvent = {
@@ -63,6 +65,7 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
       description,
       address,
       category_id: categoryId,
+      tickets_qtd: Number(ticketsQtd),
       date_start: new Date(dateStart),
       date_end: new Date(dateEnd),
       hour_start: hourStart,
@@ -223,6 +226,18 @@ export function CreateEventForm({ categories }: CreateEventFormProps) {
                 )
               })}
             </select>
+          </div>
+          <div className="flex flex-col gap-2 items-start">
+            <label htmlFor="category" className="text-sm text-slate-500">
+              Quantidade de bilhetes
+            </label>
+            <input
+              {...register('ticketsQtd')}
+              id="tickets"
+              type="number"
+              min={10}
+              className="bg-slate-50 w-full h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
+            />
           </div>
         </div>
 

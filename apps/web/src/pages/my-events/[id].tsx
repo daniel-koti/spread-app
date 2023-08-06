@@ -185,6 +185,13 @@ const MyEventDetails: NextPageWithLayout = ({
                 {event?.hour_end}
               </span>
             </div>
+
+            <div>
+              <span>Quantidade de bilhetes disponível: </span>
+              <span className="font-medium text-slate-800">
+                {event?.tickets_qtd}
+              </span>
+            </div>
           </div>
         </div>
 

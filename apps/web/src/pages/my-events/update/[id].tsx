@@ -28,6 +28,7 @@ const updateEventSchema = z.object({
   dateEnd: z.string(),
   hourStart: z.string().nullable(),
   hourEnd: z.string().nullable(),
+  ticketsQtd: z.string().nullable(),
   type: z.enum(['ONLINE', 'PERSON']),
   address: z.string(),
 })
@@ -59,6 +60,7 @@ const UpdateEvent: NextPageWithLayout = ({
       description: event?.description,
       image: event?.image,
       categoryId: event?.category_id,
+      ticketsQtd: String(event.tickets_qtd),
       dateStart: event?.date_start.toString().split('T')[0],
       dateEnd: event?.date_end.toString().split('T')[0],
       hourStart: event?.hour_start,
@@ -76,16 +78,15 @@ const UpdateEvent: NextPageWithLayout = ({
       id: event?.id,
       title: data.title,
       description: data.description,
-      image: imageBase64File,
+      image: imageBase64File || event.image,
       category_id: data.categoryId,
       date_start: new Date(data.dateStart),
       date_end: new Date(data.dateEnd),
       hour_start: data.hourStart,
       hour_end: data.hourEnd,
+      tickets_qtd: Number(data.ticketsQtd),
       type: data.type,
       address: data.address,
-      longitude: null,
-      latitude: null,
       disclosed: null,
       created_at: event?.created_at,
       producer: event?.producer_id,
@@ -291,6 +292,18 @@ const UpdateEvent: NextPageWithLayout = ({
                       )
                     })}
                   </select>
+                </div>
+                <div className="flex flex-col gap-2 items-start">
+                  <label htmlFor="tickets" className="text-sm text-slate-500">
+                    Quantidade de bilhetes
+                  </label>
+                  <input
+                    {...register('ticketsQtd')}
+                    id="tickets"
+                    type="number"
+                    min={10}
+                    className="bg-slate-50 w-full h-12 rounded-[10px] border border-slate-300 px-4 outline-primary-500 text-slate-700 text-sm resize-none"
+                  />
                 </div>
               </div>
 

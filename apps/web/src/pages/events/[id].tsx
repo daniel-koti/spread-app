@@ -33,6 +33,7 @@ interface EventProps {
   date_start: Date
   date_end: Date
   hour_start: string
+  tickets_qtd: number
   hour_end: string
   disclosed: Date | null
   type: 'ONLINE' | 'PERSON'
@@ -175,21 +176,25 @@ const EventDetails: NextPageWithLayout = ({
               </strong>
             </div>
           </div>
-          <div className="col-span-2 rounded-lg flex flex-col gap-4">
-            {user?.type === 'USER' &&
-              coupons?.map((coupon) => {
-                return (
-                  <Ticket
-                    id={coupon.id}
-                    key={coupon.id}
-                    name={coupon.coupon_type.name}
-                    price={Number(coupon.price)}
-                    eventId={event?.id}
-                    eventTitle={event?.title}
-                  />
-                )
-              })}
-          </div>
+          {event?.tickets_qtd > 0 ? (
+            <div className="col-span-2 rounded-lg flex flex-col gap-4">
+              {user?.type === 'USER' &&
+                coupons?.map((coupon) => {
+                  return (
+                    <Ticket
+                      id={coupon.id}
+                      key={coupon.id}
+                      name={coupon.coupon_type.name}
+                      price={Number(coupon.price)}
+                      eventId={event?.id}
+                      eventTitle={event?.title}
+                    />
+                  )
+                })}
+            </div>
+          ) : (
+            <strong>Não existem bilhetes disponíveis</strong>
+          )}
         </div>
       </div>
     </div>

@@ -7,27 +7,45 @@ import { Modal } from './Modal'
 import * as z from 'zod'
 import { api } from '@/services/apiClient'
 import { toast } from 'react-toastify'
+import { convertFileToBase64 } from '@/utils/formatted'
 
 interface RechargeWalletModalProps {
   onClose: () => void
 }
 
 const rechargeWalletSchema = z.object({
-  amount: z.number().min(100),
+  amount: z
+    .number()
+    .min(100, { message: 'O valor precisa ser no mínimo de 100kz' }),
+  file: z.any().refine((files) => files?.length === 1, {
+    message: 'Comprovativo obrigatório',
+  }),
 })
 
 type RechargeWalletSchemaInput = z.infer<typeof rechargeWalletSchema>
 
 export function RechargeWalletModal({ onClose }: RechargeWalletModalProps) {
-  const { register, handleSubmit, reset } = useForm<RechargeWalletSchemaInput>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<RechargeWalletSchemaInput>({
     resolver: zodResolver(rechargeWalletSchema),
+    defaultValues: {
+      amount: 100,
+    },
   })
 
   const router = useRouter()
 
   async function handleRechargeWallet(data: RechargeWalletSchemaInput) {
+    const { amount, file } = data
+
+    const voucher = await convertFileToBase64(file[0])
+
     try {
-      await api.post('transactions/income', data)
+      await api.post('transactions/income', { amount, file: voucher })
 
       reset()
       onClose()
@@ -39,26 +57,57 @@ export function RechargeWalletModal({ onClose }: RechargeWalletModalProps) {
     }
   }
 
+  function handleClose() {
+    reset()
+    onClose()
+  }
+
   return (
-    <Modal title="Carregar carteira" onClose={onClose}>
+    <Modal title="Carregar carteira" onClose={handleClose}>
       <form
         className="bg-slate-100 p-8 mb-12 "
         onSubmit={handleSubmit(handleRechargeWallet)}
       >
         <div className="flex flex-col gap-2 items-start">
-          <label htmlFor="couponId" className="text-sm text-slate-500">
-            Quantidade a depositar
-          </label>
-          <input
-            type="number"
-            min={100}
-            step={50}
-            className="rounded-lg border-slate-300 w-full px-2 py-4 outline-none"
-            placeholder="100,00 Kz"
-            {...register('amount', {
-              valueAsNumber: true,
-            })}
-          />
+          <div className="flex flex-col gap-2 w-full">
+            <label htmlFor="couponId" className="text-sm text-slate-500">
+              Quantidade a depositar
+            </label>
+            <input
+              type="number"
+              defaultValue={100}
+              min={100}
+              step={50}
+              className="rounded-lg border-slate-300 w-full px-2 py-4 outline-none"
+              placeholder="100,00 Kz"
+              {...register('amount', {
+                valueAsNumber: true,
+              })}
+            />
+
+            {errors.amount && (
+              <span className="text-xs text-red-500">
+                {errors.amount.message}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 w-full">
+            <label htmlFor="file" className="text-sm text-slate-500">
+              Comprovativo de pegamento
+            </label>
+            <input
+              type="file"
+              accept=".pdf"
+              className="rounded-lg border-slate-300 w-full px-2 py-4 outline-none"
+              {...register('file')}
+            />
+
+            {errors.file && (
+              <span className="text-xs text-red-500">
+                Comprovativo obrigatório
+              </span>
+            )}
+          </div>
         </div>
 
         <button

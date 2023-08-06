@@ -18,7 +18,11 @@ export function setupAPIClient(ctx = undefined) {
     baseURL: 'http://localhost:3333',
     withCredentials: true,
     headers: {
-      Authorization: `Bearer ${cookies['@spread.token']}`,
+      Authorization: `Bearer ${
+        cookies['@spread.token']
+          ? cookies['@spread.token']
+          : cookies['@spread.token.admin']
+      }`,
     },
   })
 
@@ -38,8 +42,6 @@ export function setupAPIClient(ctx = undefined) {
 
           if (!isRefreshing) {
             isRefreshing = true
-
-            console.log('REFRESHING')
 
             api
               .patch('/token/refresh')
