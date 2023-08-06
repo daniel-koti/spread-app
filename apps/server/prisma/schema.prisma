@@ -190,7 +190,7 @@ model Ticket {
   coupon_id String
 
   user    User   @relation(fields: [user_id], references: [id])
-  user_id String @unique
+  user_id String
 
   @@map("tickets")
 }

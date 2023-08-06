@@ -26,6 +26,7 @@ export async function findById(request: FastifyRequest, reply: FastifyReply) {
       hour_start: true,
       hour_end: true,
       created_at: true,
+      tickets_qtd: true,
       type: true,
       user: {
         select: {

@@ -74,7 +74,11 @@ export class PrismaEventsRepository implements EventsRepository {
   async fetchAvailable(): Promise<Event[]> {
     const events = await prisma.event.findMany({
       where: {
-        disclosed: typeof Date(),
+        disclosed: {
+          not: {
+            equals: null,
+          },
+        },
       },
       orderBy: {
         date_start: 'desc',

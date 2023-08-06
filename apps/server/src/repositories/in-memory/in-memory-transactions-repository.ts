@@ -59,4 +59,9 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
     return transaction
   }
+
+  async fetch() {
+    const transactions = this.items
+    return transactions
+  }
 }

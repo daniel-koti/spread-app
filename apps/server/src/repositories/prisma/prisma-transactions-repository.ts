@@ -58,4 +58,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
     return transaction
   }
+
+  async fetch() {
+    const transactions = await prisma.transaction.findMany({
+      orderBy: {
+        created_at: 'desc',
+      },
+    })
+
+    return transactions
+  }
 }

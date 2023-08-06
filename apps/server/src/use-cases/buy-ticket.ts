@@ -67,7 +67,7 @@ export class BuyTicketUseCase {
       throw new InsufficientFundsInWalletError()
     }
 
-    event.tickets_qtd -= 1
+    event.tickets_qtd = event.tickets_qtd - 1
 
     wallet.amount = new Prisma.Decimal(
       Number(wallet.amount) - Number(coupon.price),

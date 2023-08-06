@@ -23,6 +23,7 @@ export async function filterEventsByProducer(
       hour_end: true,
       disclosed: true,
       created_at: true,
+      tickets_qtd: true,
       status: true,
       user: {
         select: {

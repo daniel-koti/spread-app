@@ -4,11 +4,14 @@ import { verifyJWT } from '@/http/middlewares/verify-jwt'
 import { incomeTransaction } from './income'
 
 import { getTransactionsByUserId } from './getByUserId'
+import { fetch } from './fetch'
 
 export async function transactionsRoutes(app: FastifyInstance) {
   /**
    * Authenticated routes
    */
+
+  app.get('/transactions', { onRequest: [verifyJWT] }, fetch)
 
   app.get(
     '/transactions/user',

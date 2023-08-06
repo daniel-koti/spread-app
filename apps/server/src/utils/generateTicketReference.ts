@@ -8,7 +8,7 @@ export async function generateTicketReference() {
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
   while (!isCharactersValid) {
-    for (let i = 0; i <= 4; i++) {
+    for (let i = 0; i <= 8; i++) {
       reference += characters.charAt(
         Math.floor(Math.random() * characters.length),
       )

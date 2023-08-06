@@ -5,5 +5,6 @@ export interface TransactionsRepository {
   verifyTransaction(transaction: Transaction): Promise<Transaction>
   findById(transactionId: string): Promise<Transaction | null>
   findByWalletId(walletId: string): Promise<Transaction[]>
+  fetch(): Promise<Transaction[]>
   save(transaction: Transaction): Promise<Transaction>
 }

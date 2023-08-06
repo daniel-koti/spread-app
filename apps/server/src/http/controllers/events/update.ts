@@ -12,6 +12,7 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
     date_start: z.string().datetime(),
     date_end: z.string().datetime(),
     hour_start: z.string(),
+    tickets_qtd: z.number(),
     hour_end: z.string(),
     address: z.string(),
     type: z.enum(['ONLINE', 'PERSON']),

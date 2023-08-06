@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { makeFetchAllEventsUseCase } from '../../../use-cases/factories/make-fetch-all-events-use-case'
+import { makeFetchEventsDisclosedUseCase } from '@/use-cases/factories/make-fetch-events-disclosed-use-case'
 
 export async function fetchAll(request: FastifyRequest, reply: FastifyReply) {
-  const fetchAllEventsUseCase = makeFetchAllEventsUseCase()
+  const fetchAllEventsUseCase = makeFetchEventsDisclosedUseCase()
 
   try {
     const events = await fetchAllEventsUseCase.execute()
