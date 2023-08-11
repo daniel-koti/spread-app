@@ -1,8 +1,10 @@
+'use client'
+
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { api } from '@/services/apiClient'
 
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
@@ -27,9 +29,11 @@ interface SignInProps {
 interface AuthContextProps {
   user: User | null
   isAuthenticated: boolean
-  setUser: (user: User) => void
+  updateProfile: (user: User) => void
   signIn: (data: SignInProps) => Promise<void>
   signInAdmin: (data: SignInProps) => Promise<void>
+  signOut: () => void
+  signOutAdmin: () => void
 }
 
 interface AuthProviderProps {
@@ -37,18 +41,6 @@ interface AuthProviderProps {
 }
 
 export const AuthContext = createContext({} as AuthContextProps)
-
-export async function signOut() {
-  destroyCookie(undefined, '@spread.token')
-
-  await Router.push('/signin')
-}
-
-export async function signOutAdmin() {
-  destroyCookie(undefined, '@spread.token.admin')
-
-  await Router.push('/admin')
-}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
@@ -64,26 +56,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { '@spread.token': token } = parseCookies()
 
     if (token) {
-      api
-        .get('/me')
-        .then((response) => {
-          const { user } = response.data
-
-          setUser({
-            ...user,
-          })
-        })
-        .catch(() => {
-          signOut()
+      fetch('http://localhost:3333/me', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUser(data.user)
         })
     }
   }, [])
 
   async function signIn({ email, password }: SignInProps) {
-    try {
-      const response = await api.post(`/sessions`, { email, password })
+    const response = await fetch('http://localhost:3333/sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
 
-      const { token } = response.data
+    if (response.ok) {
+      const data = await response.json()
+      const token = data.token
 
       setCookie(undefined, '@spread.token', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 Days
@@ -94,15 +90,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
       })
 
-      api.defaults.headers.Authorization = `Bearer ${token}`
-
-      await router.push('/')
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error('Credenciais inválidas')
-      } else {
-        toast.error('Não foi possível autenticar. Tente mais tarde')
-      }
+      router.push('/')
+    } else {
+      toast.error('Não foi possível autenticar')
     }
   }
 
@@ -133,14 +123,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signOut() {
+    destroyCookie(undefined, '@spread.token')
+    await router.push('/signin')
+  }
+
+  async function signOutAdmin() {
+    destroyCookie(undefined, '@spread.token.admin')
+    await router.push('/admin')
+  }
+
+  function updateProfile(user: User) {
+    setUser(user)
+  }
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         isAuthenticated,
+        updateProfile,
         signIn,
         signInAdmin,
+        signOut,
+        signOutAdmin,
       }}
     >
       {children}
