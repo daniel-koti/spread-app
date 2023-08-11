@@ -6,7 +6,6 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from '@/components/ui/menubar'
 
@@ -17,7 +16,7 @@ import Link from 'next/link'
 import { useContext } from 'react'
 
 export function Header() {
-  const { isAuthenticated, user } = useContext(AuthContext)
+  const { isAuthenticated, user, signOut } = useContext(AuthContext)
 
   return (
     <header className="bg-orange-500 h-16 flex items-center justify-between px-8">
@@ -79,14 +78,29 @@ export function Header() {
                 <ChevronDown size={12} />
               </div>
             </MenubarTrigger>
-            <MenubarContent>
+            <MenubarContent className="min-w-[250px] w-auto rounded-none mr-2 mt-1">
+              <header className="flex flex-col items-center gap-2">
+                <div className="bg-orange-50 text-orange-600 rounded-full p-1 inline-block">
+                  <User size={20} className="" />
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <strong className="text-sm font-medium text-orange-600">
+                    {user?.name}
+                  </strong>
+                  <span
+                    data-user={user?.type === 'USER'}
+                    className="text-xs bg-orange-300 px-2 rounded-full data-[user=true]:bg-blue-400"
+                  >
+                    {user?.type === 'PRODUCER' ? 'Organizador' : 'Cliente'}
+                  </span>
+                </div>
+              </header>
+              <MenubarSeparator />
               <MenubarItem>Cadastrar evento</MenubarItem>
               <MenubarItem>Gerir evento</MenubarItem>
               <MenubarItem>Gerir evento</MenubarItem>
               <MenubarSeparator />
-              <MenubarItem>Share</MenubarItem>
-              <MenubarSeparator />
-              <MenubarItem>Sair da plataforma</MenubarItem>
+              <MenubarItem onClick={signOut}>Sair da plataforma</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
