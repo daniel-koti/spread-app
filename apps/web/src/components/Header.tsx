@@ -82,6 +82,7 @@ export function Header() {
             <MenubarContent>
               <MenubarItem>Cadastrar evento</MenubarItem>
               <MenubarItem>Gerir evento</MenubarItem>
+              <MenubarItem>Gerir evento</MenubarItem>
               <MenubarSeparator />
               <MenubarItem>Share</MenubarItem>
               <MenubarSeparator />
