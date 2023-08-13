@@ -98,9 +98,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signInAdmin({ email, password }: SignInProps) {
     try {
-      const response = await api.post(`/sessions-admin`, { email, password })
-
-      const { token } = response.data
+      const response = await fetch('http://localhost:3333/sessions-admin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      
+    if (response.ok) {
+      const data = await response.json()
+      const token = data.token
 
       setCookie(undefined, '@spread.token.admin', token, {
         maxAge: 60 * 60 * 24 * 30, // 30 Days
@@ -111,9 +119,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
       })
 
-      api.defaults.headers.Authorization = `Bearer ${token}`
+      router.push('/admin/transactions')
+    } else {
+      toast.error('Credenciais inválidas')
+    }
 
-      await router.push('/admin/dashboard')
+      
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         toast.error('Credenciais inválidas')
@@ -125,12 +136,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signOut() {
     destroyCookie(undefined, '@spread.token')
-    await router.push('/signin')
+    router.push('/signin')
   }
 
   async function signOutAdmin() {
     destroyCookie(undefined, '@spread.token.admin')
-    await router.push('/admin')
+    router.push('/admin/signin')
   }
 
   function updateProfile(user: User) {

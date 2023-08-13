@@ -1,13 +1,14 @@
 import { Metadata } from 'next'
 import { Music } from 'lucide-react'
-import { SignInForm } from './components/SignInForm'
+import { SignUpForm } from './components/SignUpForm'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Spread | Login',
+  title: 'Spread | Criar conta',
   description: 'Página de Login',
 }
 
-export default function SignIn() {
+export default function SignUp() {
   return (
     <section className="grid grid-cols-2 h-screen lg:items-center ">
       <aside className="col-span-1 h-full w-full flex items-center justify-center bg-repeat bg-cover bg-center bg-[url('/frame-2.png')]">
@@ -26,16 +27,14 @@ export default function SignIn() {
       <aside className="col-span-1 h-full flex items-center px-20 bg-white">
         <div className="w-full">
           <header className="mb-10 space-y-4">
-            <h1 className="text-3xl font-semibold text-zinc-900">
-              Hey, Olá 👋
-            </h1>
-
             <p className="text-zinc-700">
-              Insira as suas credênciais para realizar o login.
+              Já tem uma conta? <Link href="/signin" className="text-orange-500 underline">
+                  Log in
+                </Link>
             </p>
           </header>
 
-          <SignInForm />
+          <SignUpForm />
         </div>
       </aside>
     </section>

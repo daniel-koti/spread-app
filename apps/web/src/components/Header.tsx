@@ -39,8 +39,9 @@ export function Header() {
             Home
           </Link>
           <Link
+            data-auth={isAuthenticated}
             href="/wallet"
-            className="text-zinc-50 uppercase text-sm hover:text-orange-100"
+            className="text-zinc-50 uppercase text-sm hover:text-orange-100 data-[auth=false]:hidden"
           >
             Carteira
           </Link>
@@ -95,10 +96,9 @@ export function Header() {
                   </span>
                 </div>
               </header>
-              <MenubarSeparator />
-              <MenubarItem>Cadastrar evento</MenubarItem>
-              <MenubarItem>Gerir evento</MenubarItem>
-              <MenubarItem>Gerir evento</MenubarItem>
+              
+              
+              
               <MenubarSeparator />
               <MenubarItem onClick={signOut}>Sair da plataforma</MenubarItem>
             </MenubarContent>

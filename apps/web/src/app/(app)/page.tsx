@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import { Events } from './components/Events'
 import { Suspense } from 'react'
 import { SkeletonEvents } from './components/SkeletonEvents'

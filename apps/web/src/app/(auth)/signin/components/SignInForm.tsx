@@ -1,12 +1,12 @@
 'use client'
 
+import { useContext } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useContext } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
 
 const authenticateSchema = z.object({
@@ -60,6 +60,13 @@ export function SignInForm() {
         Não possui uma conta?
         <Link className="underline ml-2 text-orange-600" href="/signup">
           Criar conta
+        </Link>
+      </p>
+
+      <p className="text-gray-500 flex justify-center my-8">
+        Entrar como
+        <Link className="underline ml-2 text-blue-600" href="/admin/signin">
+          Administrador
         </Link>
       </p>
 

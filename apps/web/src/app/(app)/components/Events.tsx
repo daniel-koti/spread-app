@@ -21,11 +21,10 @@ export interface EventProps {
 }
 
 async function getEvents() {
-  // await new Promise((resolve) => {
-  //   setTimeout(resolve, 6000)
-  // })
+  const response = await fetchAPI<EventProps>('events', {
+    cache: 'no-store'
+  })
 
-  const response = await fetchAPI<EventProps>('events')
   return response.events
 }
 
@@ -36,11 +35,9 @@ export async function Events() {
     <div className="m-8">
       <header className="flex items-center justify-between">
         <strong className="text-2xl text-zinc-900 font-medium">
-          Eventos mais recentes
+          Eventos divulgados
         </strong>
-        <Link href="#" className="text-orange-500 underline">
-          Ver todos
-        </Link>
+        
       </header>
       <div className="grid grid-cols-4 gap-4 mt-8">
         {events.map((event) => (

@@ -2,6 +2,7 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import dayjs from 'dayjs'
 import { ArrowDown, ArrowUp, CircleDollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
+import { RechargeWallet } from './components/RechargeWallet'
 
 interface TransactionProps {
   transactions: {
@@ -94,7 +95,11 @@ export default async function Wallet() {
         </article>
       </div>
 
+      
+
       <div className="my-8">
+        <RechargeWallet />
+
         {transactions.length > 0 ? (
           <table className="w-full border-separate border-spacing-y-2 mt-4">
             <tbody>

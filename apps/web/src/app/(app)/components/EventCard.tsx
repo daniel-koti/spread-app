@@ -24,7 +24,7 @@ export function EventCard({
 
   return (
     <Link
-      href={`events/${id}`}
+      href={`event/${id}`}
       className="bg-zinc-50 shadow-md rounded pb-6 h-72"
     >
       <header className="w-full">

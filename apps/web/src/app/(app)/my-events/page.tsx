@@ -8,7 +8,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Card } from './components/Card'
 
 interface MyEventsProps {
-  events?: {
+  events: {
     id: string
     title: string
     date_start: Date
@@ -26,9 +26,9 @@ async function getMyEvents() {
 
   const response = await fetchAPI<MyEventsProps>('events/producer', {
     headers: { Authorization: 'Bearer ' + token },
+    cache: 'no-store',
   })
 
-  console.log(response)
   return response.events
 }
 
